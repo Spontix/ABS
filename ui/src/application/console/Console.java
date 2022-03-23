@@ -1,6 +1,8 @@
 package application.console;
 
-public class Main {
+import application.UiType;
+
+public class Console implements UiType {
 
     public static void main(String[] args)
     {
