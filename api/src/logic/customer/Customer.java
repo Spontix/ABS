@@ -1,7 +1,7 @@
 package logic.customer;
 
 import logic.bank.account.Account;
-
+//Eliran
 public abstract class Customer implements Account {
         String name;
         private int amount;
