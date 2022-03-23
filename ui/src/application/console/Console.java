@@ -6,6 +6,7 @@ public class Console implements UiType {
 
     public static void main(String[] args)
     {
+
     }
     /*
     Menu:
