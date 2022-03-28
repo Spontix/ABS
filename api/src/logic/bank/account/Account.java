@@ -4,7 +4,7 @@ public interface Account {
 
     void setAmount(int amount);
 
-    String cashDeposit(int sum);
+    void cashDeposit(int sum);
 
-    public String cashWithdrawal(int sum);
+    void cashWithdrawal(int sum);
 }

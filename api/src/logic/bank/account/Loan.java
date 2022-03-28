@@ -1,19 +1,25 @@
 package logic.bank.account;
 
-import logic.customer.Accompanied;
 //Eliran123
-import java.util.List;
 
-public class Loan {
-    private String customerName;
-    private int originalLoanAmount;
-    private String uniqueLoanName;
-    private int timeUnits;
-    private int rateOfPaymentsPerUnitOfTime;
-    private double interestRate;
-    private List<Accompanied> listOfAccompanied;
-    private int numberOfUnitsOfTimeToCompleteTheLoan;
-    private double currentInterestPaid;
-    private  int currentPaidFoundation;
+
+import dataObjects.bank.dtoAccount.DTOLoan;
+import dataObjects.bank.dtoLoanStatus.DTOLoanStatus;
+
+import java.util.ArrayList;
+
+public class Loan extends DTOLoan {
+
+
+    public Loan(DTOLoanStatus loanStatusLoan,String idLoan,String ownerLoan,String categoryLoan,int capitalLoan,int totalYazTimeLoan,int paysEveryYazLoan,int interestPerPaymentLoan) {
+        super(loanStatusLoan,idLoan,ownerLoan,categoryLoan,capitalLoan,totalYazTimeLoan,paysEveryYazLoan,interestPerPaymentLoan);
+    }
+
+    public int setTotalYaz(int number)
+    {
+        return totalYazTime+number;
+    }
+
 
 }
+

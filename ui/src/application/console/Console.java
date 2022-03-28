@@ -1,6 +1,9 @@
 package application.console;
 
 import application.UiType;
+import dataObjects.bank.dtoAccount.DTOLoan;
+import dataObjects.bank.dtoLoanStatus.DTOLoanStatus;
+import logic.bank.Bank;
 import logic.bank.account.Loan;
 import logic.fileUpload.XmlSerialization;
 import menuBuilder.MainMenu;
@@ -9,35 +12,33 @@ import menuBuilder.MenuType;
 import menuBuilder.OptionInvoker;
 
 import javax.xml.bind.annotation.XmlAccessOrder;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class Console implements UiType {
-    Loan x=new Loan();
-    static XmlSerialization xml=new XmlSerialization();
+    Bank bank;
+    private XmlSerialization xml=new XmlSerialization();
 
-   public void Run() {
+    public Console(){
+        bank=new Bank();
+    }
+
+
+    public void Run() {
        MainMenu menu = new MainMenu("Main", MenuType.PRIMARY_MENU);
        createMenu(menu);
        menu.show();
    }
 
-    private static void createMenu(MainMenu menu) {
+    private void createMenu(MainMenu menu) {
         /*MainMenu first =
                 new MainMenu("Reading the system information file.", MenuType.SECONDARY_MENU);*/
         MenuItem first=new MenuItem("Reading the system information file.");
-        first.AddListener(new OptionInvoker() {
-            @Override
-            public void reportAction() {
-                System.out.println("Please Enter a Path of xml file!");
-                String fileName=new Scanner(System.in).nextLine();
-                System.out.println("Thanks!");
-                xml.doSomething(fileName);
-            }
-        });
+        //first.AddListener(()->sumToInvest(new Loan()));
         menu.insertToMenu(first);
-        MainMenu second =
-                new MainMenu("Presentation of information on existing loans and their status.", MenuType.SECONDARY_MENU);
+        MenuItem second = new MenuItem("Presentation of information on existing loans and their status.");
+        second.AddListener(()->showDataLoans());
         menu.insertToMenu(second);
         MainMenu third =
                 new MainMenu("Display information about system customers.", MenuType.SECONDARY_MENU);
@@ -60,35 +61,45 @@ public class Console implements UiType {
     }
 
     @Override
-    public String sumToInvest(Loan x) {
-        return null;
+    public void sumToInvest(Loan x) {
     }
 
     @Override
-    public String category(Loan x) {
-        return null;
+    public void category(Loan x) {
     }
 
     @Override
-    public String minimumInterestPerUnitTime(Loan x) {
-        return null;
+    public void minimumInterestPerUnitTime(Loan x) {
     }
 
     @Override
-    public String minimumTimePerUnitTime(Loan x) {
-        return null;
+    public void minimumTimePerUnitTime(Loan x) {
     }
 
     @Override
-    public String maximumPercentageOfOwnership(Loan x) {
-        return null;
+    public void maximumPercentageOfOwnership(Loan x) {
     }
 
     @Override
-    public String maximumLoansOpenToTheBorrower(Loan x) {
-        return null;
+    public void maximumLoansOpenToTheBorrower(Loan x) {
     }
 
+    @Override
+    public void showDataLoans() {
+        System.out.println("This information for all existing loans in the system:\n");
+        ArrayList<DTOLoan> loans = bank.getLoans();
+        //loans.add(new Loan(DTOLoanStatus.PENDING,"4","Moshe","Car",2400,12,1,5));
+        for (int i = 0; i < loans.size(); i++) {
+            System.out.println("------------ Loan number " + i + " ------------\n" +
+                    "Loan ID - " + loans.get(i).getId() + "\n" +
+                    "Loan owner - " + loans.get(i).getOwner() + "\n" +
+                    "Loan category - " + loans.get(i).getCategory() + "\n" +
+                    "The total original time of the loan - " + loans.get(i).getTotalYazTime() + "\n" +
+                    "Loan interest - " + loans.get(i).getInterestPerPayment() + "\n");
+        }
 
 
+        //loans.get(0).setTotalYaz(4);
+
+    }
 }
