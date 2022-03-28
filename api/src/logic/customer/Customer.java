@@ -28,4 +28,12 @@ public abstract class Customer implements Account {
                         return "Operation failed! There is not enough money in the account!.\n";
                 }
         }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
