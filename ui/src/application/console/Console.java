@@ -5,6 +5,7 @@ import dataObjects.bank.dtoAccount.DTOLoan;
 import dataObjects.bank.dtoLoanStatus.DTOLoanStatus;
 import logic.bank.Bank;
 import logic.bank.account.Loan;
+import logic.customer.Customer;
 import logic.fileUpload.XmlSerialization;
 import menuBuilder.MainMenu;
 import menuBuilder.MenuItem;
@@ -88,7 +89,7 @@ public class Console implements UiType {
     public void showDataLoans() {
         System.out.println("This information for all existing loans in the system:\n");
         ArrayList<DTOLoan> loans = bank.getLoans();
-        //loans.add(new Loan(DTOLoanStatus.PENDING,"4","Moshe","Car",2400,12,1,5));
+        loans.add(new Loan(DTOLoanStatus.PENDING,"4","Moshe","Car",2400,12,1,5));
         for (int i = 0; i < loans.size(); i++) {
             System.out.println("------------ Loan number " + i + " ------------\n" +
                     "Loan ID - " + loans.get(i).getId() + "\n" +
@@ -100,6 +101,7 @@ public class Console implements UiType {
 
 
         //loans.get(0).setTotalYaz(4);
+        Customer d=new Customer();
 
     }
 }

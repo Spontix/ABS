@@ -1,10 +1,16 @@
 package dataObjects.dtoCustomer;
 
 
-public class DTOCustomer {
+import dataObjects.bank.dtoAccount.DTOAccount;
+import dataObjects.bank.dtoAccount.DTOMovement;
 
-    String name;
+import java.util.ArrayList;
+
+public class DTOCustomer implements DTOAccount {
+
+    protected String name;
     protected int amount;
+    protected ArrayList<DTOMovement> movements;
 
     public int getAmount() {
         return amount;
@@ -12,6 +18,11 @@ public class DTOCustomer {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public ArrayList<DTOMovement> getMovements(){
+        return movements;
     }
 
     public DTOCustomer(){
