@@ -11,4 +11,9 @@ public interface UiType {
     void minimumTimePerUnitTime(Loan x);
     void maximumPercentageOfOwnership(Loan x);
     void maximumLoansOpenToTheBorrower(Loan x);
+    void insertSumToAccount();
+    void inlayActivation();
+    void drawSumFromAccount();
+    void showCustomerList(Boolean printAmount);
+    void showCustomerInformation();
 }

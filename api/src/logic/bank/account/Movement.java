@@ -1,27 +1,37 @@
 package logic.bank.account;
 
-import dataObjects.bank.dtoAccount.DTOMovement;
+import dataObjects.dtoBank.dtoAccount.DTOMovement;
 
 public class Movement extends DTOMovement {
 
-    public void setSum(int movementSum) {
+    private void setSum(int movementSum) {
         sum=movementSum;
     }
 
-    public void setSumAfterOperation(int movementSumAfterOperation) {
+    private void setSumAfterOperation(int movementSumAfterOperation) {
         sumAfterOperation=movementSumAfterOperation;
     }
 
-    public void setSumBeforeOperation(int movementSumBeforeOperation) {
+    private void setSumBeforeOperation(int movementSumBeforeOperation) {
         sumBeforeOperation=movementSumBeforeOperation;
     }
 
-    public void setToDoYazTime(int movementToDoYazTime) {
+    private void setToDoYazTime(int movementToDoYazTime) {
         toDoYazTime=movementToDoYazTime;
 
     }
 
-    public void setOperation(String movementOperation) {
+    private void setOperation(String movementOperation) {
         operation=movementOperation;
+    }
+
+    public static DTOMovement build(int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation,int movementToDoYaz){
+        Movement movement=new Movement();
+        movement.setSum(movementSum);
+        movement.setOperation(movementOperation);
+        movement.setSumAfterOperation(movementSumAfterOperation);
+        movement.setSumBeforeOperation(movementSumBeforeOperation);
+        movement.setToDoYazTime(movementToDoYaz);
+        return movement;
     }
 }

@@ -1,7 +1,7 @@
-package dataObjects.bank.dtoAccount;
+package dataObjects.dtoBank.dtoAccount;
 
 
-import dataObjects.bank.dtoLoanStatus.DTOLoanStatus;
+import dataObjects.dtoBank.dtoLoanStatus.DTOLoanStatus;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,11 @@ public class DTOLoan {
     protected int interestPerPayment;
     protected final DTOLoanStatus loanStatus;
     protected ArrayList<DTOAccount> listOfAccompanied;
-
+    protected int yazNumberTillEnd;
+    protected int totalInterestPayTillNow;
+    protected int totalInterestPayTillEnd;
+    protected int totalCapitalPayTillNow;
+    protected int totalCapitalPayTillEnd;
 
 
     public DTOLoan(DTOLoanStatus loanStatusLoan,String idLoan,String ownerLoan,String categoryLoan,int capitalLoan,int totalYazTimeLoan,int paysEveryYazLoan,int interestPerPaymentLoan) {
@@ -29,6 +33,11 @@ public class DTOLoan {
         paysEveryYaz=paysEveryYazLoan;
         interestPerPayment=interestPerPaymentLoan;
         listOfAccompanied=null;
+        yazNumberTillEnd=0;
+        totalInterestPayTillNow=0;
+        totalInterestPayTillEnd=0;
+        totalCapitalPayTillNow=0;
+        totalCapitalPayTillEnd=0;
 
     }
 
@@ -66,5 +75,25 @@ public class DTOLoan {
 
     public String getOwner() {
         return owner;
+    }
+
+    public int getTotalCapitalPayTillEnd() {
+        return totalCapitalPayTillEnd;
+    }
+
+    public int getTotalCapitalPayTillNow() {
+        return totalCapitalPayTillNow;
+    }
+
+    public int getTotalInterestPayTillEnd() {
+        return totalInterestPayTillEnd;
+    }
+
+    public int getTotalInterestPayTillNow() {
+        return totalInterestPayTillNow;
+    }
+
+    public int getYazNumberTillEnd() {
+        return yazNumberTillEnd;
     }
 }

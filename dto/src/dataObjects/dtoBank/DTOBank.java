@@ -1,14 +1,16 @@
-package dataObjects.bank;
+package dataObjects.dtoBank;
 
-import dataObjects.bank.dtoAccount.DTOAccount;
-import dataObjects.bank.dtoAccount.DTOLoan;
+import dataObjects.dtoBank.dtoAccount.DTOAccount;
+import dataObjects.dtoBank.dtoAccount.DTOLoan;
+import logic.bank.account.Account;
+import logic.bank.account.Loan;
 
 import java.util.ArrayList;
 
 public class DTOBank {
 
-    private ArrayList<DTOAccount> accounts;
-    private ArrayList<DTOLoan> loans;
+    private ArrayList<Account> accounts;
+    private ArrayList<Loan> loans;
     private ArrayList<String> categories;
 
     public DTOBank(){
@@ -17,11 +19,11 @@ public class DTOBank {
         categories=new ArrayList<>();
     }
 
-    public ArrayList<DTOAccount> getAccounts(){
+    public ArrayList<Account> getAccounts(){
         return accounts;
     }
 
-    public ArrayList<DTOLoan> getLoans() {
+    public ArrayList<Loan> getLoans() {
         return loans;
     }
 

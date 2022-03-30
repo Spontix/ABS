@@ -1,9 +1,6 @@
 package logic.bank.account;
 
-import dataObjects.bank.dtoAccount.DTOAccount;
-import dataObjects.bank.dtoAccount.DTOMovement;
-
-import java.util.ArrayList;
+import dataObjects.dtoBank.dtoAccount.DTOAccount;
 
 public interface Account extends DTOAccount {
 
@@ -12,5 +9,6 @@ public interface Account extends DTOAccount {
     void cashDeposit(int sum);
 
     void cashWithdrawal(int sum);
+
 
 }

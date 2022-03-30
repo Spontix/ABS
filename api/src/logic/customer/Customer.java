@@ -1,11 +1,7 @@
 package logic.customer;
 
-import dataObjects.bank.dtoAccount.DTOMovement;
 import dataObjects.dtoCustomer.DTOCustomer;
 import logic.bank.account.Account;
-import logic.bank.account.Movement;
-
-import java.util.ArrayList;
 
 //Eliran
 public class Customer extends DTOCustomer implements Account {
@@ -15,6 +11,11 @@ public class Customer extends DTOCustomer implements Account {
         {
             amount=startAmount;
         }
+
+    public Customer(){
+            amount=10000;
+            name="Menash";
+    }
 
        @Override
        public void cashDeposit(int sum){
@@ -27,5 +28,7 @@ public class Customer extends DTOCustomer implements Account {
                         amount -= sum;
                 }
         }
+
+
 
 }

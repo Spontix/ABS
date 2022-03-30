@@ -1,4 +1,4 @@
-package dataObjects.bank.dtoAccount;
+package dataObjects.dtoBank.dtoAccount;
 
 public class DTOMovement {
     protected int toDoYazTime;
@@ -25,5 +25,10 @@ public class DTOMovement {
 
     public String getOperation() {
         return operation;
+    }
+
+    @Override
+    public String toString(){
+        return "<To do yaz time : "+toDoYazTime+"\n"+"Sum : "+sum+"\n"+"Operation : "+ operation+"\n"+ "Sum before operation :"+sumBeforeOperation+"\n"+"Sum after operation : "+sumAfterOperation+">\n";
     }
 }
