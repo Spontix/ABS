@@ -1,10 +1,14 @@
 package logic.bank.account;
 
-public interface Account {
+import dataObjects.dtoBank.dtoAccount.DTOAccount;
+
+public interface Account extends DTOAccount {
 
     void setAmount(int amount);
 
-    String cashDeposit(int sum);
+    void cashDeposit(int sum);
 
-    public String cashWithdrawal(int sum);
+    void cashWithdrawal(int sum);
+
+
 }

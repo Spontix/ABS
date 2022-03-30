@@ -1,10 +1,10 @@
 package logic.customer;
 
+import dataObjects.dtoCustomer.DTOCustomer;
 import logic.bank.account.Account;
+
 //Eliran
-public abstract class Customer implements Account {
-        String name;
-        private int amount;
+public class Customer extends DTOCustomer implements Account {
 
         @Override
         public void setAmount(int startAmount)
@@ -12,20 +12,23 @@ public abstract class Customer implements Account {
             amount=startAmount;
         }
 
+    public Customer(){
+            amount=10000;
+            name="Menash";
+    }
+
        @Override
-       public String cashDeposit(int sum){
+       public void cashDeposit(int sum){
                amount+=sum;
-               return "The deposit of funds was successful!.\n "+"The current amount is: "+amount+"\n";
        }
 
         @Override
-        public String cashWithdrawal(int sum){
+        public void cashWithdrawal(int sum){
                 if(amount>=sum) {
                         amount -= sum;
-                        return "The withdrawal of funds was successful!.\n ";
-                }
-                else{
-                        return "Operation failed! There is not enough money in the account!.\n";
                 }
         }
+
+
+
 }
