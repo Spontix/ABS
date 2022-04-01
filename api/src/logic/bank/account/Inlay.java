@@ -2,6 +2,8 @@ package logic.bank.account;
 
 import dataObjects.dtoBank.dtoAccount.DTOAccount;
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
+import dataObjects.dtoCustomer.DTOCustomer;
+import logic.customer.Customer;
 
 import java.util.Scanner;
 
@@ -33,5 +35,8 @@ public class Inlay extends DTOInlay {
         minYazTime = inlayMinYazTime;
     }
 
+    public void setInlayCustomer(DTOAccount customer){
+        dtoAccount=customer;
+    }
 
 }

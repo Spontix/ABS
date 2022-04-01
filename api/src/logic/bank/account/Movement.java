@@ -4,6 +4,10 @@ import dataObjects.dtoBank.dtoAccount.DTOMovement;
 
 public class Movement extends DTOMovement {
 
+    private Movement() {
+
+    }
+
     private void setSum(int movementSum) {
         sum=movementSum;
     }
@@ -25,10 +29,13 @@ public class Movement extends DTOMovement {
         operation=movementOperation;
     }
 
-    public static DTOMovement build(int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation,int movementToDoYaz){
+    public static Movement build(int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation,int movementToDoYaz){
         Movement movement=new Movement();
         movement.setSum(movementSum);
         movement.setOperation(movementOperation);
+        if(movementSumAfterOperation<0){
+            throw new RuntimeException("The operation cant be preformed because there is not enough money in this account!!");
+        }
         movement.setSumAfterOperation(movementSumAfterOperation);
         movement.setSumBeforeOperation(movementSumBeforeOperation);
         movement.setToDoYazTime(movementToDoYaz);

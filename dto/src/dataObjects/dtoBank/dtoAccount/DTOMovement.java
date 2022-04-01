@@ -1,5 +1,7 @@
 package dataObjects.dtoBank.dtoAccount;
 
+import logic.bank.account.Movement;
+
 public class DTOMovement {
     protected int toDoYazTime;
     protected int sum;
@@ -7,6 +9,19 @@ public class DTOMovement {
     protected int sumBeforeOperation;
     protected int sumAfterOperation;
 
+    public DTOMovement(){
+
+    }
+
+    public static DTOMovement build(DTOMovement movement){
+        DTOMovement dtoMovement=new DTOMovement();
+        dtoMovement.toDoYazTime=movement.toDoYazTime;
+        dtoMovement.sum=movement.sum;
+        dtoMovement.operation=movement.operation;
+        dtoMovement.sumBeforeOperation=movement.sumBeforeOperation;
+        dtoMovement.sumAfterOperation=movement.sumAfterOperation;
+        return dtoMovement;
+    }
     public int getSum() {
         return sum;
     }

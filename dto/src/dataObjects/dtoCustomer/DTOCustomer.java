@@ -3,6 +3,8 @@ package dataObjects.dtoCustomer;
 
 import dataObjects.dtoBank.dtoAccount.DTOAccount;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
+import logic.bank.account.Movement;
+import logic.customer.Customer;
 
 import java.util.ArrayList;
 
@@ -31,5 +33,17 @@ public class DTOCustomer implements DTOAccount {
     public String toString()
     {
         return "Name : "+name+"\n"+"Current amount : "+amount+"\n"+"-----------Movements-----------"+"\n"+movements.toString();
+    }
+    
+    public static DTOCustomer build(Customer customer){
+        DTOCustomer dtoCustomer=new DTOCustomer();
+        dtoCustomer.name=customer.name;
+        dtoCustomer.amount=customer.amount;
+        ArrayList<DTOMovement> dtoMovements=new ArrayList<>();
+        for (DTOMovement movement : customer.movements) {
+            dtoMovements.add(DTOMovement.build(movement));
+        }
+        dtoCustomer.movements=dtoMovements;
+        return dtoCustomer;
     }
 }
