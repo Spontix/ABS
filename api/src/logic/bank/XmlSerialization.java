@@ -1,4 +1,4 @@
-package logic.fileUpload;
+package logic.bank;
 
 
 import logic.bank.Bank;
@@ -7,8 +7,9 @@ import menuBuilder.OptionInvoker;
 public class XmlSerialization{
     //Eliran
 
-    public static void doSomething(String fileName, Bank bank) {
+    public static Bank buildBank(String fileName) {
 
+        return new Bank();
     }
 }
 
