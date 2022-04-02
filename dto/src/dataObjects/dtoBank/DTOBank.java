@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 public class DTOBank {
 
-    private final ArrayList<Account> accounts;
-    private final ArrayList<Loan> loans;
-    private final ArrayList<String> categories;
+    protected final ArrayList<Account> accounts;
+    protected final ArrayList<Loan> loans;
+    protected final ArrayList<String> categories;
+
+
 
     public DTOBank(){
         accounts=new ArrayList<>();

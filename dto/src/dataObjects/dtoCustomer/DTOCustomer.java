@@ -2,7 +2,9 @@ package dataObjects.dtoCustomer;
 
 
 import dataObjects.dtoBank.dtoAccount.DTOAccount;
+import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
+import logic.bank.account.Account;
 import logic.bank.account.Movement;
 import logic.customer.Customer;
 
@@ -12,7 +14,17 @@ public class DTOCustomer implements DTOAccount {
 
     protected String name;
     protected int amount;
-    protected ArrayList<DTOMovement> movements=new ArrayList<>();
+    protected ArrayList<DTOMovement> movements;
+    protected final ArrayList<DTOLoan> loaner;
+    protected final ArrayList<DTOLoan> borrower;
+
+
+    public DTOCustomer(){
+        movements=new ArrayList<>();
+        loaner=new ArrayList<>();
+        borrower=new ArrayList<>();
+
+    }
 
     @Override
     public int getAmount() {

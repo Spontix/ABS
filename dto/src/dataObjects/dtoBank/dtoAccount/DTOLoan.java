@@ -1,8 +1,6 @@
 package dataObjects.dtoBank.dtoAccount;
 
 
-import dataObjects.dtoBank.dtoLoanStatus.DTOLoanStatus;
-
 import java.util.ArrayList;
 
 public class DTOLoan {
@@ -14,31 +12,35 @@ public class DTOLoan {
     protected int totalYazTime;
     protected int paysEveryYaz;
     protected int interestPerPayment;
-    protected final DTOLoanStatus loanStatus;
+    protected final DTOLoanStatus loanStatus=DTOLoanStatus.NEW;
     protected ArrayList<DTOAccount> listOfAccompanied;
-    protected int yazNumberTillEnd;
+    protected ArrayList<DTOInlay> listOfInlays;
+    /*protected int yazNumberTillEnd;
     protected int totalInterestPayTillNow;
     protected int totalInterestPayTillEnd;
     protected int totalCapitalPayTillNow;
-    protected int totalCapitalPayTillEnd;
+    protected int totalCapitalPayTillEnd;*/
+
+    public DTOLoan() {
 
 
-    public DTOLoan(DTOLoanStatus loanStatusLoan,String idLoan,String ownerLoan,String categoryLoan,int capitalLoan,int totalYazTimeLoan,int paysEveryYazLoan,int interestPerPaymentLoan) {
-        loanStatus = loanStatusLoan;
-        id=idLoan;
-        owner=ownerLoan;
-        category=categoryLoan;
-        capital=capitalLoan;
-        totalYazTime=totalYazTimeLoan;
-        paysEveryYaz=paysEveryYazLoan;
-        interestPerPayment=interestPerPaymentLoan;
-        listOfAccompanied=null;
-        yazNumberTillEnd=0;
-        totalInterestPayTillNow=0;
-        totalInterestPayTillEnd=0;
-        totalCapitalPayTillNow=0;
-        totalCapitalPayTillEnd=0;
+    }
 
+    @Override
+    public String toString(){
+
+        return ("-------------------------------\n" +
+                "Loan ID - " + id + "\n" +
+                "Loan owner - " + owner + "\n" +
+                "Loan category - " + category + "\n" +
+                "The total original time of the loan - " + totalYazTime + "\n" +
+                "Pays every yaz - " + paysEveryYaz + "\n" +
+                "Loan interest - " + interestPerPayment + "\n" +
+                "Loan status - " + loanStatus + "\n");
+    }
+
+    public String getStatusOperation(){
+        return loanStatus.operationThree(this);
     }
 
     public int getCapital() {
@@ -77,7 +79,11 @@ public class DTOLoan {
         return owner;
     }
 
-    public int getTotalCapitalPayTillEnd() {
+    public ArrayList<DTOInlay> getListOfInlays() {
+        return listOfInlays;
+    }
+
+    /*public int getTotalCapitalPayTillEnd() {
         return totalCapitalPayTillEnd;
     }
 
@@ -95,5 +101,5 @@ public class DTOLoan {
 
     public int getYazNumberTillEnd() {
         return yazNumberTillEnd;
-    }
+    }*/
 }

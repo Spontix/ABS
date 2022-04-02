@@ -2,9 +2,8 @@ package application.console;
 
 import application.UiType;
 import dataObjects.dtoBank.dtoAccount.DTOAccount;
+import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
-import dataObjects.dtoBank.dtoLoanStatus.DTOLoanStatus;
-import dataObjects.dtoCustomer.DTOCustomer;
 import logic.UIInterfaceLogic;
 import logic.bank.Bank;
 import logic.bank.account.Inlay;
@@ -17,6 +16,7 @@ import menuBuilder.MenuItem;
 import menuBuilder.MenuType;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -29,7 +29,9 @@ public class Console implements UiType {
     public Console(){
         //bank=new Bank();
         bank1=XmlSerialization.buildBank("fileName");
-        bank1.addCustomer(new Customer());
+        bank1.addCustomer(new Customer("Menash",10000));
+        bank1.addCustomer(new Customer("Koko",5000));
+
     }
 
 
@@ -236,9 +238,44 @@ public class Console implements UiType {
 
     @Override
     public void showCustomerInformation() {
-        bank1.getCustomers().forEach(a->System.out.println(a.toString()+"\n"));
+        /*Loan loan=Loan.build("1","Menash","Car",10000,12,85,10);
+        Loan loan1=Loan.build("2","Menash","Car",10000,12,85,10);
+        Loan loan2=Loan.build("3","Menash","Car",10000,12,85,10);
+        Loan loan3=Loan.build("4","Menash","Car",10000,12,85,10);
+        Loan loan4=Loan.build("5","Koko","Car",10000,12,85,10);
+        Loan loan5=Loan.build("6","Koko","Car",10000,12,85,10);
+        Loan loan6=Loan.build("7","Koko","Car",10000,12,85,10);
 
-        bank1.addCustomer(new Customer());
+        bank1.addLoanToBank(loan);
+        bank1.addLoanToBank(loan1);
+        bank1.addLoanToBank(loan2);
+        bank1.addLoanToBank(loan3);
+        bank1.addLoanToBank(loan4);
+        bank1.addLoanToBank(loan5);
+        bank1.addLoanToBank(loan6);
+        bank1.addBorrowerTOLoan();
+        bank1.addBorrowerTOLoan();*/
+
+
+        List<DTOLoan> dtoCustomerLoanerList;
+        List<DTOLoan> dtoCustomerBorrowersList;
+        for(int i=0; i<bank1.getCustomers().size(); i++ ){
+            System.out.println(bank1.getCustomer(i));
+            dtoCustomerLoanerList=bank1.getCustomerLoanersList(bank1.getCustomerName(i));//===bank1.methode();
+            dtoCustomerBorrowersList =bank1.getCustomerBorrowersList(bank1.getCustomerName(i));
+            System.out.println("\n-------- Loans as loaner --------\n");
+            for (DTOLoan dtoLoan : dtoCustomerLoanerList) {
+                System.out.println(dtoLoan + "\n" +
+                        dtoLoan.getStatusOperation());
+            }
+            System.out.println("\n-------- Loans as borrower --------\n");
+            for (DTOLoan dtoLoan : dtoCustomerBorrowersList) {
+                System.out.println(dtoLoan + "\n" +
+                        dtoLoan.getStatusOperation());
+            }
+
+        }
+
     }
 
 
@@ -246,7 +283,7 @@ public class Console implements UiType {
     public void showDataLoans() {
         System.out.println("This information for all existing loans in the system:\n");
         ArrayList<Loan> loans = bank.getLoans();
-        loans.add(new Loan(DTOLoanStatus.PENDING,"4","Moshe","Car",2400,12,1,5));
+        //loans.add(new Loan(DTOLoanStatus.PENDING,"4","Moshe","Car",2400,12,1,5));
         for (int i = 0; i < loans.size(); i++) {
             System.out.println("------------ Loan number " + i + " ------------\n" +
                     "Loan ID - " + loans.get(i).getId() + "\n" +

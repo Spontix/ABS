@@ -44,6 +44,11 @@ public class DTOMovement {
 
     @Override
     public String toString(){
-        return "<To do yaz time : "+toDoYazTime+"\n"+"Sum : "+sum+"\n"+"Operation : "+ operation+"\n"+ "Sum before operation :"+sumBeforeOperation+"\n"+"Sum after operation : "+sumAfterOperation+">\n";
+        return "-------------------------------\n" +
+                "To do yaz time - " + toDoYazTime + "\n" +
+                "Sum - " + sum + "\n" +
+                "Operation - " + operation + "\n" +
+                "Sum before operation - " + sumBeforeOperation + "\n" +
+                "Sum after operation - " + sumAfterOperation + "\n";
     }
 }

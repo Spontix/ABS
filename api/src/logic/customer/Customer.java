@@ -12,9 +12,9 @@ public class Customer extends DTOCustomer implements Account {
             amount=startAmount;
         }
 
-    public Customer(){///should be private because the user should not have the power to creat a new customer without any information , that's why we have the static method Customer.build
-            amount=10000;
-            name="Menash";
+    public Customer(String oursName,int oursAmount){/////////////////
+            amount=oursAmount;
+            name=oursName;
     }
 
        @Override
