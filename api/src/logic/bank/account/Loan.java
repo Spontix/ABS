@@ -4,49 +4,47 @@ package logic.bank.account;
 
 
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
-import dataObjects.dtoBank.dtoLoanStatus.DTOLoanStatus;
+import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 public class Loan extends DTOLoan {
 
 
-    public Loan(DTOLoanStatus loanStatusLoan,String idLoan,String ownerLoan,String categoryLoan,int capitalLoan,int totalYazTimeLoan,int paysEveryYazLoan,int interestPerPaymentLoan) {
-        super(loanStatusLoan,idLoan,ownerLoan,categoryLoan,capitalLoan,totalYazTimeLoan,paysEveryYazLoan,interestPerPaymentLoan);
+    public Loan() {
+
     }
 
-    public int setTotalYaz(int number)
-    {
-        return totalYazTime+number;
+    public int setTotalYaz(int number) {
+        return totalYazTime + number;
     }
 
-    private void setPendingDetails(){
+    private void setPendingDetails() {
         //int sum=listOfAccompanied.stream().mapToInt(a -> a.get)
     }
 
-    public DTOLoan exeStatus(DTOLoanStatus loanStatus){
-        switch (loanStatus){
-            case PENDING:
-                setPendingDetails();
-                break;
-            case ACTIVE:
-
-                break;
-            case RISK:
-
-                break;
-
-            case FINISHED:
-
-                break;
-
-        }
-
-        return this;
-
+    public static Loan build(String idLoan, String ownerLoan, String categoryLoan, int capitalLoan, int totalYazTimeLoan, int paysEveryYazLoan, int interestPerPaymentLoan) {
+        Loan loan = new Loan();
+        loan.id = idLoan;
+        loan.owner = ownerLoan;
+        loan.category = categoryLoan;
+        loan.capital = capitalLoan;
+        loan.totalYazTime = totalYazTimeLoan;
+        loan.paysEveryYaz = paysEveryYazLoan;
+        loan.interestPerPayment = interestPerPaymentLoan;
+        loan.listOfAccompanied = new ArrayList<>();
+        loan.listOfInlays=new ArrayList<>();
+        /*loan.yazNumberTillEnd = 0;
+        loan.totalInterestPayTillNow = 0;
+        loan.totalInterestPayTillEnd = 0;
+        loan.totalCapitalPayTillNow = 0;
+        loan.totalCapitalPayTillEnd = 0;*/
+        return loan;
     }
 
 
 }
+
+
+
 
