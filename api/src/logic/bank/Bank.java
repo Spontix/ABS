@@ -121,8 +121,10 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
     @Override
     public void addBorrowerTOLoan() {///////////
-        loans.get(4).getListOfAccompanied().add(getCustomer(0));
-        loans.get(5).getListOfAccompanied().add(getCustomer(0));
+        loans.get(0).getListOfAccompanied().add(getCustomer(0));
+        loans.get(0).getListOfAccompanied().add(getCustomer(1));
+        loans.get(0).getListOfAccompanied().add(getCustomer(2));
+        loans.get(0).getListOfAccompanied().add(getCustomer(3));
 
     }
 
@@ -193,6 +195,30 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
             index++;
         }
         return loansChosenCustomer;
+    }
+
+    @Override
+    public void addMovementPerLoanFromInlay(Inlay inlay, ArrayList<DTOLoan> loansCustomerChosen , int chosenInvestAmount, int customerIndexGiveMoney){
+        int sumPerLoan =0;
+        if(loansCustomerChosen != null){
+            sumPerLoan = (chosenInvestAmount / loansCustomerChosen.size());
+            for (DTOLoan dtoLoan : loansCustomerChosen) {
+                Inlay customerInlay = Inlay.build(inlay.getDtoAccount(),sumPerLoan,inlay.getCategory(),inlay.getMinInterestYaz(), inlay.getMinYazTime());
+                for (int j = 0; j < getCustomers().size(); j++) {
+                    DTOCustomer customer = getCustomers().get(j);
+                    if (Objects.equals(customer.getCustomerName(), dtoLoan.getId())) {
+                        Movement movementLoan = Movement.build(sumPerLoan, "+", customer.getAmount(), customer.getAmount() + sumPerLoan, 0);
+                        addMovementToClient(j, movementLoan);
+                        dtoLoan.getListOfAccompanied().add(getCustomer(customerIndexGiveMoney));
+                        dtoLoan.getListOfInlays().add(customerInlay);
+                        cashDeposit(j, sumPerLoan);///////////////////////////////////////////////////
+                        }
+                    }
+                }
+
+            }
+        else
+            throw new RuntimeException ("You didnt choose any loans.");
     }
 
     @Override

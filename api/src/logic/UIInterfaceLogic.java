@@ -35,4 +35,5 @@ public interface UIInterfaceLogic {
     ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
     ArrayList<DTOLoan>  loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay,String[] arrayStringsScanner);
     void yazProgress();//ToDo!!
+    void addMovementPerLoanFromInlay(Inlay inlay, ArrayList<DTOLoan> loansCustomerChosen , int chosenInvestAmount, int customerIndexGiveMoney);
 }

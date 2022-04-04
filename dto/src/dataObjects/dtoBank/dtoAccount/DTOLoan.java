@@ -13,6 +13,7 @@ public class DTOLoan {
     protected String owner;
     protected String category;
     protected int capital;
+    protected int capitalSumLeftTillActive;
     protected int totalYazTime;
     protected int paysEveryYaz;
     protected int interestPerPayment;

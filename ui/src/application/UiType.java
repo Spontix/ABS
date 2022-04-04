@@ -35,5 +35,5 @@ public interface UiType {
     //ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
     void showLoansList(List<DTOLoan> loans);
     ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay);
-    void addMovementPerLoanFromInlay(ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount ,int customerIndexGiveMoney);
+   // void addMovementPerLoanFromInlay(ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount ,int customerIndexGiveMoney);
 }

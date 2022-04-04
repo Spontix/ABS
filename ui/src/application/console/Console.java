@@ -51,7 +51,7 @@ public class Console implements UiType {
         /*bank1.addCustomer(new Customer("Koko", 789));
         bank1.addCustomer(new Customer("Lili", 456));*/
 
-        Loan loan=Loan.build("1","Menash","Car",10000,12,85,10);
+        Loan loan=Loan.build("1","Eden","Car",5000,10,2,5);
         //Loan loan1=Loan.build("2","MoMo","Home",5000,24,100,50);
         //Loan loan2=Loan.build("3","Gil","Bar Mitzvah",100,10,20,20);
         //Loan loan3=Loan.build("4","Noa","Mortgage",300,30,10,5);
@@ -66,7 +66,6 @@ public class Console implements UiType {
         //bank1.addLoanToBank(loan4);
         //bank1.addLoanToBank(loan5);
         //bank1.addLoanToBank(loan6);
-        bank1.addBorrowerTOLoan();
         bank1.addBorrowerTOLoan();
     }
 
@@ -192,9 +191,10 @@ public class Console implements UiType {
 
             Movement movement = Movement.build(chosenInvestAmount, "-", bank1.getAmountOfCustomer(chosenCustomerIndex), bank1.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount, 0);
             DTOMovement cloneMovement = bank1.addMovementToClient(chosenCustomerIndex, movement);
+
             if (ensureMassageToCustomer(cloneMovement)) {
                 bank1.cashWithdrawal(chosenCustomerIndex, chosenInvestAmount);
-                addMovementPerLoanFromInlay(loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
+                bank1.addMovementPerLoanFromInlay(inlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
                 System.out.println("-------- The operation was performed successfully --------\n");
                 } else {
                     System.out.println("-------- Operation canceled --------\n");
@@ -211,7 +211,7 @@ public class Console implements UiType {
         }
     }
 
-    @Override
+    /*@Override
     public void addMovementPerLoanFromInlay(ArrayList<DTOLoan> loansCustomerChosen , int chosenInvestAmount, int customerIndexGiveMoney){
         int sumPerLoan =0;
         if(loansCustomerChosen != null){
@@ -232,8 +232,9 @@ public class Console implements UiType {
             }
         }
         else
+        //throw new RuntimeException exception
             System.out.println("You didnt choose any loans.");
-    }
+    }*/
 
     @Override
     public ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay){
