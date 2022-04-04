@@ -33,4 +33,5 @@ public class DTOBank {
     public ArrayList<String> getCategories() {
         return categories;
     }
+
 }
