@@ -4,11 +4,12 @@ import dataObjects.dtoCustomer.DTOCustomer;
 import logic.customer.Customer;
 
 public class DTOInlay {
-    protected DTOAccount dtoAccount=new DTOCustomer();
+    protected DTOAccount dtoAccount = new DTOCustomer();
     protected int investAmount;
     protected String category;
     protected double minInterestYaz;
     protected int minYazTime;
+
 
     public String getCategory() {
         return category;
@@ -28,5 +29,15 @@ public class DTOInlay {
 
     public DTOAccount getDtoAccount() {
         return dtoAccount;
+    }
+
+    public static DTOInlay build(DTOInlay inlay){
+        DTOInlay dtoInlay=new DTOInlay();
+        dtoInlay.investAmount=inlay.investAmount;
+        dtoInlay.category=inlay.category;
+        dtoInlay.minInterestYaz=inlay.minInterestYaz;
+        dtoInlay.minYazTime=inlay.minYazTime;
+        dtoInlay.dtoAccount=DTOCustomer.build((DTOCustomer)inlay.dtoAccount);
+        return dtoInlay;
     }
 }

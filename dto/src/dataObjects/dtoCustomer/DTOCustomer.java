@@ -2,6 +2,7 @@ package dataObjects.dtoCustomer;
 
 
 import dataObjects.dtoBank.dtoAccount.DTOAccount;
+import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
 import logic.bank.account.Account;
@@ -15,11 +16,13 @@ public class DTOCustomer implements DTOAccount {
     protected String name;
     protected int amount;
     protected ArrayList<DTOMovement> movements;
+    protected ArrayList<DTOInlay> inlays;
     protected final ArrayList<DTOLoan> loaner;
     protected final ArrayList<DTOLoan> borrower;
 
 
     public DTOCustomer(){
+        inlays = new ArrayList<>();
         movements=new ArrayList<>();
         loaner=new ArrayList<>();
         borrower=new ArrayList<>();
@@ -37,6 +40,9 @@ public class DTOCustomer implements DTOAccount {
     }
 
     @Override
+    public ArrayList<DTOInlay> getInlays(){return inlays;}
+
+    @Override
     public String getCustomerName(){
         return name;
     }
@@ -47,7 +53,7 @@ public class DTOCustomer implements DTOAccount {
         return "Name : "+name+"\n"+"Current amount : "+amount+"\n"+"-----------Movements-----------"+"\n"+movements.toString();
     }
     
-    public static DTOCustomer build(Customer customer){
+    public static DTOCustomer build(DTOCustomer customer){
         DTOCustomer dtoCustomer=new DTOCustomer();
         dtoCustomer.name=customer.name;
         dtoCustomer.amount=customer.amount;
