@@ -34,4 +34,5 @@ public interface UIInterfaceLogic {
     ArrayList<Loan> getLoansList();
     ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
     ArrayList<DTOLoan>  loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay,String[] arrayStringsScanner);
+    void yazProgress();//ToDo!!
 }

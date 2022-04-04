@@ -14,10 +14,10 @@ public enum DTOLoanStatus {
 
         public String operationThree(DTOLoan dtoLoan){
             int sum =0;
-            for(int i=0; i<dtoLoan.listOfInlays.size(); i++){
-                sum += dtoLoan.listOfInlays.get(i).investAmount;
+            for (DTOInlay dtoInlay:dtoLoan.listOfInlays) {
+                sum += dtoInlay.investAmount;
             }
-            return "The missing amount until the loan will become active is - " +  dtoLoan.capital+"\n";
+            return "The missing amount until the loan will become active is - " +  (dtoLoan.capital-sum)+"\n";
         }
     },
     ACTIVE{
@@ -28,7 +28,7 @@ public enum DTOLoanStatus {
 
         @Override
         public String operationThree(DTOLoan dtoLoan) {
-            return null;
+            return "The next Yaz to be paid is: "+dtoLoan.theNextYazToBePaid()+"\n"+"The expected payment is: "+dtoLoan.paymentPerPulse();
         }
     }
     ,RISK{
@@ -39,7 +39,7 @@ public enum DTOLoanStatus {
 
         @Override
         public  String operationThree(DTOLoan dtoLoan) {
-            return null;
+            return "The total payments number that was not paid are: "+dtoLoan.inRiskCounter+"/"+dtoLoan.pulseAmount()+"\n"+"And the dept is:  "+ dtoLoan.totalAmountThatWasNotPayed();
         }
     }
     ,FINISHED{
@@ -50,7 +50,7 @@ public enum DTOLoanStatus {
 
         @Override
         public String operationThree(DTOLoan dtoLoan) {
-            return null;
+            return "Started YAZ is: "+dtoLoan.startedYazInActive+"\n"+"Ended YAZ is: "+dtoLoan.endedYaz;
         }
     }
     ,NEW {
@@ -61,7 +61,8 @@ public enum DTOLoanStatus {
 
         @Override
         public String operationThree(DTOLoan dtoLoan) {
-            return null;
+
+            return new String("The loan standing on NEW status there for the capital stand still");
         }
     };
 

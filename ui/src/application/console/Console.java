@@ -43,29 +43,29 @@ public class Console implements UiType {
     public void addDataForCheck(){
         bank1.addCategories();
 
-        bank1.addCustomer(new Customer("Menash", 10000));
-        bank1.addCustomer(new Customer("MoMo", 5000));
-        bank1.addCustomer(new Customer("Gil", 20000));
-        bank1.addCustomer(new Customer("Noa", 3000));
-        bank1.addCustomer(new Customer("Avi", 500));
-        bank1.addCustomer(new Customer("Koko", 789));
-        bank1.addCustomer(new Customer("Lili", 456));
+        bank1.addCustomer(new Customer("Moshe", 10000));
+        bank1.addCustomer(new Customer("Avi", 5000));
+        bank1.addCustomer(new Customer("Shlomo", 20000));
+        bank1.addCustomer(new Customer("Dani", 3000));
+        bank1.addCustomer(new Customer("Eden", 500000));
+        /*bank1.addCustomer(new Customer("Koko", 789));
+        bank1.addCustomer(new Customer("Lili", 456));*/
 
         Loan loan=Loan.build("1","Menash","Car",10000,12,85,10);
-        Loan loan1=Loan.build("2","MoMo","Home",5000,24,100,50);
-        Loan loan2=Loan.build("3","Gil","Bar Mitzvah",100,10,20,20);
-        Loan loan3=Loan.build("4","Noa","Mortgage",300,30,10,5);
-        Loan loan4=Loan.build("5","Koko","Car",800,50,60,6);
-        Loan loan5=Loan.build("6","Avi","Home",20,17,5,3);
-        Loan loan6=Loan.build("7","Lili","Bar Mitzvah",50,7,3,2);
+        //Loan loan1=Loan.build("2","MoMo","Home",5000,24,100,50);
+        //Loan loan2=Loan.build("3","Gil","Bar Mitzvah",100,10,20,20);
+        //Loan loan3=Loan.build("4","Noa","Mortgage",300,30,10,5);
+        //Loan loan4=Loan.build("5","Koko","Car",800,50,60,6);
+        //Loan loan5=Loan.build("6","Avi","Home",20,17,5,3);
+        //Loan loan6=Loan.build("7","Lili","Bar Mitzvah",50,7,3,2);
 
         bank1.addLoanToBank(loan);
-        bank1.addLoanToBank(loan1);
-        bank1.addLoanToBank(loan2);
-        bank1.addLoanToBank(loan3);
-        bank1.addLoanToBank(loan4);
-        bank1.addLoanToBank(loan5);
-        bank1.addLoanToBank(loan6);
+        //bank1.addLoanToBank(loan1);
+        //bank1.addLoanToBank(loan2);
+        //bank1.addLoanToBank(loan3);
+        //bank1.addLoanToBank(loan4);
+        //bank1.addLoanToBank(loan5);
+        //bank1.addLoanToBank(loan6);
         bank1.addBorrowerTOLoan();
         bank1.addBorrowerTOLoan();
     }

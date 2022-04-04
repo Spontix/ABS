@@ -194,4 +194,9 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         }
         return loansChosenCustomer;
     }
+
+    @Override
+    public void yazProgress() {
+
+    }
 }
