@@ -1,8 +1,9 @@
 package logic.bank.account;
 
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
+import logic.YazLogic;
 
-public class Movement extends DTOMovement {
+public class Movement extends DTOMovement implements Cloneable {
 
     private Movement() {
 
@@ -29,16 +30,26 @@ public class Movement extends DTOMovement {
         operation=movementOperation;
     }
 
-    public static Movement build(int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation,int movementToDoYaz){
+    public static Movement build(int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation){
         Movement movement=new Movement();
         movement.setSum(movementSum);
         movement.setOperation(movementOperation);
+        movement.setToDoYazTime(YazLogic.currentYazUnit);
         if(movementSumAfterOperation<0){
             throw new RuntimeException("The operation cant be preformed because there is not enough money in this account!!");
         }
         movement.setSumAfterOperation(movementSumAfterOperation);
         movement.setSumBeforeOperation(movementSumBeforeOperation);
-        movement.setToDoYazTime(movementToDoYaz);
         return movement;
+    }
+
+
+    @Override
+    public Movement clone() {
+        try {
+            return (Movement) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

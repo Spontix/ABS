@@ -7,6 +7,7 @@ import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Loan extends DTOLoan {
 
@@ -14,6 +15,8 @@ public class Loan extends DTOLoan {
     public Loan() {
 
     }
+
+
 
     public int setTotalYaz(int number) {
         return totalYazTime + number;
@@ -41,6 +44,35 @@ public class Loan extends DTOLoan {
         loan.totalCapitalPayTillEnd = 0;*/
         return loan;
     }
+
+    public void decCapitalSumLeftTillActive(int paymentPerPulse){
+        this.capitalSumLeftTillActive=this.capitalSumLeftTillActive-paymentPerPulse;
+
+    }
+
+    public void setStartedYazInActive(int yaz){
+        if(startedYazInActive==0)
+            startedYazInActive=yaz;
+    }
+
+    public void setLoanStatus(DTOLoanStatus loanStatus){
+        this.loanStatus=loanStatus;
+
+    }
+
+    public void incrInRiskCounter(){
+        this.inRiskCounter++;
+    }
+
+    public void decInRiskCounter(){
+        this.inRiskCounter--;
+    }
+
+    public void incrCapitalSumLeftTillActive(int paymentPerPulse){
+        this.capitalSumLeftTillActive=this.capitalSumLeftTillActive+paymentPerPulse;
+    }
+
+
 
 
 }

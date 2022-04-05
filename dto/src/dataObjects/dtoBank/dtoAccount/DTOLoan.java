@@ -2,10 +2,13 @@ package dataObjects.dtoBank.dtoAccount;
 
 
 import dataObjects.dtoCustomer.DTOCustomer;
+import logic.YazLogic;
 import logic.customer.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DTOLoan {
 
@@ -18,14 +21,13 @@ public class DTOLoan {
     protected int paysEveryYaz;
     protected int interestPerPayment;
     protected DTOLoanStatus loanStatus = DTOLoanStatus.NEW;
-    protected ArrayList<DTOAccount> listOfAccompanied;
-    protected ArrayList<DTOInlay> listOfInlays;
+    protected List<DTOAccount> listOfAccompanied;
+    protected List<DTOInlay> listOfInlays;
     /*protected int yazNumberTillEnd;
     protected int totalInterestPayTillNow;
     protected int totalInterestPayTillEnd;
     protected int totalCapitalPayTillNow;
     protected int totalCapitalPayTillEnd;*/
-    protected int currentYaz;
     protected int pulseCounterThatHappened;
     protected int startedYazInActive;
     protected int endedYaz;
@@ -59,14 +61,15 @@ public class DTOLoan {
     @Override
     public String toString() {
 
-        return ("---------------------------------\n" +
+        return (
                 "Loan ID - " + id + "\n" +
                 "Loan owner - " + owner + "\n" +
                 "Loan category - " + category + "\n" +
+                "Loan capital - "+ capital + "\n" +
                 "The total original time of the loan - " + totalYazTime + "\n" +
                 "Pays every yaz - " + paysEveryYaz + "\n" +
                 "Loan interest - " + interestPerPayment + "\n" +
-                "Loan status - " + loanStatus);
+                "Loan status - " + loanStatus+"\n");
     }
 
     public String getStatusOperation() {
@@ -77,7 +80,7 @@ public class DTOLoan {
         return capital;
     }
 
-    public ArrayList<DTOAccount> getListOfAccompanied() {
+    public List<DTOAccount> getListOfAccompanied() {
         return listOfAccompanied;
     }
 
@@ -109,7 +112,7 @@ public class DTOLoan {
         return owner;
     }
 
-    public ArrayList<DTOInlay> getListOfInlays() {
+    public List<DTOInlay> getListOfInlays() {
         return listOfInlays;
     }
 
@@ -124,16 +127,20 @@ public class DTOLoan {
     }
 
     public int theNextYazToBePaid(){
-        return currentYaz+ (paysEveryYaz-( currentYaz% paysEveryYaz));
+        return YazLogic.currentYazUnit+ numberOfYazTillNextPulse();
+    }
+
+    public int numberOfYazTillNextPulse(){
+        return (paysEveryYaz-( (YazLogic.currentYazUnit-1)% paysEveryYaz));
     }
 
 
-    public int calculatePaymentToLoaner(int customerIndex) {
-        return (paymentPerPulse() * (listOfInlays.get(customerIndex).investAmount * 100) / capital) / 100;
+    public int calculatePaymentToLoaner(Customer customer) {
+        return (paymentPerPulse() * (listOfInlays.stream().filter(i-> Objects.equals(i.dtoAccount.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).investAmount * 100) / capital) / 100;
     }
 
     public int getCurrentYaz() {
-        return currentYaz;
+        return YazLogic.currentYazUnit;
     }
 
     public int getStartedYazInActive() {
@@ -150,6 +157,10 @@ public class DTOLoan {
 
     public int totalAmountThatWasNotPayed(){
         return inRiskCounter*paymentPerPulse();
+    }
+
+    public int getCapitalSumLeftTillActive() {
+        return capitalSumLeftTillActive;
     }
 
     /*public int getTotalCapitalPayTillEnd() {

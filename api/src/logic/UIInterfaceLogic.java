@@ -15,12 +15,15 @@ import java.util.List;
 
 public interface UIInterfaceLogic {
     DTOMovement addMovementToClient(int customerIndex,Movement movement);
+    DTOMovement addMovementToClient(DTOCustomer customer, Movement movement);
     DTOInlay addInlayToClient(int customerIndex, Inlay inlay);
     int getAmountOfCustomer(int customerIndex);
     DTOCustomer getCustomer(int customerIndex);
     String getCustomerName(int customerIndex);
     int getTotalCustomersSize();
     void cashDeposit(int customerIndex,int sum);
+    void cashDeposit(Customer customer, int sum);
+    void cashWithdrawal(Customer customer, int sum);
     void cashWithdrawal(int customerIndex,int sum);
     void addCustomer(Customer customer);
     ArrayList<DTOCustomer> getCustomers();
@@ -34,6 +37,6 @@ public interface UIInterfaceLogic {
     ArrayList<Loan> getLoansList();
     ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
     ArrayList<DTOLoan>  loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay,String[] arrayStringsScanner);
-    void yazProgress();//ToDo!!
+    void yazProgressLogic();//ToDo!!
     void addMovementPerLoanFromInlay(Inlay inlay, ArrayList<DTOLoan> loansCustomerChosen , int chosenInvestAmount, int customerIndexGiveMoney);
 }
