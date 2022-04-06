@@ -39,7 +39,7 @@ public enum DTOLoanStatus {
 
         @Override
         public  String operationThree(DTOLoan dtoLoan) {
-            return "The total payments number that was not paid are: "+dtoLoan.inRiskCounter+"/"+dtoLoan.pulseAmount()+"\n"+"And the dept is:  "+ dtoLoan.totalAmountThatWasNotPayed();
+            return "The total payments number that was not paid are: "+dtoLoan.inRiskCounter+"/"+dtoLoan.pulseNumber()+"\n"+"And the dept is:  "+ dtoLoan.totalAmountThatWasNotPayed();
         }
     }
     ,FINISHED{

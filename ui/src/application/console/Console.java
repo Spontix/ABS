@@ -15,6 +15,7 @@ import menuBuilder.MainMenu;
 import menuBuilder.MenuItem;
 import menuBuilder.MenuType;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,56 +23,26 @@ import java.util.Scanner;
 
 
 public class Console implements UiType {
-    private final UIInterfaceLogic bank;
+    private UIInterfaceLogic bank;
     MainMenu menu;
 
     public Console() {
-        bank = XmlSerialization.buildBank("api/src/resources/ex1-small.xml");
-        addDataForCheck();
+
     }
 
 
-    public void Run() {
+    public void Run() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         menu = new MainMenu("Main", MenuType.PRIMARY_MENU);
         createMenu(menu);
         menu.show();
     }
 
-    ///////////////////////////////////////////Don't Forget To Delete it/////////////////////////////////////////////////////////////
-    public void addDataForCheck(){
-        /*bank.addCategories();
-
-        bank.addCustomer(Customer.build("Moshe", 10000));
-        bank.addCustomer(Customer.build("Avi", 5000));
-        bank.addCustomer(Customer.build("Shlomo", 20000));
-        bank.addCustomer(Customer.build("Dani", 3000));
-        bank.addCustomer(Customer.build("Eden", 500000));
-        /*bank1.addCustomer(new Customer("Koko", 789));
-        bank1.addCustomer(new Customer("Lili", 456));*/
-
-        //Loan loan=Loan.build("1","Eden","car",5000,10,2,5);
-        //Loan loan1=Loan.build("2","MoMo","Home",5000,24,100,50);
-        //Loan loan2=Loan.build("3","Gil","Bar Mitzvah",100,10,20,20);
-        //Loan loan3=Loan.build("4","Noa","Mortgage",300,30,10,5);
-        //Loan loan4=Loan.build("5","Koko","Car",800,50,60,6);
-        //Loan loan5=Loan.build("6","Avi","Home",20,17,5,3);
-        //Loan loan6=Loan.build("7","Lili","Bar Mitzvah",50,7,3,2);
-
-        //bank.addLoanToBank(loan);
-        //bank1.addLoanToBank(loan1);
-        //bank1.addLoanToBank(loan2);
-        //bank1.addLoanToBank(loan3);
-        //bank1.addLoanToBank(loan4);
-        //bank1.addLoanToBank(loan5);
-        //bank1.addLoanToBank(loan6);
-        //bank1.addBorrowerTOLoan();*/
-    }
 
     private void createMenu(MainMenu menu) {
         /*MainMenu first =
                 new MainMenu("Reading the system information file.", MenuType.SECONDARY_MENU);*/
         MenuItem first = new MenuItem("Reading the system information file.");
-        //first.AddListener(()->sumToInvest(new Loan()));
+        first.AddListener(()->bank = XmlSerialization.buildBank("api/src/resources/ex1-small.xml"));
         menu.insertToMenu(first);
         MenuItem second = new MenuItem("Presentation of information on existing loans and their status.");
         //second.AddListener(this::showDataLoans);
@@ -105,19 +76,6 @@ public class Console implements UiType {
         menu.insertToMenu(eighth);
     }
 
-   /* @Override
-    public void sumToInvest(Loan x) {}
-    @Override
-    public void category(Loan x) {}
-    @Override
-    public void minimumInterestPerUnitTime(Loan x) {}
-    @Override
-    public void minimumTimePerUnitTime(Loan x) {}
-    @Override
-    public void maximumPercentageOfOwnership(Loan x) {}
-    @Override
-    public void maximumLoansOpenToTheBorrower(Loan x) {
-    }*/
 
     @Override
     public void insertSumToAccount() {
@@ -130,11 +88,10 @@ public class Console implements UiType {
             chosenCustomerIndex = getChosenCustomerIndex();
             System.out.println("Please write the amount to be add: ");
             amountTOAdd = getAmountFromUser();
-            amountOfCustomer = bank.getAmountOfCustomer(chosenCustomerIndex);
-            Movement movement = Movement.build(amountTOAdd, "+", amountOfCustomer, amountOfCustomer + amountTOAdd);
-            DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);
-            if (ensureMassageToCustomer(cloneMovement)) {
-                bank.cashDeposit(chosenCustomerIndex, amountTOAdd);
+            amountOfCustomer = bank.getAmountOfCustomer(chosenCustomerIndex-1);
+            DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex-1),amountTOAdd, "+", amountOfCustomer, amountOfCustomer + amountTOAdd);
+            if (ensureMassageToCustomer(dtoMovement)) {
+                bank.cashDeposit(chosenCustomerIndex-1, amountTOAdd);
                 System.out.println("-------- The operation was performed successfully --------\n");
             } else {
                 System.out.println("-------- Operation canceled --------\n");
@@ -146,6 +103,12 @@ public class Console implements UiType {
         } catch (RuntimeException exception) {
             System.out.println(exception.getMessage());
             insertSumToAccount();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
@@ -173,7 +136,8 @@ public class Console implements UiType {
             System.out.println("Please select the customer number you would like to run the placement on:");
             int chosenCustomerIndex = getChosenCustomerIndex()-1;
             System.out.println("Please select the amount that you willing to invest. between 0 - " + bank.getAmountOfCustomer(chosenCustomerIndex) + ". (Mandatory selection)");
-            int chosenInvestAmount = getChosenInvestAmount(bank.getAmountOfCustomer(chosenCustomerIndex)) + 1;
+            int chosenInvestAmount = getChosenInvestAmount(bank.getAmountOfCustomer(chosenCustomerIndex)) ;
+            bank.checksInvestAmount(bank.getCustomer(chosenCustomerIndex),chosenInvestAmount);
             showCategoriesList();
             System.out.println("Please select the appropriate category number. If you are interested in proceeding to the following figure, please click Enter.");
             int choseCategoryIndex = getChosenCategoryIndex();
@@ -185,19 +149,17 @@ public class Console implements UiType {
             String category = null;
             if (choseCategoryIndex > 0 && choseCategoryIndex< bank.getCategoriesGroup().size())
                 category = bank.getCategory(choseCategoryIndex);
-            Inlay inlay = Inlay.build(bank.getCustomer(chosenCustomerIndex), chosenInvestAmount, category, minInterestYaz, minYazTime);
-            DTOInlay cloneInlay = bank.addInlayToClient(chosenCustomerIndex, inlay);
-            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(cloneInlay);
+            DTOInlay dtoInlay=bank.inlayBuild(bank.getCustomer(chosenCustomerIndex), chosenInvestAmount, category, minInterestYaz, minYazTime);
+            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(dtoInlay);
             showLoansList(loansSupportInlay);
-            System.out.println("Please select the id loans you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
+            System.out.println("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The loan number is in the loan title and the format is: 2 3 4 ...");
             ArrayList<DTOLoan> loansCustomerChosen = loansCustomerChosenParticipate(loansSupportInlay);
+            DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex),chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
+            /*Movement movement = Movement.build(chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
+            DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);*/
 
-            Movement movement = Movement.build(chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
-            DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);
-
-            if (ensureMassageToCustomer(cloneMovement)) {
-                bank.cashWithdrawal(chosenCustomerIndex, chosenInvestAmount);
-                bank.addMovementPerLoanFromInlay(inlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
+            if (ensureMassageToCustomer(dtoMovement)) {
+                bank.addMovementPerLoanFromInlay(dtoInlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
                 System.out.println("-------- The operation was performed successfully --------\n");
                 } else {
                     System.out.println("-------- Operation canceled --------\n");
@@ -205,28 +167,38 @@ public class Console implements UiType {
                 }
 
         }catch(NumberFormatException exception){
-                System.out.println("Incorrect input,please note that you entered an integer number!!\n");
+                System.out.println("Incorrect input!!!\n");
                 inlayActivation();
 
         }catch(RuntimeException exception) {
             System.out.println(exception.getMessage());
             inlayActivation();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay){
+    public ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         ArrayList<DTOLoan> loansChosenCustomer = new ArrayList<>();
         String[] arrayStringsScanner;
         Scanner sc = new Scanner(System.in);
         String idLoanCustomerChosen = sc.nextLine();
         arrayStringsScanner = idLoanCustomerChosen.split(" ");
-        try {
-            loansChosenCustomer= bank.loansSustainInlayAndClientChoose(loansSupportInlay,arrayStringsScanner);
+        if(idLoanCustomerChosen.equals("")) {
+            menu.show();
         }
-           catch (NumberFormatException exception) {
-                System.out.println("Please select the id loans you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
-               loansCustomerChosenParticipate( loansSupportInlay);
+        else {
+            try {
+                loansChosenCustomer = bank.loansSustainInlayAndClientChoose(loansSupportInlay, arrayStringsScanner);
+            } catch (NumberFormatException exception) {
+                System.out.println(exception.getMessage());
+                loansCustomerChosenParticipate(loansSupportInlay);
+            }
         }
         return loansChosenCustomer;
     }
@@ -245,9 +217,10 @@ public class Console implements UiType {
             System.out.println("Please write the amount to be draw: ");
             amountTODraw = getAmountFromUser();
             amountOfCustomer = bank.getAmountOfCustomer(chosenCustomerIndex);
-            Movement movement = Movement.build(amountTODraw, "-", amountOfCustomer, amountOfCustomer - amountTODraw);
-            DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);
-            if (ensureMassageToCustomer(cloneMovement)) {
+            DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex),amountTODraw, "+", amountOfCustomer, amountOfCustomer + amountTODraw);
+            /*Movement movement = Movement.build(amountTODraw, "-", amountOfCustomer, amountOfCustomer - amountTODraw);
+            DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);*/
+            if (ensureMassageToCustomer(dtoMovement)) {
                 bank.cashWithdrawal(chosenCustomerIndex, amountTODraw);
                 System.out.println("-------- The operation was performed successfully --------\n");
             } else {
@@ -260,6 +233,12 @@ public class Console implements UiType {
         } catch (RuntimeException exception) {
             System.out.println(exception.getMessage());
             drawSumFromAccount();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
@@ -300,12 +279,14 @@ public class Console implements UiType {
 
     @Override
     public void showLoansList(List<DTOLoan> loans){
+        int index=1;
         if(loans.size()==0){
             System.out.println("None\n---------------------------------");
         }
         else
              for (DTOLoan dtoLoan : loans) {
-                 System.out.println(dtoLoan+dtoLoan.getStatusOperation()+"\n---------------------------------");
+                 System.out.println("\n----------Loan number " + index +"----------\n" + dtoLoan+dtoLoan.invokeStatusOperation()+"\n");
+                 index++;
           }
     }
 
@@ -314,7 +295,7 @@ public class Console implements UiType {
         Scanner sc = new Scanner(System.in);
         String number = sc.nextLine();
         int chosenCustomerIndex = Integer.parseInt(number);
-        if (chosenCustomerIndex < 0 || chosenCustomerIndex > bank.getCustomers().size())
+        if (chosenCustomerIndex <= 0 || chosenCustomerIndex > bank.getCustomers().size())
             throw new NumberFormatException();
 
         return chosenCustomerIndex;
@@ -331,14 +312,13 @@ public class Console implements UiType {
     }
 
     @Override
-    public int getChosenInvestAmount(int amountOfCustomer){
+    public int getChosenInvestAmount(int amountOfCustomer) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         int chosenInvestAmount;
         Scanner sc = new Scanner(System.in);
         String number = sc.nextLine();
-        chosenInvestAmount = Integer.parseInt(number) - 1;
-        /*if(chosenInvestAmount > amountOfCustomer || chosenInvestAmount<0){
-            throw new RuntimeException("The investment amount is above the amount balance,please try again!");
-        }*/
+        chosenInvestAmount = Integer.parseInt(number);
+        if(chosenInvestAmount==0)
+            menu.show();
         return chosenInvestAmount;
     }
 

@@ -11,11 +11,104 @@ import logic.bank.account.Loan;
 import logic.bank.account.Movement;
 import logic.customer.Customer;
 
-import java.lang.ref.SoftReference;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Bank extends DTOBank implements UIInterfaceLogic {
+
+
+    private Object createInstance(Class clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        Constructor[] conList=clazz.getDeclaredConstructors();
+        Object object=null;
+        for (Constructor ctor : conList) {
+            if (ctor.getParameters().length == 0) {
+                ctor.setAccessible(true);
+                object= ctor.newInstance();
+                break;
+            }
+        }
+        return object;
+    }
+
+    @Override
+    public DTOCustomer customerBuild(String name,int amount) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        Customer customer=(Customer) createInstance(Customer.class);
+        customer.setName(name);
+        customer.setAmount(amount);
+        customer.setMovements(new ArrayList<>());
+        customer.setLoaner(new ArrayList<>());
+        customer.setBorrower(new ArrayList<>());
+        customer.setInlays(new ArrayList<>());
+        accounts.add(customer);
+
+        return DTOCustomer.build(customer);
+    }
+
+    @Override
+    public DTOMovement movementBuild(DTOCustomer customer,int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        Movement movement=(Movement) createInstance(Movement.class);
+        movement.setSum(movementSum);
+        movement.setOperation(movementOperation);
+        movement.setToDoYazTime(YazLogic.currentYazUnit);
+        if(movementSumAfterOperation<0){
+            throw new RuntimeException("The operation cant be preformed because there is not enough money in this account!!");
+        }
+        movement.setSumAfterOperation(movementSumAfterOperation);
+        movement.setSumBeforeOperation(movementSumBeforeOperation);
+
+        accounts.stream().filter(a->a.getCustomerName().equals(customer.getCustomerName())).collect(Collectors.toList()).get(0).getMovements().add(movement);
+
+
+        return DTOMovement.build(movement);
+    }
+
+    @Override
+    public  Inlay inlayBuild(DTOAccount customer, int investAmount,String category,double minInterestYaz,int minYazTime) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        Inlay inlay=(Inlay) createInstance(Inlay.class);
+        checksInvestAmount(customer,investAmount);
+
+            inlay.setInvestAmount(investAmount);
+        inlay.setCategory(category);
+        inlay.setMinInterestYaz(minInterestYaz);
+        inlay.setMinYazTime(minYazTime);
+        inlay.setInlayCustomer(accounts.stream().filter(a->a.getCustomerName().equals(customer.getCustomerName())).collect(Collectors.toList()).get(0));
+
+        return inlay;
+    }
+
+    @Override
+    public void checksInvestAmount(DTOAccount customer,int investAmount){
+        if(investAmount > customer.getAmount() || investAmount<0){
+            throw new RuntimeException("The investment amount is above the amount balance or a negative one. please try again!");
+        }
+    }
+
+    @Override
+    public DTOLoan loanBuilder(String idLoan, String ownerLoan, String categoryLoan, int capitalLoan, int totalYazTimeLoan, int paysEveryYazLoan, int interestPerPaymentLoan) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        Loan loan = (Loan) createInstance(Loan.class);
+        loan.setId(idLoan);
+        loan.setOwner(ownerLoan);
+        loan.setCategory(categoryLoan);
+        loan.setCapital(capitalLoan);
+        loan.setCapitalSumLeftTillActive(capitalLoan);
+        loan.setTotalYaz(totalYazTimeLoan);
+        loan.serPaysEveryYaz(paysEveryYazLoan);
+        loan.setInterestPerPayment(interestPerPaymentLoan);
+        loan.setListOfAccompanied(new ArrayList<>());
+        loan.setListOfInlays(new ArrayList<>());
+        /*loan.yazNumberTillEnd = 0;
+        loan.totalInterestPayTillNow = 0;
+        loan.totalInterestPayTillEnd = 0;
+        loan.totalCapitalPayTillNow = 0;
+        loan.totalCapitalPayTillEnd = 0;*/
+
+        loans.add(loan);
+
+        return DTOLoan.build(loan);
+    }
+
 
     protected Bank() {
 
@@ -77,7 +170,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
     @Override
     public void cashWithdrawal(Customer customer, int sum) {
-        accounts.stream().filter(a -> a.getCustomerName() == customer.getCustomerName()).collect(Collectors.toList()).get(0).cashWithdrawal(sum);
+        accounts.stream().filter(a -> Objects.equals(a.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).cashWithdrawal(sum);
 
     }
 
@@ -97,10 +190,10 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
     @Override
-    public ArrayList<Loan> getLoansList() {
-        ArrayList<Loan> loans = new ArrayList<>();
-        for (Loan loan : this.getLoans()) {
-            loans.add(Loan.build(loan.getId(), loan.getOwner(), loan.getCategory(), loan.getCapital(), loan.getTotalYazTime(), loan.getPaysEveryYaz(), loan.getInterestPerPayment()));
+    public ArrayList<DTOLoan> getLoansList() {
+        ArrayList<DTOLoan> loans = new ArrayList<>();
+        for (DTOLoan loan : this.getLoans()) {
+            loans.add(DTOLoan.build(loan));
         }
         return loans;
         //return this.getLoans();
@@ -123,14 +216,6 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         loans.add(loan);
     }
 
-    @Override
-    public void addBorrowerTOLoan() {///////////
-        loans.get(0).getListOfAccompanied().add(getCustomer(0));
-        loans.get(0).getListOfAccompanied().add(getCustomer(1));
-        loans.get(0).getListOfAccompanied().add(getCustomer(2));
-        loans.get(0).getListOfAccompanied().add(getCustomer(3));
-
-    }
 
     @Override
     public ArrayList<String> getCategoriesGroup() {
@@ -143,22 +228,13 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
     @Override
-    public void addCategories() {
-        categories.add("car");
-        categories.add("Home");
-        categories.add("Mortgage");
-        categories.add("Bar Mitzvah");
-    }
-
-    @Override
     public ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay) {
         ArrayList<DTOLoan> loansSustainInlay = new ArrayList<>();
         for (Loan loan : loans) {
             if (loan.getLoanStatus() == DTOLoanStatus.PENDING || loan.getLoanStatus() == DTOLoanStatus.NEW) {
                 if (!Objects.equals(inlay.getDtoAccount().getCustomerName(), loan.getOwner())) {//if i am not the one who asking for the money
-                    if (loan.getCapital() > inlay.getInvestAmount() &&
-                            (inlay.getMinInterestYaz() > loan.getInterestPerPayment() || inlay.getMinInterestYaz() == 0) &&//i dont understand why this is not should be equal
-                            (inlay.getMinYazTime() > loan.getTotalYazTime() || inlay.getMinYazTime() == 0) &&
+                    if ((inlay.getMinInterestYaz() <= loan.getInterestPerPayment() || inlay.getMinInterestYaz() == 0) &&//i dont understand why this is not should be equal
+                            (inlay.getMinYazTime() <= loan.getTotalYazTime() || inlay.getMinYazTime() == 0) &&
                             (inlay.getCategory() == null || Objects.equals(inlay.getCategory(), loan.getCategory())))
 
                         loansSustainInlay.add(DTOLoan.build(loan));
@@ -171,56 +247,73 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     @Override
     public ArrayList<DTOLoan> loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay, String[] arrayStringsScanner) {
         ArrayList<DTOLoan> loansChosenCustomer = new ArrayList<>();
-        boolean checkIdLoan = false;
         int index = 0;
-        int indexForWhileLoop = 0;
-        while (indexForWhileLoop < arrayStringsScanner.length) {
-            if (Objects.equals(arrayStringsScanner[index], "")) {
-                loansChosenCustomer = null;
-                break;
-            }
             for (DTOLoan dtoLoan : loansSupportInlay) {
-                if (Objects.equals(dtoLoan.getId(), arrayStringsScanner[index])) {////////////////////////////////////////////////////////Todo!!
-                    checkIdLoan = true;
+                if(index<arrayStringsScanner.length) {
+                    try {
+                        if ((Integer.parseInt(arrayStringsScanner[index]) - 1) >= 0 && (Integer.parseInt(arrayStringsScanner[index]) - 1) < arrayStringsScanner.length) {
+                            loansChosenCustomer.add(dtoLoan);
+                        } else
+                            throw new NumberFormatException("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
+                    } catch (NumberFormatException exception) {
+                        throw new NumberFormatException("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
+
+                    }
                 }
-                if (checkIdLoan)
-                    loansChosenCustomer.add(dtoLoan);
-                else
-                    throw new NumberFormatException("Please select the id loans you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
+                index++;
             }
-            indexForWhileLoop++;
-            checkIdLoan = false;
-            index++;
-        }
         return loansChosenCustomer;
     }
 
     @Override
-    public void addMovementPerLoanFromInlay(Inlay inlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) {
-        int sumPerLoan = 0;
+    public void addMovementPerLoanFromInlay(DTOInlay dtoInlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        ///5000
+        int sumPerLoan = 0;//מחזיק חלוקה שרירותית
+        int sumPerLoanToBeAdd=0;//מחזיק חלוקה שרירותית פלוס 1 אם המודולו אינו אפס
+        int remainderByModulo=0;//מחזיק את השארית
+        DTOInlay dtoInlayToBeAddToTheLoan;
+        int investAmountCounterThatGoingToBeInsertToTheCustomer=0;
+        Account customer=(Account) dtoInlay.getDtoAccount();//הלקוח שנותן כסף(logic)
+        Loan loan;//משתנה הלוואה
+        int numberOfLoans=loansCustomerChosen.size();//כמות ההלוואות שהמשתמש בחר
         if (loansCustomerChosen != null) {
-            sumPerLoan = (chosenInvestAmount / loansCustomerChosen.size());
-            for (DTOLoan dtoLoan : loansCustomerChosen) {
-                Loan loan = loans.stream().filter(l -> l.getId().equals(dtoLoan.getId())).collect(Collectors.toList()).get(0);
-                Inlay customerInlay = Inlay.build(inlay.getDtoAccount(), sumPerLoan, inlay.getCategory(), inlay.getMinInterestYaz(), inlay.getMinYazTime());
-                loan.getListOfAccompanied().add(accounts.get(customerIndexGiveMoney));
-                loan.getListOfInlays().add(customerInlay);
-                loan.decCapitalSumLeftTillActive(chosenInvestAmount);
+            for (DTOLoan dtoLoan : loansCustomerChosen) {//רץ לי על ההלוואות שהלקוח בחר
+                remainderByModulo=chosenInvestAmount % numberOfLoans;//מחשב את השארית ===2
+                sumPerLoanToBeAdd=sumPerLoan = (chosenInvestAmount /numberOfLoans);//מחשב באופן שרירותי את הסכום פר הלוואה שהלקוח יכול לתת====5000/3=1666
+                if(remainderByModulo>0) {//מודולו=2
+                    sumPerLoanToBeAdd=sumPerLoan+1;////1666+1
+                    remainderByModulo--;//מודולו=1
+                }
+
+                loan = loans.stream().filter(l -> l.getId().equals(dtoLoan.getId())).collect(Collectors.toList()).get(0);//מציאת ההלוואה המקורית מהלוגיקה
+                if(sumPerLoanToBeAdd>=loan.getCapitalSumLeftTillActive()){//אם הסכום השרירותי גדול מהסכום שנשאר לסגור את ההחוואה אזי --1666>1000
+                    dtoInlayToBeAddToTheLoan=inlayBuild(customer, loan.getCapitalSumLeftTillActive(), dtoInlay.getCategory(), dtoInlay.getMinInterestYaz(), dtoInlay.getMinYazTime());//בונה שיבוץ חדש שהסגכום שלו הוא מה שנשאר כדי לסגור את ההלוואה---1000
+                    chosenInvestAmount=chosenInvestAmount- loan.getCapitalSumLeftTillActive();//הסכום הכולל של הלקוח פחות הסכום שנתן עכשיו להללואה---5000-1000
+                    cashWithdrawal((Customer) customer,loan.getCapitalSumLeftTillActive());
+                    investAmountCounterThatGoingToBeInsertToTheCustomer+=loan.getCapitalSumLeftTillActive();
+                    numberOfLoans=numberOfLoans-1;//מחסיר את כמות ההלוואות אשר סגרתי הלוואה 1
+                }
+                else{
+                    dtoInlayToBeAddToTheLoan=inlayBuild(customer, sumPerLoanToBeAdd, dtoInlay.getCategory(), dtoInlay.getMinInterestYaz(), dtoInlay.getMinYazTime());
+                    chosenInvestAmount=chosenInvestAmount- sumPerLoanToBeAdd;//5000-1667
+                    cashWithdrawal((Customer) customer,sumPerLoanToBeAdd);
+                    investAmountCounterThatGoingToBeInsertToTheCustomer+=sumPerLoanToBeAdd;
+                    numberOfLoans=numberOfLoans-1;
+                }
+                //sumPerLoanToBeAdd=sumPerLoan;
+                loan.getListOfAccompanied().add(customer);//מוסיף אותו כמלווה להלוואה
+                loan.getListOfInlays().add(dtoInlayToBeAddToTheLoan);//מוסיף את השיבוץ החדש להלוואה עם הסכום שהוא הלווה
+                loan.decCapitalSumLeftTillActive(investAmountCounterThatGoingToBeInsertToTheCustomer);//מוריד העתק של הסכום אשר אומר מתי הלוואה היא פעילה
                 if(loan.getStatusOperation().equals(DTOLoanStatus.NEW)){
                     loan.setLoanStatus(DTOLoanStatus.PENDING);
                 }
-                else if(loan.getCapitalSumLeftTillActive()==0){
+                if(loan.getCapitalSumLeftTillActive()==0){
                     loan.setLoanStatus(DTOLoanStatus.ACTIVE);
+                    (getRealCustomerByName(loan.getOwner())).cashDeposit(loan.getCapital());
                 }
-                /*for (int j = 0; j < getCustomers().size(); j++) {
-                    DTOCustomer customer = getCustomers().get(j);
-                    if (Objects.equals(customer.getCustomerName(), dtoLoan.getId())) {
-                        Movement movementLoan = Movement.build(sumPerLoan, "+", customer.getAmount(), customer.getAmount() + sumPerLoan, 0);
-                        addMovementToClient(j, movementLoan);
-                        dtoLoan.getListOfAccompanied().add(getCustomer(customerIndexGiveMoney));
-                        dtoLoan.getListOfInlays().add(customerInlay);
-                        cashDeposit(j, sumPerLoan);///////////////////////////////////////////////////*/
             }
+            ((Inlay)dtoInlay).setInvestAmount(investAmountCounterThatGoingToBeInsertToTheCustomer);
+            customer.getInlays().add((Inlay)dtoInlay);
         } else
             throw new RuntimeException("You didnt choose any loans.");
     }
@@ -230,7 +323,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
     @Override
-    public void yazProgressLogic() {
+    public void yazProgressLogic() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         YazLogic.currentYazUnit++;
         /////////////1.if loan is getting active,set the started yaz----its should be in the loan logic
         (loans.stream().filter(l -> l.getLoanStatus() == DTOLoanStatus.ACTIVE).collect(Collectors.toList())).forEach(l -> l.setStartedYazInActive(YazLogic.currentYazUnit));
@@ -239,7 +332,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
             @Override
             public int compare(Loan l1, Loan l2) {
                 if (l1.getStartedYazInActive() - l2.getStartedYazInActive() == 0 && l1.paymentPerPulse() - l2.paymentPerPulse() == 0)//if the yaz equals and the payment per pulse is equal so sort by the number of pulse
-                    return l1.pulseAmount() - l2.pulseAmount();
+                    return l1.pulseNumber() - l2.pulseNumber();
                 else if (l1.getStartedYazInActive() - l2.getStartedYazInActive() == 0) {//if the yaz equals so sort by the payment per pulse
                     return l1.paymentPerPulse() - l2.paymentPerPulse();
                 }
@@ -260,10 +353,10 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                         loan.setLoanStatus(DTOLoanStatus.ACTIVE);
                     }
                 }
-                Movement movement = Movement.build(loan.paymentPerPulse(), "-", getRealCustomerByName(loan.getOwner()).getAmount(), getRealCustomerByName(loan.getOwner()).getAmount() - loan.paymentPerPulse());
-                addMovementToClient(getRealCustomerByName(loan.getOwner()), movement);
+                DTOMovement dtoMovement=movementBuild(getRealCustomerByName(loan.getOwner()),loan.paymentPerPulse(), "-", getRealCustomerByName(loan.getOwner()).getAmount(), getRealCustomerByName(loan.getOwner()).getAmount() - loan.paymentPerPulse());
                 cashWithdrawal(getRealCustomerByName(loan.getOwner()), loan.paymentPerPulse());
                 loan.incrCapitalSumLeftTillActive(loan.paymentPerPulse());
+                loan.incrPulseCounterThatHappenedByOne();
                 for (DTOInlay dtoInlay : loan.getListOfInlays()) {
                     cashDeposit((Customer) dtoInlay.getDtoAccount(), loan.calculatePaymentToLoaner((Customer) dtoInlay.getDtoAccount()));
                 }
@@ -282,8 +375,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                     loan.setLoanStatus(DTOLoanStatus.ACTIVE);
                 }
             }
-            Movement movement = Movement.build(loan.paymentPerPulse(), "-", getRealCustomerByName(loan.getOwner()).getAmount(), getRealCustomerByName(loan.getOwner()).getAmount() - loan.paymentPerPulse());
-            addMovementToClient(getRealCustomerByName(loan.getOwner()), movement);
+            DTOMovement dtoMovement=movementBuild(getRealCustomerByName(loan.getOwner()),loan.paymentPerPulse(), "-", getRealCustomerByName(loan.getOwner()).getAmount(), getRealCustomerByName(loan.getOwner()).getAmount() - loan.paymentPerPulse());
             cashWithdrawal(getRealCustomerByName(loan.getOwner()), loan.paymentPerPulse());
             loan.incrCapitalSumLeftTillActive(loan.paymentPerPulse());
             for (DTOInlay dtoInlay : loan.getListOfInlays()) {

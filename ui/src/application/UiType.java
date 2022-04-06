@@ -5,13 +5,13 @@ import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import logic.bank.account.Inlay;
 import logic.bank.account.Loan;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface UiType {
     //void showDataLoans();
-    void Run();
-    void addDataForCheck();
+    void Run() throws InvocationTargetException, InstantiationException, IllegalAccessException;
     /*void sumToInvest(Loan x);
     void category(Loan x);
     void minimumInterestPerUnitTime(Loan x);
@@ -31,9 +31,9 @@ public interface UiType {
     int getChosenCategoryIndex();
     double getChosenMinInterestYaz();
     int getChosenMinYazTime();
-    int getChosenInvestAmount(int amountOfCustomer);
+    int getChosenInvestAmount(int amountOfCustomer) throws InvocationTargetException, InstantiationException, IllegalAccessException;
     //ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
     void showLoansList(List<DTOLoan> loans);
-    ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay);
+    ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay) throws InvocationTargetException, InstantiationException, IllegalAccessException;
    // void addMovementPerLoanFromInlay(ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount ,int customerIndexGiveMoney);
 }

@@ -12,40 +12,52 @@ import java.util.List;
 //Eliran
 public class Customer extends DTOCustomer implements Account {
 
-        @Override
-        public void setAmount(int startAmount)
-        {
-            amount=startAmount;
-        }
+    @Override
+    public void setAmount(int startAmount) {
+        amount = startAmount;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setMovements(List<DTOMovement> movements) {
+        this.movements = movements;
+    }
+
+    @Override
+    public void setInlays(List<DTOInlay> inlays) {
+        this.inlays = inlays;
+    }
+
+    @Override
+    public void setLoaner(List<DTOLoan> loaner) {
+        this.loaner = loaner;
+    }
+
+    @Override
+    public void setBorrower(List<DTOLoan> borrower) {
+        this.borrower = borrower;
+    }
 
 
-    public Customer(){/////////////////
+    private Customer() {
 
     }
 
-    public static Customer build(String name,int amount){
-            Customer customer=new Customer();
-            customer.name=name;
-            customer.amount=amount;
-            customer.movements=new ArrayList<>();
-            customer.borrower=new ArrayList<>();
-            customer.inlays=new ArrayList<>();
-            customer.loaner=new ArrayList<>();
-            return customer;
+    @Override
+    public void cashDeposit(int sum) {
+        amount += sum;
     }
 
-       @Override
-       public void cashDeposit(int sum){
-               amount+=sum;
-       }
-
-        @Override
-        public void cashWithdrawal(int sum){
-                if(amount>=sum) {
-                        amount -= sum;
-                }
+    @Override
+    public void cashWithdrawal(int sum) {
+        if (amount >= sum) {
+            amount -= sum;
         }
-
+    }
 
 
 }

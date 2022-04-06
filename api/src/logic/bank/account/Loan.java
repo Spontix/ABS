@@ -3,6 +3,8 @@ package logic.bank.account;
 //Eliran123
 
 
+import dataObjects.dtoBank.dtoAccount.DTOAccount;
+import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 
@@ -12,37 +14,18 @@ import java.util.Comparator;
 public class Loan extends DTOLoan {
 
 
-    public Loan() {
+    private Loan() {
 
     }
 
 
 
-    public int setTotalYaz(int number) {
-        return totalYazTime + number;
+    public void setTotalYaz(int totalYazTime) {
+        this.totalYazTime= totalYazTime;
     }
 
     private void setPendingDetails() {
         //int sum=listOfAccompanied.stream().mapToInt(a -> a.get)
-    }
-
-    public static Loan build(String idLoan, String ownerLoan, String categoryLoan, int capitalLoan, int totalYazTimeLoan, int paysEveryYazLoan, int interestPerPaymentLoan) {
-        Loan loan = new Loan();
-        loan.id = idLoan;
-        loan.owner = ownerLoan;
-        loan.category = categoryLoan;
-        loan.capital = capitalLoan;
-        loan.totalYazTime = totalYazTimeLoan;
-        loan.paysEveryYaz = paysEveryYazLoan;
-        loan.interestPerPayment = interestPerPaymentLoan;
-        loan.listOfAccompanied = new ArrayList<>();
-        loan.listOfInlays=new ArrayList<>();
-        /*loan.yazNumberTillEnd = 0;
-        loan.totalInterestPayTillNow = 0;
-        loan.totalInterestPayTillEnd = 0;
-        loan.totalCapitalPayTillNow = 0;
-        loan.totalCapitalPayTillEnd = 0;*/
-        return loan;
     }
 
     public void decCapitalSumLeftTillActive(int paymentPerPulse){
@@ -73,8 +56,45 @@ public class Loan extends DTOLoan {
     }
 
 
+    public void setId(String idLoan) {
+        this.id=idLoan;
+    }
 
+    public void setOwner(String ownerLoan) {
+        this.owner=ownerLoan;
+    }
 
+    public void setCategory(String categoryLoan) {
+        this.category=categoryLoan;
+    }
+
+    public void setCapital(int capitalLoan) {
+        this.capital=capitalLoan;
+    }
+
+    public void serPaysEveryYaz(int paysEveryYazLoan) {
+        this.paysEveryYaz=paysEveryYazLoan;
+    }
+
+    public void setInterestPerPayment(int interestPerPaymentLoan) {
+        this.interestPerPayment=interestPerPaymentLoan;
+    }
+
+    public void setListOfAccompanied(ArrayList<DTOAccount> accompanied) {
+        this.listOfAccompanied=accompanied;
+    }
+
+    public void setListOfInlays(ArrayList<DTOInlay> inlays) {
+        this.listOfInlays=inlays;
+    }
+
+    public void setCapitalSumLeftTillActive(int capitalSumLeftTillActive) {
+        this.capitalSumLeftTillActive=capitalSumLeftTillActive;
+    }
+
+    public void incrPulseCounterThatHappenedByOne(){
+        pulseCounterThatHappened++;
+    }
 }
 
 

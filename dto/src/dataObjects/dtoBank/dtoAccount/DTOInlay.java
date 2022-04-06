@@ -42,4 +42,5 @@ public class DTOInlay {
         dtoInlay.dtoAccount=DTOCustomer.build((DTOCustomer)inlay.dtoAccount);
         return dtoInlay;
     }
+
 }

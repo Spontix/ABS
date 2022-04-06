@@ -1,5 +1,6 @@
 package menuBuilder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class MenuItem {
@@ -21,11 +22,11 @@ public class MenuItem {
         setOfOptionInvoker.add(actionOptionInvoker);
     }
 
-    public void ActivateWhenActionIsCommitted() {
+    public void ActivateWhenActionIsCommitted() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         notifyAllListeners();
     }
 
-    private void notifyAllListeners() {
+    private void notifyAllListeners() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         if (setOfOptionInvoker.size() == 0) {
             /*throw new AppDomainUnloadedException("Error:This choice do nothing");*/
         }

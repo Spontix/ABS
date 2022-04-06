@@ -5,6 +5,7 @@ import dataObjects.dtoCustomer.DTOCustomer;
 import logic.YazLogic;
 import logic.customer.Customer;
 
+import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +56,8 @@ public class DTOLoan {
         for (DTOInlay dtoInlay : loan.listOfInlays) {
             inlaysList.add(DTOInlay.build(dtoInlay));
         }
+        dtoLoan.listOfInlays=inlaysList;
+        dtoLoan.listOfAccompanied=accompaniedList;
         return dtoLoan;
     }
 
@@ -72,8 +75,12 @@ public class DTOLoan {
                 "Loan status - " + loanStatus+"\n");
     }
 
-    public String getStatusOperation() {
+    public String invokeStatusOperation(){
         return loanStatus.operationThree(this);
+    }
+
+    public DTOLoanStatus getStatusOperation(){
+        return loanStatus;
     }
 
     public int getCapital() {
@@ -116,13 +123,13 @@ public class DTOLoan {
         return listOfInlays;
     }
 
-    public int pulseAmount() {
+    public int pulseNumber() {
         return totalYazTime / paysEveryYaz;
         //it's the total payments that we will have
     }
 
     public int paymentPerPulse() {
-        return capital / pulseAmount() + (capital / pulseAmount() * (interestPerPayment / 100));
+        return capital / pulseNumber() + (int)(capital / pulseNumber() * ( (double)(interestPerPayment / 100.0)));
         //it's the amount per payment capital+interest
     }
 

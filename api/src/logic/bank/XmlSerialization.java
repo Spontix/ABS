@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,9 +40,22 @@ public class XmlSerialization{
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller u = jc.createUnmarshaller();
         AbsDescriptor absDescriptor= (AbsDescriptor) u.unmarshal(in);
-        absDescriptor.getAbsCustomers().getAbsCustomer().forEach(customer->bank.getAccounts().add(Customer.build(customer.getName(),customer.getAbsBalance())));
+        absDescriptor.getAbsCustomers().getAbsCustomer().forEach(customer-> {
+            try {
+                bank.customerBuild(customer.getName(),customer.getAbsBalance());
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
+        absDescriptor.getAbsLoans().getAbsLoan().forEach(loan-> {
+            try {
+                bank.loanBuilder(loan.getId(),loan.getAbsOwner(),loan.getAbsCategory(),loan.getAbsCapital(),loan.getAbsTotalYazTime(),loan.getAbsPaysEveryYaz(),loan.getAbsIntristPerPayment());
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
         absDescriptor.getAbsCategories().getAbsCategory().forEach(category->bank.getCategories().add(category));
-        absDescriptor.getAbsLoans().getAbsLoan().forEach(loan->bank.getLoans().add(Loan.build(loan.getId(),loan.getAbsOwner(),loan.getAbsCategory(),loan.getAbsCapital(),loan.getAbsTotalYazTime(),loan.getAbsPaysEveryYaz(),loan.getAbsIntristPerPayment())));
+
         return bank;
     }
 }
