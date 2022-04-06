@@ -75,8 +75,11 @@ public class DTOLoan {
                 "Loan status - " + loanStatus+"\n");
     }
 
-    public String invokeStatusOperation(){
-        return loanStatus.operationThree(this);
+////////////////// I decided that I don't want to copy this KOD, so we will sand the number of the operation: //////////////////////////////
+    public String invokeStatusOperation(int indexOperation){
+        if(indexOperation ==3)
+            return loanStatus.operationThree(this);
+        return loanStatus.operationTwo(this);
     }
 
     public DTOLoanStatus getStatusOperation(){
