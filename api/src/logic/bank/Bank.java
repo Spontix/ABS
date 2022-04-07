@@ -114,12 +114,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         loan.setInterestPerPayment(interestPerPaymentLoan);
         loan.setListOfAccompanied(new ArrayList<>());
         loan.setListOfInlays(new ArrayList<>());
-        /*loan.yazNumberTillEnd = 0;
-        loan.totalInterestPayTillNow = 0;
-        loan.totalInterestPayTillEnd = 0;
-        loan.totalCapitalPayTillNow = 0;
-        loan.totalCapitalPayTillEnd = 0;*/
-
+        loan.setListOfMovements(new ArrayList<>());
         loans.add(loan);
 
         return DTOLoan.build(loan);
@@ -282,7 +277,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
     @Override/////This methode should return list of movements and print them all
-    public void addMovementPerLoanFromInlay(DTOInlay dtoInlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public ArrayList<DTOMovement> addMovementPerLoanFromInlay(DTOInlay dtoInlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         ///5000
         int sumPerLoan = 0;//מחזיק חלוקה שרירותית
         int sumPerLoanToBeAdd = 0;//מחזיק חלוקה שרירותית פלוס 1 אם המודולו אינו אפס
@@ -291,6 +286,8 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         int investAmountCounterThatGoingToBeInsertToTheCustomer = 0;
         Account customer = (Account) dtoInlay.getDtoAccount();//הלקוח שנותן כסף(logic)
         Loan loan;//משתנה הלוואה
+        ArrayList<DTOMovement> listOfDTOMovements=new ArrayList<>();
+        DTOMovement dtoMovement;//the movement that i will add to the list ot the DTOmovements that i will return to the console that the console will show the list
         int numberOfLoans = loansCustomerChosen.size();//כמות ההלוואות שהמשתמש בחר
         if (loansCustomerChosen != null) {
             for (DTOLoan dtoLoan : loansCustomerChosen) {//רץ לי על ההלוואות שהלקוח בחר
@@ -302,18 +299,22 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                 }
 
                 loan = loans.stream().filter(l -> l.getId().equals(dtoLoan.getId())).collect(Collectors.toList()).get(0);//מציאת ההלוואה המקורית מהלוגיקה
-                if (sumPerLoanToBeAdd >= loan.getCapitalSumLeftTillActive()) {//אם הסכום השרירותי גדול מהסכום שנשאר לסגור את ההחוואה אזי --1666>1000
-                    dtoInlayToBeAddToTheLoan = inlayBuild(customer, loan.getCapitalSumLeftTillActive(), dtoInlay.getCategory(), dtoInlay.getMinInterestYaz(), dtoInlay.getMinYazTime());//בונה שיבוץ חדש שהסגכום שלו הוא מה שנשאר כדי לסגור את ההלוואה---1000
+                if (sumPerLoanToBeAdd >= (loan.getCapital()-loan.getCapitalSumLeftTillActive())) {//אם הסכום השרירותי גדול מהסכום שנשאר לסגור את ההחוואה אזי --1666>1000
+                    dtoInlayToBeAddToTheLoan = inlayBuild(customer, (loan.getCapital()-loan.getCapitalSumLeftTillActive()), dtoInlay.getCategory(), dtoInlay.getMinInterestYaz(), dtoInlay.getMinYazTime());//בונה שיבוץ חדש שהסגכום שלו הוא מה שנשאר כדי לסגור את ההלוואה---1000
                     chosenInvestAmount = chosenInvestAmount - (loan.getCapital()-loan.getCapitalSumLeftTillActive());//הסכום הכולל של הלקוח פחות הסכום שנתן עכשיו להללואה---5000-1000
+                    movementBuildToCustomer((DTOCustomer) customer,(loan.getCapital()-loan.getCapitalSumLeftTillActive()),"-",customer.getAmount(),customer.getAmount()-(loan.getCapital()-loan.getCapitalSumLeftTillActive()));
                     cashWithdrawal((Customer) customer, (loan.getCapital()-loan.getCapitalSumLeftTillActive()));
-                    movementBuildToLoan(loan, (loan.getCapital()-loan.getCapitalSumLeftTillActive()), "+", loan.getCapitalSumLeftTillActive(), loan.getCapital());//ההלוואה קיבלה כסף ולכן הפלוס אף אנחנו מנפים את זה מהעתק של הסכום כדי לדעת מתי הגענו ל0
+                    dtoMovement=movementBuildToLoan(loan, (loan.getCapital()-loan.getCapitalSumLeftTillActive()), "+", loan.getCapitalSumLeftTillActive(), loan.getCapital());//ההלוואה קיבלה כסף ולכן הפלוס אף אנחנו מנפים את זה מהעתק של הסכום כדי לדעת מתי הגענו ל0
+                    listOfDTOMovements.add(dtoMovement);
                     investAmountCounterThatGoingToBeInsertToTheCustomer += loan.getCapitalSumLeftTillActive();
                     numberOfLoans = numberOfLoans - 1;//מחסיר את כמות ההלוואות אשר סגרתי הלוואה 1
                 } else {
                     dtoInlayToBeAddToTheLoan = inlayBuild(customer, sumPerLoanToBeAdd, dtoInlay.getCategory(), dtoInlay.getMinInterestYaz(), dtoInlay.getMinYazTime());
                     chosenInvestAmount = chosenInvestAmount - sumPerLoanToBeAdd;//5000-1667
+                    movementBuildToCustomer((DTOCustomer) customer,sumPerLoanToBeAdd,"-",customer.getAmount(),customer.getAmount()-sumPerLoanToBeAdd);
                     cashWithdrawal((Customer) customer, sumPerLoanToBeAdd);
-                    movementBuildToLoan(loan, sumPerLoanToBeAdd, "+", loan.getCapitalSumLeftTillActive(), loan.getCapitalSumLeftTillActive()+sumPerLoanToBeAdd);//ההלוואה קיבלה כסף ולכן הפלוס אף אנחנו מנפים את זה מהעתק של הסכום כדי לדעת מתי הגענו ל0
+                    dtoMovement=movementBuildToLoan(loan, sumPerLoanToBeAdd, "+", loan.getCapitalSumLeftTillActive(), loan.getCapitalSumLeftTillActive()+sumPerLoanToBeAdd);//ההלוואה קיבלה כסף ולכן הפלוס אף אנחנו מנפים את זה מהעתק של הסכום כדי לדעת מתי הגענו ל0
+                    listOfDTOMovements.add(dtoMovement);
                     investAmountCounterThatGoingToBeInsertToTheCustomer += sumPerLoanToBeAdd;
                     numberOfLoans = numberOfLoans - 1;
                 }
@@ -333,7 +334,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                 if (loan.getStatusOperation().equals(DTOLoanStatus.NEW)) {
                     loan.setLoanStatus(DTOLoanStatus.PENDING);
                 }
-                if (loan.getCapitalSumLeftTillActive() == loan.getCapital()) {
+                if (loan.getCapital()-loan.getCapitalSumLeftTillActive() == loan.getCapital()) {
                     loan.setLoanStatus(DTOLoanStatus.ACTIVE);
                     (getRealCustomerByName(loan.getOwner())).cashDeposit(loan.getCapital());
                     loan.setStartedYazInActive(YazLogic.currentYazUnit);
@@ -344,6 +345,8 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
             customer.getInlays().add((Inlay) dtoInlay);
         } else
             throw new RuntimeException("You didnt choose any loans.");
+
+        return listOfDTOMovements;
     }
 
     private Customer getRealCustomerByName(String customerName) {

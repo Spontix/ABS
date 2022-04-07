@@ -51,14 +51,19 @@ public class DTOLoan {
         dtoLoan.category = loan.category;
         List<DTOAccount> accompaniedList = new ArrayList<>();
         List<DTOInlay> inlaysList = new ArrayList<>();
+        List<DTOMovement> movementsList=new ArrayList<>();
         for (DTOAccount dtoAccount : loan.listOfAccompanied) {
             accompaniedList.add(DTOCustomer.build((DTOCustomer) dtoAccount));
         }
         for (DTOInlay dtoInlay : loan.listOfInlays) {
             inlaysList.add(DTOInlay.build(dtoInlay));
         }
+        for (DTOMovement dtoMovement : loan.listOfMovements) {
+            movementsList.add(DTOMovement.build(dtoMovement));
+        }
         dtoLoan.listOfInlays=inlaysList;
         dtoLoan.listOfAccompanied=accompaniedList;
+        dtoLoan.listOfMovements=movementsList;
         return dtoLoan;
     }
 

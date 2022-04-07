@@ -60,7 +60,7 @@ public interface UIInterfaceLogic {
 
     void yazProgressLogic() throws InvocationTargetException, InstantiationException, IllegalAccessException;//ToDo!!
 
-    void addMovementPerLoanFromInlay(DTOInlay inlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException;
+    ArrayList<DTOMovement> addMovementPerLoanFromInlay(DTOInlay inlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     void checksInvestAmount(DTOAccount customer,int investAmount);
 

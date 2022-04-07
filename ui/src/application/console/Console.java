@@ -179,7 +179,7 @@ public class Console implements UiType {
             DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);*/
              System.out.println("Are you sure you want to this operation? 1.yes 2.no ");
             if (Integer.parseInt(new Scanner(System.in).nextLine())== 1) {
-                bank.addMovementPerLoanFromInlay(dtoInlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
+                System.out.println(bank.addMovementPerLoanFromInlay(dtoInlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex));
                 System.out.println("-------- The operation was performed successfully --------\n");
                 } else {
                     System.out.println("-------- Operation canceled --------\n");

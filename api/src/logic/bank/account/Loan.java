@@ -3,10 +3,7 @@ package logic.bank.account;
 //Eliran123
 
 
-import dataObjects.dtoBank.dtoAccount.DTOAccount;
-import dataObjects.dtoBank.dtoAccount.DTOInlay;
-import dataObjects.dtoBank.dtoAccount.DTOLoan;
-import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
+import dataObjects.dtoBank.dtoAccount.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -94,6 +91,10 @@ public class Loan extends DTOLoan {
 
     public void incrPulseCounterThatHappenedByOne(){
         pulseCounterThatHappened++;
+    }
+
+    public void setListOfMovements(ArrayList<DTOMovement> movements) {
+        this.listOfMovements=movements;
     }
 }
 
