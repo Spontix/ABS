@@ -5,20 +5,22 @@ import dataObjects.dtoBank.dtoAccount.DTOAccount;
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
+import logic.YazLogic;
 import logic.bank.account.Account;
 import logic.bank.account.Movement;
 import logic.customer.Customer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DTOCustomer implements DTOAccount {
 
     protected String name;
     protected int amount;
-    protected ArrayList<DTOMovement> movements;
-    protected ArrayList<DTOInlay> inlays;
-    protected final ArrayList<DTOLoan> loaner;
-    protected final ArrayList<DTOLoan> borrower;
+    protected List<DTOMovement> movements;
+    protected List<DTOInlay> inlays;
+    protected List<DTOLoan> loaner;
+    protected List<DTOLoan> borrower;
 
 
     public DTOCustomer(){
@@ -35,12 +37,12 @@ public class DTOCustomer implements DTOAccount {
     }
 
     @Override
-    public ArrayList<DTOMovement> getMovements(){
+    public List<DTOMovement> getMovements(){
         return movements;
     }
 
     @Override
-    public ArrayList<DTOInlay> getInlays(){return inlays;}
+    public List<DTOInlay> getInlays(){return inlays;}
 
     @Override
     public String getCustomerName(){

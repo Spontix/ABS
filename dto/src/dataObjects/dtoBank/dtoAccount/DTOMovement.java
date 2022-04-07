@@ -1,5 +1,6 @@
 package dataObjects.dtoBank.dtoAccount;
 
+import logic.YazLogic;
 import logic.bank.account.Movement;
 
 public class DTOMovement {
@@ -14,6 +15,7 @@ public class DTOMovement {
     }
 
     public static DTOMovement build(DTOMovement movement){
+
         DTOMovement dtoMovement=new DTOMovement();
         dtoMovement.toDoYazTime=movement.toDoYazTime;
         dtoMovement.sum=movement.sum;

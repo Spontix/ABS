@@ -2,10 +2,14 @@ package dataObjects.dtoBank.dtoAccount;
 
 
 import dataObjects.dtoCustomer.DTOCustomer;
+import logic.YazLogic;
 import logic.customer.Customer;
 
+import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DTOLoan {
 
@@ -18,14 +22,14 @@ public class DTOLoan {
     protected int paysEveryYaz;
     protected int interestPerPayment;
     protected DTOLoanStatus loanStatus = DTOLoanStatus.NEW;
-    protected ArrayList<DTOAccount> listOfAccompanied;
-    protected ArrayList<DTOInlay> listOfInlays;
+    protected List<DTOAccount> listOfAccompanied;
+    protected List<DTOInlay> listOfInlays;
+    protected List<DTOMovement> listOfMovements;
     /*protected int yazNumberTillEnd;
     protected int totalInterestPayTillNow;
     protected int totalInterestPayTillEnd;
     protected int totalCapitalPayTillNow;
     protected int totalCapitalPayTillEnd;*/
-    protected int currentYaz;
     protected int pulseCounterThatHappened;
     protected int startedYazInActive;
     protected int endedYaz;
@@ -47,37 +51,52 @@ public class DTOLoan {
         dtoLoan.category = loan.category;
         List<DTOAccount> accompaniedList = new ArrayList<>();
         List<DTOInlay> inlaysList = new ArrayList<>();
+        List<DTOMovement> movementsList=new ArrayList<>();
         for (DTOAccount dtoAccount : loan.listOfAccompanied) {
             accompaniedList.add(DTOCustomer.build((DTOCustomer) dtoAccount));
         }
         for (DTOInlay dtoInlay : loan.listOfInlays) {
             inlaysList.add(DTOInlay.build(dtoInlay));
         }
+        for (DTOMovement dtoMovement : loan.listOfMovements) {
+            movementsList.add(DTOMovement.build(dtoMovement));
+        }
+        dtoLoan.listOfInlays=inlaysList;
+        dtoLoan.listOfAccompanied=accompaniedList;
+        dtoLoan.listOfMovements=movementsList;
         return dtoLoan;
     }
 
     @Override
     public String toString() {
 
-        return ("---------------------------------\n" +
+        return (
                 "Loan ID - " + id + "\n" +
                 "Loan owner - " + owner + "\n" +
                 "Loan category - " + category + "\n" +
+                "Loan capital - "+ capital + "\n" +
                 "The total original time of the loan - " + totalYazTime + "\n" +
                 "Pays every yaz - " + paysEveryYaz + "\n" +
                 "Loan interest - " + interestPerPayment + "\n" +
-                "Loan status - " + loanStatus);
+                "Loan status - " + loanStatus+"\n");
     }
 
-    public String getStatusOperation() {
-        return loanStatus.operationThree(this);
+////////////////// I decided that I don't want to copy this CODE, so we will sand the number of the operation: //////////////////////////////
+    public String invokeStatusOperation(int indexOperation){
+        if(indexOperation ==3)
+            return loanStatus.operationThree(this);
+        return loanStatus.operationTwo(this);
+    }
+
+    public DTOLoanStatus getStatusOperation(){
+        return loanStatus;
     }
 
     public int getCapital() {
         return capital;
     }
 
-    public ArrayList<DTOAccount> getListOfAccompanied() {
+    public List<DTOAccount> getListOfAccompanied() {
         return listOfAccompanied;
     }
 
@@ -109,31 +128,35 @@ public class DTOLoan {
         return owner;
     }
 
-    public ArrayList<DTOInlay> getListOfInlays() {
+    public List<DTOInlay> getListOfInlays() {
         return listOfInlays;
     }
 
-    public int pulseAmount() {
+    public int pulseNumber() {
         return totalYazTime / paysEveryYaz;
         //it's the total payments that we will have
     }
 
     public int paymentPerPulse() {
-        return capital / pulseAmount() + (capital / pulseAmount() * (interestPerPayment / 100));
+        return capital / pulseNumber() + (int)(capital / pulseNumber() * ( (double)(interestPerPayment / 100.0)));
         //it's the amount per payment capital+interest
     }
 
     public int theNextYazToBePaid(){
-        return currentYaz+ (paysEveryYaz-( currentYaz% paysEveryYaz));
+        return YazLogic.currentYazUnit+ numberOfYazTillNextPulse();
+    }
+
+    public int numberOfYazTillNextPulse(){
+        return (paysEveryYaz-( (YazLogic.currentYazUnit-1)% paysEveryYaz));
     }
 
 
-    public int calculatePaymentToLoaner(int customerIndex) {
-        return (paymentPerPulse() * (listOfInlays.get(customerIndex).investAmount * 100) / capital) / 100;
+    public int calculatePaymentToLoaner(Customer customer) {
+        return (paymentPerPulse() * (listOfInlays.stream().filter(i-> Objects.equals(i.dtoAccount.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).investAmount * 100) / capital) / 100;
     }
 
     public int getCurrentYaz() {
-        return currentYaz;
+        return YazLogic.currentYazUnit;
     }
 
     public int getStartedYazInActive() {
@@ -152,6 +175,17 @@ public class DTOLoan {
         return inRiskCounter*paymentPerPulse();
     }
 
+    public int getCapitalSumLeftTillActive() {
+        return capitalSumLeftTillActive;
+    }
+
+    public List<DTOMovement> getListOfMovements() {
+        return listOfMovements;
+    }
+
+    public int getPulseCounterThatHappened() {
+        return pulseCounterThatHappened;
+    }
     /*public int getTotalCapitalPayTillEnd() {
         return totalCapitalPayTillEnd;
     }

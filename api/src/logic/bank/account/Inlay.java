@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Inlay extends DTOInlay {
 
-    public Inlay(){
+    private Inlay(){
 
     }
 
@@ -33,18 +33,5 @@ public class Inlay extends DTOInlay {
         dtoAccount=customer;
     }
 
-
-    public static Inlay build(DTOAccount customer, int investAmount,String category,double minInterestYaz,int minYazTime){
-        Inlay inlay=new Inlay();
-        if(investAmount > customer.getAmount() || investAmount<0){
-            throw new RuntimeException("The investment amount is above the amount balance,please try again!");
-        }
-        inlay.setInvestAmount(investAmount);
-        inlay.setCategory(category);
-        inlay.setMinInterestYaz(minInterestYaz);
-        inlay.setMinYazTime(minYazTime);
-        inlay.setInlayCustomer(customer);
-        return inlay;
-    }
 
 }

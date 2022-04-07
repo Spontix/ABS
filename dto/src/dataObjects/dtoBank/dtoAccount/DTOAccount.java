@@ -1,11 +1,12 @@
 package dataObjects.dtoBank.dtoAccount;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface DTOAccount {
 
-    ArrayList<DTOInlay> getInlays();
-    ArrayList<DTOMovement> getMovements();
+    List<DTOInlay> getInlays();
+    List<DTOMovement> getMovements();
     String getCustomerName();
     int getAmount();
     String toString();

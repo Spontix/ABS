@@ -1,6 +1,7 @@
 package dataObjects.dtoBank.dtoAccount;
 
 import dataObjects.dtoCustomer.DTOCustomer;
+import logic.YazLogic;
 import logic.customer.Customer;
 
 public class DTOInlay {
@@ -9,6 +10,7 @@ public class DTOInlay {
     protected String category;
     protected double minInterestYaz;
     protected int minYazTime;
+
 
 
     public String getCategory() {
@@ -40,4 +42,5 @@ public class DTOInlay {
         dtoInlay.dtoAccount=DTOCustomer.build((DTOCustomer)inlay.dtoAccount);
         return dtoInlay;
     }
+
 }

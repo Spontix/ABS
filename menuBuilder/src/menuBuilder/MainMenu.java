@@ -1,5 +1,6 @@
 package menuBuilder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,8 +33,7 @@ public class MainMenu extends MenuItem {
         arrayOfMenusItems.add(menuItem);
     }
 
-    public void show()
-    {
+    public void show() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         String menuDescription = null;
         int userInput = 0;
 
@@ -100,8 +100,7 @@ public class MainMenu extends MenuItem {
         return number <= arrayOfMenusItems.size() && number >= 0;
     }
 
-    private void activeMenuItem(MenuItem menuItem)
-    {
+    private void activeMenuItem(MenuItem menuItem) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         if (menuItem instanceof MainMenu)
         {
             ((MainMenu) menuItem).show();

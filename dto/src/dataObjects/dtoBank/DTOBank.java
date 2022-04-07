@@ -1,18 +1,17 @@
 package dataObjects.dtoBank;
 
-import dataObjects.dtoBank.dtoAccount.DTOAccount;
-import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import logic.bank.account.Account;
 import logic.bank.account.Loan;
-import logic.customer.Customer;
+import logic.YazLogic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DTOBank {
 
-    protected final ArrayList<Account> accounts;
-    protected final ArrayList<Loan> loans;
-    protected final ArrayList<String> categories;
+    protected List<Account> accounts;
+    protected List<Loan> loans;
+    protected List<String> categories;
 
 
 
@@ -22,15 +21,15 @@ public class DTOBank {
         categories=new ArrayList<>();
     }
 
-    public ArrayList<Account> getAccounts(){
+    public List<Account> getAccounts(){
         return accounts;
     }
 
-    public ArrayList<Loan> getLoans() {
+    public List<Loan> getLoans() {
         return loans;
     }
 
-    public ArrayList<String> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
