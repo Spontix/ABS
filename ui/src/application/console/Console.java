@@ -45,7 +45,7 @@ public class Console implements UiType {
         first.AddListener(()->bank = XmlSerialization.buildBank("api/src/resources/ex1-small.xml"));
         menu.insertToMenu(first);
         MenuItem second = new MenuItem("Presentation of information on existing loans and their status.");
-        //second.AddListener(this::showDataLoans);
+        second.AddListener(this::showDataLoans);
         menu.insertToMenu(second);
         MenuItem third =
                 new MenuItem("Display information about system customers.");
@@ -75,6 +75,26 @@ public class Console implements UiType {
                 new MainMenu("Exiting the system.", MenuType.SECONDARY_MENU);
         menu.insertToMenu(eighth);
     }
+
+    @Override
+    public void showDataLoans(){
+        showLoansList(bank.getLoansList(), 2);
+    }
+
+
+    @Override
+    public void showLoansList(List<DTOLoan> loans, int indexOperation){
+        int index=1;
+        if(loans.size()==0){
+            System.out.println("None\n---------------------------------");
+        }
+        else
+            for (DTOLoan dtoLoan : loans) {
+                System.out.println("\n----------Loan number " + index +"----------\n" + dtoLoan+dtoLoan.invokeStatusOperation(indexOperation)+"\n");
+                index++;
+            }
+    }
+
 
 
     @Override
@@ -151,14 +171,14 @@ public class Console implements UiType {
                 category = bank.getCategory(choseCategoryIndex);
             DTOInlay dtoInlay=bank.inlayBuild(bank.getCustomer(chosenCustomerIndex), chosenInvestAmount, category, minInterestYaz, minYazTime);
             ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(dtoInlay);
-            showLoansList(loansSupportInlay);
+            showLoansList(loansSupportInlay,3);
             System.out.println("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The loan number is in the loan title and the format is: 2 3 4 ...");
             ArrayList<DTOLoan> loansCustomerChosen = loansCustomerChosenParticipate(loansSupportInlay);
-            DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex),chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
+            //DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex),chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
             /*Movement movement = Movement.build(chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
             DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);*/
-
-            if (ensureMassageToCustomer(dtoMovement)) {
+             System.out.println("Are you sure you want to this operation? 1.yes 2.no ");
+            if (Integer.parseInt(new Scanner(System.in).nextLine())== 1) {
                 bank.addMovementPerLoanFromInlay(dtoInlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
                 System.out.println("-------- The operation was performed successfully --------\n");
                 } else {
@@ -269,25 +289,12 @@ public class Console implements UiType {
             dtoCustomerLoanerList = bank.getCustomerLoanersList(bank.getCustomerName(i));//===bank1.methode();
             dtoCustomerBorrowersList = bank.getCustomerBorrowersList(bank.getCustomerName(i));
             System.out.println("\n-------- Loans as loaner --------");
-            showLoansList(dtoCustomerLoanerList);
+            showLoansList(dtoCustomerLoanerList, 3);////////// send the number operation that loanStatus will differentiate between operationTwo and operationThree
             System.out.println("\n-------- Loans as borrower --------");
-            showLoansList(dtoCustomerBorrowersList);
+            showLoansList(dtoCustomerBorrowersList,3 );/////////// same.
 
         }
 
-    }
-
-    @Override
-    public void showLoansList(List<DTOLoan> loans){
-        int index=1;
-        if(loans.size()==0){
-            System.out.println("None\n---------------------------------");
-        }
-        else
-             for (DTOLoan dtoLoan : loans) {
-                 System.out.println("\n----------Loan number " + index +"----------\n" + dtoLoan+dtoLoan.invokeStatusOperation()+"\n");
-                 index++;
-          }
     }
 
     @Override
@@ -353,11 +360,11 @@ public class Console implements UiType {
         else{
             try {
                 chosenMinInterestYaz = Double.parseDouble((number));
-                if (chosenMinInterestYaz < 0)
+                if (chosenMinInterestYaz < 0 || chosenMinInterestYaz > 100)
                     throw new NumberFormatException();
             }
             catch (NumberFormatException exception){
-                System.out.println("Your choice is incorrect. Press Enter if you want to skip to the next item or select the minimum interest yaz you are willing to receive, a decimal number greater than 0.");
+                System.out.println("Your choice is incorrect. Press Enter if you want to skip to the next item or select the minimum interest yaz you are willing to receive, a decimal number greater than 0 and smaller than 100.");
                 getChosenMinInterestYaz();
             }
             return chosenMinInterestYaz;

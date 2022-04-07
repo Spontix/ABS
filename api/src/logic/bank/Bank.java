@@ -68,8 +68,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     public  Inlay inlayBuild(DTOAccount customer, int investAmount,String category,double minInterestYaz,int minYazTime) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Inlay inlay=(Inlay) createInstance(Inlay.class);
         checksInvestAmount(customer,investAmount);
-
-            inlay.setInvestAmount(investAmount);
+        inlay.setInvestAmount(investAmount);
         inlay.setCategory(category);
         inlay.setMinInterestYaz(minInterestYaz);
         inlay.setMinYazTime(minYazTime);
@@ -248,20 +247,20 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     public ArrayList<DTOLoan> loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay, String[] arrayStringsScanner) {
         ArrayList<DTOLoan> loansChosenCustomer = new ArrayList<>();
         int index = 0;
-            for (DTOLoan dtoLoan : loansSupportInlay) {
-                if(index<arrayStringsScanner.length) {
+                while(index < arrayStringsScanner.length) {
                     try {
-                        if ((Integer.parseInt(arrayStringsScanner[index]) - 1) >= 0 && (Integer.parseInt(arrayStringsScanner[index]) - 1) < arrayStringsScanner.length) {
-                            loansChosenCustomer.add(dtoLoan);
+                        int indexForLoan = (Integer.parseInt(arrayStringsScanner[index]) -1);
+                        if (indexForLoan >= 0 && indexForLoan <= arrayStringsScanner.length) {
+                            loansChosenCustomer.add(loansSupportInlay.get(indexForLoan));
                         } else
                             throw new NumberFormatException("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
                     } catch (NumberFormatException exception) {
                         throw new NumberFormatException("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...");
 
                     }
+                    index++;
                 }
-                index++;
-            }
+
         return loansChosenCustomer;
     }
 
@@ -301,7 +300,16 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                     numberOfLoans=numberOfLoans-1;
                 }
                 //sumPerLoanToBeAdd=sumPerLoan;
-                loan.getListOfAccompanied().add(customer);//מוסיף אותו כמלווה להלוואה
+                //////////////////Documentation: Check if the client is not already on the list of loaners..................\\\\\\\\\\\\\\\\
+                boolean customerAlreadyExistInListOfAccompanied = false;
+                for (DTOAccount account:loan.getListOfAccompanied()) {
+                    if (account == customer) {
+                        customerAlreadyExistInListOfAccompanied = true;
+                        break;
+                    }
+                }
+                if(!customerAlreadyExistInListOfAccompanied)
+                    loan.getListOfAccompanied().add(customer);//מוסיף אותו כמלווה להלוואה
                 loan.getListOfInlays().add(dtoInlayToBeAddToTheLoan);//מוסיף את השיבוץ החדש להלוואה עם הסכום שהוא הלווה
                 loan.decCapitalSumLeftTillActive(investAmountCounterThatGoingToBeInsertToTheCustomer);//מוריד העתק של הסכום אשר אומר מתי הלוואה היא פעילה
                 if(loan.getStatusOperation().equals(DTOLoanStatus.NEW)){
@@ -311,16 +319,19 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                     loan.setLoanStatus(DTOLoanStatus.ACTIVE);
                     (getRealCustomerByName(loan.getOwner())).cashDeposit(loan.getCapital());
                 }
+
             }
             ((Inlay)dtoInlay).setInvestAmount(investAmountCounterThatGoingToBeInsertToTheCustomer);
             customer.getInlays().add((Inlay)dtoInlay);
-        } else
+        }
+        else
             throw new RuntimeException("You didnt choose any loans.");
     }
 
     private Customer getRealCustomerByName(String customerName) {
         return (Customer) (accounts.stream().filter(c -> Objects.equals(c.getCustomerName(), customerName)).collect(Collectors.toList())).get(0);
     }
+
 
     @Override
     public void yazProgressLogic() throws InvocationTargetException, InstantiationException, IllegalAccessException {
