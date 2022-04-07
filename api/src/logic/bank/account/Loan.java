@@ -52,7 +52,7 @@ public class Loan extends DTOLoan {
     }
 
     public void incrCapitalSumLeftTillActive(int paymentPerPulse){
-        this.capitalSumLeftTillActive=this.capitalSumLeftTillActive+paymentPerPulse;
+        this.capitalSumLeftTillActive+=paymentPerPulse;
     }
 
 

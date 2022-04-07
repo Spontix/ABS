@@ -24,6 +24,7 @@ public class DTOLoan {
     protected DTOLoanStatus loanStatus = DTOLoanStatus.NEW;
     protected List<DTOAccount> listOfAccompanied;
     protected List<DTOInlay> listOfInlays;
+    protected List<DTOMovement> listOfMovements;
     /*protected int yazNumberTillEnd;
     protected int totalInterestPayTillNow;
     protected int totalInterestPayTillEnd;
@@ -75,7 +76,7 @@ public class DTOLoan {
                 "Loan status - " + loanStatus+"\n");
     }
 
-////////////////// I decided that I don't want to copy this KOD, so we will sand the number of the operation: //////////////////////////////
+////////////////// I decided that I don't want to copy this CODE, so we will sand the number of the operation: //////////////////////////////
     public String invokeStatusOperation(int indexOperation){
         if(indexOperation ==3)
             return loanStatus.operationThree(this);
@@ -173,6 +174,13 @@ public class DTOLoan {
         return capitalSumLeftTillActive;
     }
 
+    public List<DTOMovement> getListOfMovements() {
+        return listOfMovements;
+    }
+
+    public int getPulseCounterThatHappened() {
+        return pulseCounterThatHappened;
+    }
     /*public int getTotalCapitalPayTillEnd() {
         return totalCapitalPayTillEnd;
     }

@@ -109,7 +109,7 @@ public class Console implements UiType {
             System.out.println("Please write the amount to be add: ");
             amountTOAdd = getAmountFromUser();
             amountOfCustomer = bank.getAmountOfCustomer(chosenCustomerIndex-1);
-            DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex-1),amountTOAdd, "+", amountOfCustomer, amountOfCustomer + amountTOAdd);
+            DTOMovement dtoMovement=bank.movementBuildToCustomer(bank.getCustomer(chosenCustomerIndex-1),amountTOAdd, "+", amountOfCustomer, amountOfCustomer + amountTOAdd);
             if (ensureMassageToCustomer(dtoMovement)) {
                 bank.cashDeposit(chosenCustomerIndex-1, amountTOAdd);
                 System.out.println("-------- The operation was performed successfully --------\n");
@@ -237,7 +237,7 @@ public class Console implements UiType {
             System.out.println("Please write the amount to be draw: ");
             amountTODraw = getAmountFromUser();
             amountOfCustomer = bank.getAmountOfCustomer(chosenCustomerIndex);
-            DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex),amountTODraw, "+", amountOfCustomer, amountOfCustomer + amountTODraw);
+            DTOMovement dtoMovement=bank.movementBuildToCustomer(bank.getCustomer(chosenCustomerIndex),amountTODraw, "+", amountOfCustomer, amountOfCustomer + amountTODraw);
             /*Movement movement = Movement.build(amountTODraw, "-", amountOfCustomer, amountOfCustomer - amountTODraw);
             DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);*/
             if (ensureMassageToCustomer(dtoMovement)) {
