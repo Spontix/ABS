@@ -51,7 +51,6 @@ public interface UIInterfaceLogic {
 
     String getCategory(int categoryIndex);
 
-
     ArrayList<DTOLoan> getLoansList();
 
     ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
@@ -63,7 +62,6 @@ public interface UIInterfaceLogic {
     ArrayList<DTOMovement> addMovementPerLoanFromInlay(DTOInlay inlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     void checksInvestAmount(DTOAccount customer,int investAmount);
-
 
     DTOLoan loanBuilder(String idLoan, String ownerLoan, String categoryLoan, int capitalLoan, int totalYazTimeLoan, int paysEveryYazLoan, int interestPerPaymentLoan) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 

@@ -10,16 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface UiType {
-    //void showDataLoans();
     void Run() throws InvocationTargetException, InstantiationException, IllegalAccessException;
-    /*void sumToInvest(Loan x);
-    void category(Loan x);
-    void minimumInterestPerUnitTime(Loan x);
-    void minimumTimePerUnitTime(Loan x);
-    void maximumPercentageOfOwnership(Loan x);
-    void maximumLoansOpenToTheBorrower(Loan x);
-    void userCustomerSelection(Inlay inlay);
-    void userSumSelection(Inlay inlay);*/
     void insertSumToAccount();
     void inlayActivation();
     void drawSumFromAccount();

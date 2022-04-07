@@ -90,7 +90,7 @@ public class Console implements UiType {
         }
         else
             for (DTOLoan dtoLoan : loans) {
-                System.out.println("\n----------Loan number " + index +"----------\n" + dtoLoan+dtoLoan.invokeStatusOperation(indexOperation)+"\n");
+                showLoanData(dtoLoan,index,indexOperation);
                 index++;
             }
     }
@@ -174,12 +174,13 @@ public class Console implements UiType {
             showLoansList(loansSupportInlay,3);
             System.out.println("Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The loan number is in the loan title and the format is: 2 3 4 ...");
             ArrayList<DTOLoan> loansCustomerChosen = loansCustomerChosenParticipate(loansSupportInlay);
-            //DTOMovement dtoMovement=bank.movementBuild(bank.getCustomer(chosenCustomerIndex),chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
-            /*Movement movement = Movement.build(chosenInvestAmount, "-", bank.getAmountOfCustomer(chosenCustomerIndex), bank.getAmountOfCustomer(chosenCustomerIndex) - chosenInvestAmount);
-            DTOMovement cloneMovement = bank.addMovementToClient(chosenCustomerIndex, movement);*/
              System.out.println("Are you sure you want to this operation? 1.yes 2.no ");
             if (Integer.parseInt(new Scanner(System.in).nextLine())== 1) {
-                System.out.println(bank.addMovementPerLoanFromInlay(dtoInlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex));
+                List<DTOMovement> dtoMovementsOfInlayOperation=bank.addMovementPerLoanFromInlay(dtoInlay,loansCustomerChosen,chosenInvestAmount, chosenCustomerIndex);
+                for(int i=0;i<loansCustomerChosen.size();i++){
+                    showLoanData(loansCustomerChosen.get(i),i,3);
+                    System.out.println(dtoMovementsOfInlayOperation);
+                }
                 System.out.println("-------- The operation was performed successfully --------\n");
                 } else {
                     System.out.println("-------- Operation canceled --------\n");
@@ -200,6 +201,10 @@ public class Console implements UiType {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showLoanData(DTOLoan dtoLoan,int index, int indexOperation){
+        System.out.println("\n----------Loan number " + (index+1) +"----------\n" + dtoLoan+dtoLoan.invokeStatusOperation(indexOperation)+"\n");
     }
 
     @Override
