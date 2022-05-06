@@ -44,7 +44,7 @@ public class MainMenu extends MenuItem {
                System.out.println(menuDescription);
                userInput = getUserInput();
 
-               if (userInput == 0) {
+               if (userInput == 8) {
                    break;
                }
                else {
@@ -65,9 +65,6 @@ public class MainMenu extends MenuItem {
             description=description+index+"."+menuItem.getMenuTitle()+"\n";
             index++;
         }
-
-        description=description+"0."+ (menuType == MenuType.PRIMARY_MENU? "Exit" : "Back")+"\n";
-
         return description;
     }
 

@@ -5,7 +5,6 @@ import dataObjects.dtoCustomer.DTOCustomer;
 import logic.YazLogic;
 import logic.customer.Customer;
 
-import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,15 +24,14 @@ public class DTOLoan {
     protected List<DTOAccount> listOfAccompanied;
     protected List<DTOInlay> listOfInlays;
     protected List<DTOMovement> listOfMovements;
-    /*protected int yazNumberTillEnd;
-    protected int totalInterestPayTillNow;
-    protected int totalInterestPayTillEnd;
-    protected int totalCapitalPayTillNow;
-    protected int totalCapitalPayTillEnd;*/
+    protected List<Integer> listOfYazPayments;
+    protected List<Integer> listOfInRiskYazPayments;
     protected int pulseCounterThatHappened;
     protected int startedYazInActive;
     protected int endedYaz;
     protected int inRiskCounter;
+    protected int windowOfPaymentCounter=1;
+
     public DTOLoan() {
 
 
@@ -41,6 +39,7 @@ public class DTOLoan {
 
     public static DTOLoan build(DTOLoan loan) {
         DTOLoan dtoLoan = new DTOLoan();
+        dtoLoan.windowOfPaymentCounter=loan.windowOfPaymentCounter;
         dtoLoan.capital = loan.capital;
         dtoLoan.loanStatus = loan.loanStatus;
         dtoLoan.paysEveryYaz = loan.paysEveryYaz;
@@ -49,9 +48,15 @@ public class DTOLoan {
         dtoLoan.totalYazTime = loan.totalYazTime;
         dtoLoan.interestPerPayment = loan.interestPerPayment;
         dtoLoan.category = loan.category;
+        dtoLoan.startedYazInActive=loan.startedYazInActive;
+        dtoLoan.endedYaz=loan.endedYaz;
+        dtoLoan.inRiskCounter=loan.inRiskCounter;
+        dtoLoan.capitalSumLeftTillActive=loan.capitalSumLeftTillActive;
         List<DTOAccount> accompaniedList = new ArrayList<>();
         List<DTOInlay> inlaysList = new ArrayList<>();
         List<DTOMovement> movementsList=new ArrayList<>();
+        List<Integer> listOfYazPayments=new ArrayList<>();
+        List<Integer> listOfInRiskYazPayments=new ArrayList<>();
         for (DTOAccount dtoAccount : loan.listOfAccompanied) {
             accompaniedList.add(DTOCustomer.build((DTOCustomer) dtoAccount));
         }
@@ -61,6 +66,10 @@ public class DTOLoan {
         for (DTOMovement dtoMovement : loan.listOfMovements) {
             movementsList.add(DTOMovement.build(dtoMovement));
         }
+        listOfYazPayments.addAll(loan.listOfYazPayments);
+        listOfInRiskYazPayments.addAll(loan.listOfInRiskYazPayments);
+        dtoLoan.listOfInRiskYazPayments=listOfInRiskYazPayments;
+        dtoLoan.listOfYazPayments=listOfYazPayments;
         dtoLoan.listOfInlays=inlaysList;
         dtoLoan.listOfAccompanied=accompaniedList;
         dtoLoan.listOfMovements=movementsList;
@@ -90,6 +99,10 @@ public class DTOLoan {
 
     public DTOLoanStatus getStatusOperation(){
         return loanStatus;
+    }
+
+    public List<Integer> getListOfInRiskYazPayments() {
+        return listOfInRiskYazPayments;
     }
 
     public int getCapital() {
@@ -134,7 +147,7 @@ public class DTOLoan {
 
     public int pulseNumber() {
         return totalYazTime / paysEveryYaz;
-        //it's the total payments that we will have
+        //it's the total pulses that we will have
     }
 
     public int paymentPerPulse() {
@@ -143,11 +156,14 @@ public class DTOLoan {
     }
 
     public int theNextYazToBePaid(){
-        return YazLogic.currentYazUnit+ numberOfYazTillNextPulse();
+        return windowOfPaymentCounter*paysEveryYaz+startedYazInActive-1;
     }
 
     public int numberOfYazTillNextPulse(){
-        return (paysEveryYaz-( (YazLogic.currentYazUnit-1)% paysEveryYaz));
+        if((YazLogic.currentYazUnit-(this.startedYazInActive-1))%this.paysEveryYaz==0) {
+            windowOfPaymentCounter++;
+        }
+        return (YazLogic.currentYazUnit-(this.startedYazInActive-1))%this.paysEveryYaz;
     }
 
 
@@ -155,9 +171,6 @@ public class DTOLoan {
         return (paymentPerPulse() * (listOfInlays.stream().filter(i-> Objects.equals(i.dtoAccount.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).investAmount * 100) / capital) / 100;
     }
 
-    public int getCurrentYaz() {
-        return YazLogic.currentYazUnit;
-    }
 
     public int getStartedYazInActive() {
         return startedYazInActive;
@@ -186,23 +199,29 @@ public class DTOLoan {
     public int getPulseCounterThatHappened() {
         return pulseCounterThatHappened;
     }
-    /*public int getTotalCapitalPayTillEnd() {
-        return totalCapitalPayTillEnd;
+
+    public List<Integer> getListOfYazPayments() {
+        return this.listOfYazPayments;
     }
 
     public int getTotalCapitalPayTillNow() {
-        return totalCapitalPayTillNow;
+        return this.listOfYazPayments.size()*this.paymentPerPulse();
     }
 
-    public int getTotalInterestPayTillEnd() {
-        return totalInterestPayTillEnd;
+    public int getTotalCapitalPayTillEnd() {
+        return this.pulseNumber()*this.paymentPerPulse()-this.getTotalCapitalPayTillNow();
     }
 
     public int getTotalInterestPayTillNow() {
-        return totalInterestPayTillNow;
+        return this.listOfYazPayments.size()*(int)((this.capital) / this.pulseNumber() * ( (double)(this.interestPerPayment / 100.0)));
     }
 
-    public int getYazNumberTillEnd() {
-        return yazNumberTillEnd;
-    }*/
+    public int getTotalInterestPayTillEnd() {
+        return this.pulseNumber()*(int)((this.capital) / this.pulseNumber() * ( (double)(this.interestPerPayment / 100.0)))-this.getTotalInterestPayTillNow();
+    }
+
+    public int getTotalAmountOfInRiskCapitalThatDidNotPayed(){
+        return this.inRiskCounter*this.paymentPerPulse();
+    }
+
 }
