@@ -19,7 +19,7 @@ public interface UiType {
     int getChosenCustomerIndex();
     int getAmountFromUser();
     void showCategoriesList();
-    int getChosenCategoryIndex();
+    String[] getChosenCategoryIndex();
     double getChosenMinInterestYaz();
     int getChosenMinYazTime();
     int getChosenInvestAmount(int amountOfCustomer) throws InvocationTargetException, InstantiationException, IllegalAccessException;
@@ -28,5 +28,6 @@ public interface UiType {
     <T> Boolean ensureMassageToCustomer(T data);
     void showDataLoans();
     ArrayList<DTOLoan> loansCustomerChosenParticipate(ArrayList<DTOLoan> loansSupportInlay) throws InvocationTargetException, InstantiationException, IllegalAccessException;
-   // void addMovementPerLoanFromInlay(ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount ,int customerIndexGiveMoney);
+    void showCurrentYAZ();
+    // void addMovementPerLoanFromInlay(ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount ,int customerIndexGiveMoney);
 }

@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="menuBuilder">
+    <output-path>$PROJECT_DIR$/out/artifacts/menuBuilder</output-path>
+    <root id="root">
+      <element id="archive" name="menuBuilder.jar">
+        <element id="module-output" name="menuBuilder" />
+      </element>
+    </root>
+  </artifact>
+</component>

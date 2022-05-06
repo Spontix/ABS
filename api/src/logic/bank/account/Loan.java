@@ -25,10 +25,6 @@ public class Loan extends DTOLoan {
         //int sum=listOfAccompanied.stream().mapToInt(a -> a.get)
     }
 
-    public void decCapitalSumLeftTillActive(int paymentPerPulse){
-        this.capitalSumLeftTillActive=this.capitalSumLeftTillActive-paymentPerPulse;
-
-    }
 
     public void setStartedYazInActive(int yaz){
         if(startedYazInActive==0)
@@ -69,7 +65,7 @@ public class Loan extends DTOLoan {
         this.capital=capitalLoan;
     }
 
-    public void serPaysEveryYaz(int paysEveryYazLoan) {
+    public void setPaysEveryYaz(int paysEveryYazLoan) {
         this.paysEveryYaz=paysEveryYazLoan;
     }
 
@@ -96,6 +92,23 @@ public class Loan extends DTOLoan {
     public void setListOfMovements(ArrayList<DTOMovement> movements) {
         this.listOfMovements=movements;
     }
+
+    public void setListOfYazPayment(ArrayList<Integer> listOfYazPayment) {
+        this.listOfYazPayments = listOfYazPayment;
+
+    }
+
+    public void setListOfInRiskYazPayments(ArrayList<Integer> listOfInRiskYazPayments) {
+        this.listOfInRiskYazPayments=listOfInRiskYazPayments;
+    }
+
+    public void setEndedYaz(int endedYaz){
+        this.endedYaz=endedYaz;
+    }
+
+
+
+
 }
 
 

@@ -57,7 +57,7 @@ public interface UIInterfaceLogic {
 
     ArrayList<DTOLoan> loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay, String[] arrayStringsScanner);
 
-    void yazProgressLogic() throws InvocationTargetException, InstantiationException, IllegalAccessException;//ToDo!!
+    void yazProgressLogic(boolean progressTheYaz) throws InvocationTargetException, InstantiationException, IllegalAccessException;//ToDo!!
 
     ArrayList<DTOMovement> addMovementPerLoanFromInlay(DTOInlay inlay, ArrayList<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int customerIndexGiveMoney) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
@@ -72,5 +72,7 @@ public interface UIInterfaceLogic {
     DTOMovement movementBuildToLoan(DTOLoan dtoLoan,int movementSum,String movementOperation,int movementSumBeforeOperation,int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     DTOCustomer customerBuild(String name, int amount) throws InvocationTargetException, InstantiationException, IllegalAccessException;
+
+    DTOLoan getLoanById(String id);
 }
 

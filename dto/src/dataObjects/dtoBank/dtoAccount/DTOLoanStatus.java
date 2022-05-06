@@ -2,13 +2,14 @@ package dataObjects.dtoBank.dtoAccount;
 
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public enum DTOLoanStatus {
     PENDING{
         @Override
         public String operationTwo(DTOLoan dtoLoan) {
-            return printLoansList(dtoLoan) + operationThree(dtoLoan);
+            return getLoansListAsString(dtoLoan) + PENDING.operationThree(dtoLoan);
         }
 
         public String operationThree(DTOLoan dtoLoan){
@@ -22,7 +23,18 @@ public enum DTOLoanStatus {
     ACTIVE{
         @Override
         public String operationTwo(DTOLoan dtoLoan) {
-            return printLoansList(dtoLoan) +"The Yaz when the status loan become ACTIVE is: "+dtoLoan.startedYazInActive +"\n"+ operationThree(dtoLoan);///+ כל החלק החל ממידע על כל התשלומים שבוצעו עד כה. על כל תשלום יש לפרט:
+            return  "------------ Pending Information ------------\n" + getLoansListAsString(dtoLoan) + "------------ Active Information ------------\n" +
+                    "The Yaz when the status loan become ACTIVE is: "+dtoLoan.startedYazInActive +
+                    "\n"+ ACTIVE.operationThree(dtoLoan) + "\n" +
+                    "The amount of the pulse payment is : "+dtoLoan.getCapital() / dtoLoan.pulseNumber() + "\n" +
+                    "The interest per pulse is : "+(int)(dtoLoan.getCapital()) / dtoLoan.pulseNumber() * ( (double)(dtoLoan.getInterestPerPayment() / 100.0))+"\n" +
+                    "The total pulse withe interest payment : " + dtoLoan.paymentPerPulse() + "\n" +
+                    "The payments were preformed in Yaz's : " + dtoLoan.getListOfYazPayments() + "\n" +
+                    "The total capital that was payed till now are : " + dtoLoan.getTotalCapitalPayTillNow() + "\n" +
+                    "The total capital that left to pay is : " + dtoLoan.getTotalCapitalPayTillEnd() + "\n" +
+                    "The total interest that was payed till now are : " + dtoLoan.getTotalInterestPayTillNow() + "\n" +
+                    "The total interest that left to pay is : " + dtoLoan.getTotalInterestPayTillEnd() + "\n"
+                    ;
         }
 
         @Override
@@ -33,7 +45,10 @@ public enum DTOLoanStatus {
     ,RISK{
         @Override
         public String operationTwo(DTOLoan dtoLoan) {
-            return null;
+            return ACTIVE.operationTwo(dtoLoan) + "------------ Risk Information ------------\n" +
+                    "The Yazs that did pay by the loaner are : " + dtoLoan.getListOfInRiskYazPayments() + "\n" +
+                    "The total payments that have been delayed are : " + dtoLoan.getInRiskCounter() + "\n" +
+                    "The total capital that have been delayed is : " + dtoLoan.getInRiskCounter()*dtoLoan.paymentPerPulse();
         }
 
         @Override
@@ -44,7 +59,13 @@ public enum DTOLoanStatus {
     ,FINISHED{
         @Override
         public String operationTwo(DTOLoan dtoLoan) {
-            return printLoansList(dtoLoan) + operationThree(dtoLoan); //+ •	מידע על כל התשלומים ששולמו בפועל (כפי שמוגדר ב active)
+            return getLoansListAsString(dtoLoan) + "------------ Finished Information ------------\n" +
+                    FINISHED.operationThree(dtoLoan) + "\n" +
+                    "The amount of the pulse payment is : "+dtoLoan.getCapital() / dtoLoan.pulseNumber() + "\n" +
+                    "The interest per pulse is : "+(int)(dtoLoan.getCapital()) / dtoLoan.pulseNumber() * ( (double)(dtoLoan.getInterestPerPayment() / 100.0))+"\n" +
+                    "The total pulse withe interest payment : " + dtoLoan.paymentPerPulse() + "\n" +
+                    "The payments were preformed in Yaz's : " + dtoLoan.getListOfYazPayments() + "\n"
+                    ; //+ •	מידע על כל התשלומים ששולמו בפועל (כפי שמוגדר ב active)
         }
 
         @Override
@@ -68,17 +89,18 @@ public enum DTOLoanStatus {
     public abstract String operationTwo(DTOLoan dtoLoan);
     public abstract String operationThree(DTOLoan dtoLoan);
 
-    public String printLoansList(DTOLoan dtoLoan){
-        String stringPrint = new String();
+    public String getLoansListAsString(DTOLoan dtoLoan){
+        StringBuilder stringPrint = new StringBuilder("");
         int index=1;
         if(dtoLoan.listOfAccompanied == null)
-            stringPrint+="The loaners list is currently empty.";
+            stringPrint.append("The loaners list is currently empty.");
         else {
-            stringPrint+="------------ Loaners list ------------\n";
+            stringPrint.append("------------ Borrowers list ------------\n");
             for (DTOAccount accompanied : dtoLoan.listOfAccompanied) {
-                stringPrint += index + ". Name: " + accompanied.getCustomerName() + ", The invest amount: " + accompanied.getAmount() + "\n";
+                int sum=dtoLoan.getListOfInlays().stream().filter(i->i.getDtoAccount().getCustomerName().equals(accompanied.getCustomerName())).mapToInt(i->i.getInvestAmount()).sum();
+                stringPrint.append(index).append(". Name: ").append(accompanied.getCustomerName()).append("\nThe invest amount: ").append(sum).append("\n");
             }
         }
-        return stringPrint;
+        return stringPrint.toString();
     }
 }
