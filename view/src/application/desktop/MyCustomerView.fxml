@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane fx:id="customerTablePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.CustomerController">
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <tabs>
+      <Tab text="Infromation">
+         <content>
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="178.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="312.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" prefWidth="10.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="ALWAYS" />
+               </rowConstraints>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="120.0" />
+                        <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="20.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="120.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="0.0" prefHeight="20.0" vgrow="ALWAYS" />
+                     </rowConstraints>
+                     <children>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnSpan="3" GridPane.rowSpan="3" />
+                        <Button maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Charge" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Withdraw" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
+                     </children>
+                  </GridPane>
+                  <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                  <Label text="Loaner Loans Table" />
+                  <Label text="Payment Controls" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+         </content>
+      </Tab>
+      <Tab text="Scramble" />
+      <Tab text="Payment">
+         <content>
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="178.0" minWidth="10.0" prefWidth="178.0" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="375.0" minWidth="10.0" prefWidth="312.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" prefWidth="10.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="ALWAYS" />
+               </rowConstraints>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="120.0" />
+                        <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="20.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="120.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="0.0" prefHeight="20.0" vgrow="ALWAYS" />
+                     </rowConstraints>
+                     <children>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnSpan="3" GridPane.rowSpan="4" />
+                     </children>
+                  </GridPane>
+                  <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                  <Label text="Loaner Loans Table" />
+                  <Label text="Payment Controls" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>

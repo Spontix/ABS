@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/api</output-path>
     <root id="root">
       <element id="archive" name="api.jar">
-        <element id="module-output" name="api" />
+        <element id="module-output" name="model" />
       </element>
     </root>
   </artifact>
