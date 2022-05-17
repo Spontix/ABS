@@ -449,6 +449,29 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         return  inRiskToActive;
 
     }
+
+
+
+    @Override
+    public ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+
+        /////////////2.Payment should be paid by the loaner+sorted the list because of the logic of the app
+        List<Loan> loansThatShouldPay = loans.stream().filter(l -> (l.numberOfYazTillNextPulse() == 0 && l.getLoanStatus() == DTOLoanStatus.ACTIVE) || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
+            @Override
+            public int compare(Loan l1, Loan l2) {
+                if (l1.getStartedYazInActive() - l2.getStartedYazInActive() == 0 && l1.paymentPerPulse() - l2.paymentPerPulse() == 0)//if the yaz equals and the payment per pulse is equal so sort by the number of pulse
+                    return l1.pulseNumber() - l2.pulseNumber();
+                else if (l1.getStartedYazInActive() - l2.getStartedYazInActive() == 0) {//if the yaz equals so sort by the payment per pulse
+                    return l1.paymentPerPulse() - l2.paymentPerPulse();
+                }
+                return l1.getStartedYazInActive() - l2.getStartedYazInActive();//else sort by the activation time of the loan
+            }
+        }).collect(Collectors.toList());
+        ArrayList<DTOLoan> DTOLoansThatShouldPay=new ArrayList<>();
+        loansThatShouldPay.stream().filter(l->DTOLoansThatShouldPay.add(DTOLoan.build(l)));
+
+        return DTOLoansThatShouldPay;
+    }
 }
 
 

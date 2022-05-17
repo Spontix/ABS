@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface UiType {
-    void Run() throws InvocationTargetException, InstantiationException, IllegalAccessException;
+    void Run(String[] args) throws InvocationTargetException, InstantiationException, IllegalAccessException;
     void insertSumToAccount();
     void inlayActivation();
     void drawSumFromAccount();

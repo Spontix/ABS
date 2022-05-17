@@ -21,7 +21,7 @@ public class Console implements UiType {
     }
 
 
-    public void Run() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void Run(String[] args) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         menu = new MainMenu("Main", MenuType.PRIMARY_MENU);
         createMenu(menu);
         menu.show();
