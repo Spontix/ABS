@@ -37,7 +37,7 @@
                      </items>
                   </MenuButton>
                   <Label fx:id="filePath" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="File Path : " GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="1" />
-                  <Label fx:id="currentYaz" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Current YAZ : 25" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                  <Label fx:id="currentYaz" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Current Yaz : 1" GridPane.columnIndex="6" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </top>

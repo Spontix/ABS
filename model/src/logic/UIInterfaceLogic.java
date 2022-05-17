@@ -74,5 +74,7 @@ public interface UIInterfaceLogic {
     DTOCustomer customerBuild(String name, int amount) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     DTOLoan getLoanById(String id);
+
+    ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException;
 }
 
