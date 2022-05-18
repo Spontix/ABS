@@ -130,7 +130,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
 
-    protected Bank() {
+    public Bank() {
 
     }
 
