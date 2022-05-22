@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.LoanTitleTableController">
+   <content>
+      <TitledPane fx:id="titledPaneLoan" animated="false" text="--  Loan number 1 --" textAlignment="RIGHT">
+         <content>
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="194.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TableView fx:id="loanInformationDepandingStatus" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="informationDependingOnStatusColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#InformationDependingOnStatusColumnActionLisener" prefWidth="851.0" text="Information depending on the status of the loan:" />
+                     </columns>
+                  </TableView>
+                  <TableView fx:id="loanDetails" prefHeight="200.0" prefWidth="853.0" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                     <columns>
+                        <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#IdColumnActionLisener" prefWidth="100.0" text="Id" />
+                        <TableColumn fx:id="ownerColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#OwnerColumnActionLisener" prefWidth="100.0" text="Owner" />
+                        <TableColumn fx:id="categoryColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#CategoryColumnActionLisener" prefWidth="100.0" text="Category" />
+                        <TableColumn fx:id="capitalColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#CategoryColumnActionLisener" prefWidth="100.0" text="Capital" />
+                        <TableColumn fx:id="totalTimeColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#TotalTimeColumnActionLisener" prefWidth="100.0" text="Total time " />
+                        <TableColumn fx:id="paysEveryYazColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#PaysEveryYazColumnActionLisener" prefWidth="150.0" text="Pays every yaz" />
+                        <TableColumn fx:id="interestColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#InterestColumnActionLisener" prefWidth="100.0" text="Interest" />
+                        <TableColumn fx:id="statusColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" onEditStart="#StatusColumnActionLisener" prefWidth="100.0" text="Status" />
+                     </columns>
+                  </TableView>
+               </children>
+            </GridPane>
+         </content>
+      </TitledPane>
+   </content>
+</ScrollPane>

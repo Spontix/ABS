@@ -189,6 +189,7 @@ public class Console implements UiType {
                 for (String category:choseCategoryIndex) {
                     categories.append(bank.getCategory(Integer.parseInt(category))).append(" ");
                 }
+            ///////// add another field in the end, its not import in here its just for errors/////////////
             DTOInlay dtoInlay=bank.inlayBuild(bank.getCustomer(chosenCustomerIndex), chosenInvestAmount, categories.toString(), minInterestYaz, minYazTime);
             ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(dtoInlay);
             showLoansList(loansSupportInlay,3);
@@ -225,6 +226,7 @@ public class Console implements UiType {
             e.printStackTrace();
         }
     }
+
 
     public void showLoanData(DTOLoan dtoLoan,int index, int indexOperation){
         System.out.println("\n----------Loan number " + index +"----------\n" + dtoLoan+dtoLoan.invokeStatusOperation(indexOperation));

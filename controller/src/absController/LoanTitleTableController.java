@@ -1,5 +1,6 @@
 package absController;
 
+
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoCustomer.DTOCustomer;
@@ -17,10 +18,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.DoubleToIntFunction;
 
+
 public class LoanTitleTableController implements Initializable {
     private UIInterfaceLogic bank;
 
-    @FXML
     protected TableView<DTOInlay> lendersTableView;
 
     @FXML
@@ -80,4 +81,5 @@ public class LoanTitleTableController implements Initializable {
         investmentColumn.setCellValueFactory(new PropertyValueFactory<>("investAmount"));
 
     }
+
 }

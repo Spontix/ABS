@@ -1,6 +1,8 @@
 package absController;
 
 
+
+import dataObjects.dtoCustomer.DTOCustomer;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +28,7 @@ import javax.swing.border.Border;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,17 @@ public class ABSController implements Initializable {
     private CustomerController customerController;
     private List<LoanTitleTableController> loanTitleTableControllerList = new ArrayList<>();
     private AdminController adminController;
-    private UIInterfaceLogic bank;
+    /////////////public static = just for to get the bank example that I create here to customerController
+    ///////////// new Bank() = for this line I had to do Bank.Bank public////////////
+    public static UIInterfaceLogic bank = new Bank();
+
+    ////////////// this ctor and the two blocks is for the example/////////////////////
+    public ABSController(){
+        try {
+            createBankExample();
+        } catch (InvocationTargetException | InstantiationException|IllegalAccessException e) {
+        }
+    }
 
 
     @FXML
@@ -62,9 +75,31 @@ public class ABSController implements Initializable {
     void contextMenuRequested(ContextMenuEvent event) {
     }
 
+    public void createBankExample() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        DTOCustomer customer0 = bank.customerBuild("Menash", 5000);
+        DTOCustomer customer1 = bank.customerBuild("Avrum", 1000);
+        DTOCustomer customer2 = bank.customerBuild("Tikva", 10000);
+
+        DTOLoan loan1 = bank.loanBuilder("build a room", "Avrum", "Renovate", 3000, 10, 2,3);
+        DTOLoan loan2 = bank.loanBuilder("Bar Mitzva", "Tikva", "OverdraftCover", 4000, 10, 1,3);
+        DTOLoan loan3 = bank.loanBuilder("Wedding", "Menash", "Setup a business", 42000, 21, 7,20);
+
+        String a =new String("Renovate");
+        bank.getCategoriesGroup().add(a);
+        bank.getCategoriesGroup().add("OverdraftCover");
+        bank.getCategoriesGroup().add("Setup a business");
+
+        bank.getLoansList().add(loan1);
+        bank.getLoansList().add(loan2);
+        bank.getLoansList().add(loan3);
+
+        bank.getCustomers().add(customer0);
+        bank.getCustomers().add(customer1);
+        bank.getCustomers().add(customer2);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         //ToDo: Function
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = getClass().getResource("/application/desktop/MyCustomerView.fxml");
@@ -121,6 +156,7 @@ public class ABSController implements Initializable {
                         else
                             System.out.println(ex.getMessage());
                 }});
+
 
         //ToDo: Function
 

@@ -27,6 +27,8 @@ public interface UIInterfaceLogic {
 
     String getCustomerName(int customerIndex);
 
+    int getNumbersOfOpenLoansBorrowerDK(int customerIndex);
+
     int getTotalCustomersSize();
 
     void cashDeposit(int customerIndex, int sum);
@@ -66,6 +68,8 @@ public interface UIInterfaceLogic {
     DTOLoan loanBuilder(String idLoan, String ownerLoan, String categoryLoan, int capitalLoan, int totalYazTimeLoan, int paysEveryYazLoan, int interestPerPaymentLoan) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     Inlay inlayBuild(DTOAccount customer, int investAmount, String category, double minInterestYaz, int minYazTime) throws InvocationTargetException, InstantiationException, IllegalAccessException;
+    //////////copy of inlayBuild//////////
+    Inlay inlayBuildForDK(DTOAccount customer, int investAmount, String category, double minInterestYaz, int minYazTime, int maximumLoansOpenToTheBorrower) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     DTOMovement movementBuildToCustomer(DTOCustomer customer, int movementSum, String movementOperation, int movementSumBeforeOperation, int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 

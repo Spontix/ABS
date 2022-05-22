@@ -103,6 +103,20 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
     @Override
+    public //////////copy of inlayBuild. I had a new member maximumLoansOpenToTheBorrower to DTOInlay and creat Get and Set methods//////////
+    Inlay inlayBuildForDK(DTOAccount customer, int investAmount, String category, double minInterestYaz, int minYazTime, int maximumLoansOpenToTheBorrower) throws InvocationTargetException, InstantiationException, IllegalAccessException{
+        Inlay inlay = (Inlay) createInstance(Inlay.class);
+        checksInvestAmount(customer, investAmount);
+        inlay.setInvestAmount(investAmount);
+        inlay.setCategory(category);
+        inlay.setMinInterestYaz(minInterestYaz);
+        inlay.setMaximumLoansOpenToTheBorrower(maximumLoansOpenToTheBorrower);
+        inlay.setMinYazTime(minYazTime);
+        inlay.setInlayCustomer(accounts.stream().filter(a -> a.getCustomerName().equals(customer.getCustomerName())).collect(Collectors.toList()).get(0));
+        return inlay;
+    }
+
+    @Override
     public void checksInvestAmount(DTOAccount customer, int investAmount) {
         if (investAmount > customer.getAmount() || investAmount < 0) {
             throw new RuntimeException("The investment amount is above the amount balance or a negative one. please try again!");
@@ -132,7 +146,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
 
-    protected Bank() {
+    public Bank() {
 
     }
 
@@ -157,6 +171,17 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     @Override
     public int getAmountOfCustomer(int customerIndex) {
         return this.getCustomer(customerIndex).getAmount();
+    }
+
+    /////////////////this one is new and its for the inlay////////////////
+    @Override
+    public int getNumbersOfOpenLoansBorrowerDK(int customerIndex){
+        int counterLoansOpenToTheBorrower =0;
+        for (DTOLoan loan : this.getLoansList()) {
+            if (loan.getOwner().equals(this.getCustomerName(customerIndex)) && loan.getLoanStatus() != DTOLoanStatus.FINISHED)
+                counterLoansOpenToTheBorrower++;
+        }
+        return counterLoansOpenToTheBorrower;
     }
 
     @Override
