@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<TitledPane fx:id="loanTitledPane" animated="false" prefHeight="400.0" prefWidth="800.0" text="loan" textAlignment="RIGHT" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.LoanTitleTableController">
+   <content>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Accordion>
+               <panes>
+                  <TitledPane animated="false" prefWidth="800.0" text="Loan Infromation">
+                     <content>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TableView fx:id="loansTableView" GridPane.columnSpan="2" GridPane.rowSpan="3">
+                                 <columns>
+                                    <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                    <TableColumn fx:id="ownerColumn" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Owner" />
+                                    <TableColumn fx:id="capitalColumn" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Capital" />
+                                    <TableColumn fx:id="yazTimeColumn" maxWidth="1.7976931348623157E308" prefWidth="97.386474609375" text="Yaz Time" />
+                                    <TableColumn fx:id="paysYazColumn" maxWidth="1.7976931348623157E308" prefWidth="122.3095703125" text="Pays Yaz" />
+                                    <TableColumn fx:id="interestColumn" maxWidth="1.7976931348623157E308" prefWidth="84.072509765625" text="Interest" />
+                                    <TableColumn fx:id="categoryColumn" maxWidth="1.7976931348623157E308" prefWidth="89.814453125" text="Category" />
+                                    <TableColumn fx:id="statusColumn" maxWidth="1.7976931348623157E308" prefWidth="121.0" text="Status" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </GridPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Leaders Infromation">
+                     <content>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TableView fx:id="lendersTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowSpan="3">
+                                 <columns>
+                                    <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" prefWidth="275.0" text="Name" />
+                                    <TableColumn fx:id="investmentColumn" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="272.0" text="Investment" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <Label fx:id="totalPaymentsLabel" text="Total payments : " GridPane.rowIndex="3" />
+                              <Label fx:id="leftPaymentsLabel" text="Left payments : " GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Status Infromation">
+                     <content>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+         </children>
+      </GridPane>
+   </content>
+</TitledPane>

@@ -6,6 +6,7 @@ import logic.customer.Customer;
 
 public class DTOInlay {
     protected DTOAccount dtoAccount = new DTOCustomer();
+    protected String name;
     protected int investAmount;
     protected String category;
     protected double minInterestYaz;
@@ -39,6 +40,7 @@ public class DTOInlay {
         dtoInlay.category=inlay.category;
         dtoInlay.minInterestYaz=inlay.minInterestYaz;
         dtoInlay.minYazTime=inlay.minYazTime;
+        dtoInlay.name=inlay.name;
         dtoInlay.dtoAccount=DTOCustomer.build((DTOCustomer)inlay.dtoAccount);
         return dtoInlay;
     }

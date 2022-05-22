@@ -31,6 +31,7 @@ public class Inlay extends DTOInlay {
 
     public void setInlayCustomer(DTOAccount customer){
         dtoAccount=customer;
+        name=customer.getCustomerName();
     }
 
 
