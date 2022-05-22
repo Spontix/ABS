@@ -17,6 +17,8 @@ public class Inlay extends DTOInlay {
         investAmount=inlayInvestAmount;
     }
 
+    public void setMaximumLoansOpenToTheBorrower(int inlayMaximumLoansOpenToTheBorrower){maximumLoansOpenToTheBorrower = inlayMaximumLoansOpenToTheBorrower;}
+
     public void setCategory(String inlayCategory){
         category = inlayCategory;
     }

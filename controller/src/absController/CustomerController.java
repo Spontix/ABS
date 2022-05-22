@@ -2,30 +2,35 @@ package absController;
 
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
+import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import logic.UIInterfaceLogic;
 import logic.bank.Bank;
+import logic.bank.account.Loan;
+import org.controlsfx.control.CheckComboBox;
 
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 
-public class CustomerController {
+public class CustomerController implements Initializable{
     private UIInterfaceLogic bank = new Bank();
 
     public CustomerController() {
         bank = ABSController.bank;
     }
 
-
     @FXML
     TabPane customerTablePane;
 
     @FXML
-    private ComboBox<String> categoriesList;
+    private CheckComboBox<String> categoriesList;
 
     @FXML
     private Button enableInlayButton;
@@ -34,7 +39,7 @@ public class CustomerController {
     private TextField investmentAmount;
 
     @FXML
-    private TextArea textErrorInvestmentAmount;
+    private TextArea errorTextArea;
 
     @FXML
     private TextField minimumInterestYaz;
@@ -51,6 +56,17 @@ public class CustomerController {
     @FXML
     private Accordion accordion;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+       final ObservableList<String> categories = FXCollections.observableArrayList();
+       ////////////This two lines are for example - don't forget to delete it!!////////////////////
+        categories.add("Renovate");
+        categories.add("OverdraftCover");
+
+        categories.addAll(bank.getCategoriesGroup());
+        categoriesList.getItems().addAll(categories);
+    }
+
 
     @FXML
     void AccordingAddLoanTitleTableActionLisener(MouseEvent event) {
@@ -59,13 +75,21 @@ public class CustomerController {
 
 
     @FXML
-    void MaximumLoanOwnershipPercentageActionLisener(ActionEvent event) {
-
+    void MaximumLoanOwnershipPercentageActionLisener() {
     }
 
     @FXML
-    void MaximumLoansOpenToTheBorrowerActionLisener(ActionEvent event) {
-
+    int MaximumLoansOpenToTheBorrowerActionLisener() {
+        int maxLoansOpen = 0;
+        String number = maximumLoansOpenToTheBorrower.getText();
+        if (Objects.equals(number, ""))
+            return 0;
+        else {
+            maxLoansOpen = Integer.parseInt((number));
+            if (maxLoansOpen < 0)
+                throw new NumberFormatException("In 'Maximum loans open to the borrower' - Invalid input!! Please enter a number greater than 0 or leave this figure empty.");
+        }
+        return maxLoansOpen;
     }
 
     @FXML
@@ -76,8 +100,9 @@ public class CustomerController {
             return 0;
         else {
             chosenMinInterestYaz = Double.parseDouble((number));
-            if (chosenMinInterestYaz < 0 || chosenMinInterestYaz > 100)
-                throw new NumberFormatException();
+            if (chosenMinInterestYaz <= 0 || chosenMinInterestYaz > 100)
+                throw new NumberFormatException("In 'Minimum interest yaz' - Invalid input!! Please enter a number greater than 0 or leave this figure empty.");
+
         }
         return chosenMinInterestYaz;
     }
@@ -90,65 +115,63 @@ public class CustomerController {
             return 0;
         else {
             chosenMinYazTime = Integer.parseInt((number));
-            if (chosenMinYazTime < 0)
-                throw new NumberFormatException();
+            if (chosenMinYazTime <= 0)
+                throw new NumberFormatException("In 'Minimum total yaz' - Invalid input!! Please enter a number greater than 0 or leave this figure empty.");
         }
         return chosenMinYazTime;
     }
 
     @FXML
-    boolean investmentAmountActionListener() {
+    int investmentAmountActionListener() throws Exception {
         String amount = investmentAmount.getText();
         int amountFromUser = 0;
-        try {
-            amountFromUser = Integer.parseInt(amount);
-            ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
-            if (amountFromUser < 0 || amountFromUser > bank.getAmountOfCustomer(0))
-                throw new NumberFormatException();
-        } catch (NumberFormatException exception) {
-            return false;
-        }
-        //return amountFromUser;
-        return true;
+        amountFromUser = Integer.parseInt(amount);
+        ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
+        if (amountFromUser <= 0 || amountFromUser > bank.getAmountOfCustomer(0))
+            throw new NumberFormatException("In 'Amount to investment' - Invalid input!! Please enter a number greater than 0 and less than \" + bank.getAmountOfCustomer(0)");
+
+        return amountFromUser;
     }
 
-    private boolean validateEnteredData() {
-        return investmentAmountActionListener();
-    }
+
+
 
     @FXML
     void ClickEnableInlayButtonActionLisener(ActionEvent event) {
-        if (validateEnteredData()) {
-            try {
-                //int chosenInvestAmount = investmentAmountActionListener();
-                double minInterestYaz = MinimumInterestYazActionLisener();
-                int minYazTime = MinimumTotalYazActionLisener();
-                //DTOInlay dtoInlay=bank.inlayBuild(bank.getCustomer(0), chosenInvestAmount, categoriesList.toString(), minInterestYaz, minYazTime);
-                //ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(dtoInlay);
-            } catch (NumberFormatException exception) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Input field is incorrect!");
-                alert.showAndWait();
-            } catch (RuntimeException exception) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Input field is incorrect!");
-                alert.setContentText(exception.getMessage());
-                alert.showAndWait();
-            }
-        } else {
-                        /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Input field is incorrect!");
-            alert.setContentText("Enter a number greater than 0 and less than" + bank.getAmountOfCustomer(0));
-            alert.showAndWait();*/
-            textErrorInvestmentAmount.isVisible();
+        try {
+            ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
+            int investAmount = investmentAmountActionListener();
+            int minimumTotalYaz = MinimumTotalYazActionLisener();
+            double minimumInterestYaz = MinimumInterestYazActionLisener();
+            int maximumLoansOpenToTheBorrower = MaximumLoansOpenToTheBorrowerActionLisener();
+            ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
+            DTOInlay dtoInlay = bank.inlayBuildForDK(bank.getCustomer(0), investAmount, list.toString(), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
+            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(dtoInlay);
+
+        } catch (Exception e) {
+            String message = e.getMessage();
+            if(message.startsWith("For input string:", 0))
+                message = "Invalid Input!! " + message;
+            errorTextArea.setVisible(true);
+            errorTextArea.setText(message);
         }
+
     }
 
-    @FXML
-    void ShowCategoriesListActionLisener(ActionEvent event) {
-        for (String category : bank.getCategoriesGroup()) {
-            categoriesList.getItems().addAll(category);
-        }
+    /*void setDisableFields(boolean choice){
+        enableInlayButton.setDisable(choice);
+        categoriesList.setDisable(choice);
+        minimumInterestYaz.setDisable(choice);
+        minimumTotalYaz.setDisable(choice);
+        maximumLoansOpenToTheBorrower.setDisable(choice);
+        maximumLoanOwnershipPercentage.setDisable(choice);
+    }*/
+
+
+    private void sleepForSomeTime() {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ignored) {}
     }
 
 }

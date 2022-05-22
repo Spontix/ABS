@@ -75,7 +75,8 @@ public class ABSController implements Initializable {
         DTOLoan loan2 = bank.loanBuilder("Bar Mitzva", "Tikva", "OverdraftCover", 4000, 10, 1,3);
         DTOLoan loan3 = bank.loanBuilder("Wedding", "Menash", "Setup a business", 42000, 21, 7,20);
 
-        bank.getCategoriesGroup().add("Renovate");
+        String a =new String("Renovate");
+        bank.getCategoriesGroup().add(a);
         bank.getCategoriesGroup().add("OverdraftCover");
         bank.getCategoriesGroup().add("Setup a business");
 

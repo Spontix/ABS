@@ -10,8 +10,10 @@ public class DTOInlay {
     protected String category;
     protected double minInterestYaz;
     protected int minYazTime;
+    protected int maximumLoansOpenToTheBorrower;
 
 
+    public int getMaximumLoansOpenToTheBorrower(){return maximumLoansOpenToTheBorrower;}
 
     public String getCategory() {
         return category;
@@ -36,6 +38,7 @@ public class DTOInlay {
     public static DTOInlay build(DTOInlay inlay){
         DTOInlay dtoInlay=new DTOInlay();
         dtoInlay.investAmount=inlay.investAmount;
+        dtoInlay.maximumLoansOpenToTheBorrower = inlay.maximumLoansOpenToTheBorrower;
         dtoInlay.category=inlay.category;
         dtoInlay.minInterestYaz=inlay.minInterestYaz;
         dtoInlay.minYazTime=inlay.minYazTime;
