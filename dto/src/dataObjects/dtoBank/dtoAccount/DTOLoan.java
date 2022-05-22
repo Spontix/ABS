@@ -7,6 +7,7 @@ import logic.customer.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -168,6 +169,7 @@ public class DTOLoan {
 
 
     public int calculatePaymentToLoaner(Customer customer) {
+
         return (paymentPerPulse() * (listOfInlays.stream().filter(i-> Objects.equals(i.dtoAccount.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).investAmount * 100) / capital) / 100;
     }
 
