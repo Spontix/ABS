@@ -80,5 +80,6 @@ public interface UIInterfaceLogic {
     DTOLoan getLoanById(String id);
 
     ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException;
+
 }
 

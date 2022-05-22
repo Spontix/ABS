@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 public class Bank extends DTOBank implements UIInterfaceLogic {
 
 
+
+
     private Object createInstance(Class clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Constructor[] conList = clazz.getDeclaredConstructors();
         Object object = null;
@@ -497,6 +499,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
         return DTOLoansThatShouldPay;
     }
+
 }
 
 

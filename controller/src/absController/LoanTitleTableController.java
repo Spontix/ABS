@@ -1,103 +1,84 @@
 package absController;
 
-        import dataObjects.dtoBank.dtoAccount.DTOLoan;
-        import javafx.collections.FXCollections;
-        import javafx.collections.ObservableList;
-        import javafx.event.ActionEvent;
-        import javafx.fxml.FXML;
-        import javafx.fxml.Initializable;
-        import javafx.scene.control.TableColumn;
-        import javafx.scene.control.TableView;
-        import javafx.scene.control.TitledPane;
-        import logic.UIInterfaceLogic;
 
-        import java.net.URL;
-        import java.util.ResourceBundle;
+import dataObjects.dtoBank.dtoAccount.DTOInlay;
+import dataObjects.dtoBank.dtoAccount.DTOLoan;
+import dataObjects.dtoCustomer.DTOCustomer;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.cell.PropertyValueFactory;
+import logic.UIInterfaceLogic;
+import logic.bank.account.Inlay;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.DoubleToIntFunction;
+
 
 public class LoanTitleTableController implements Initializable {
     private UIInterfaceLogic bank;
 
-    @FXML
-    private TitledPane titledPaneLoan;
+    protected TableView<DTOInlay> lendersTableView;
 
     @FXML
-    private TableView<?> loanInformationDepandingStatus;
+    protected TableView<DTOLoan> loansTableView;
 
     @FXML
-    private TableView<DTOLoan> loanDetails;
+    protected TitledPane loanTitledPane;
 
     @FXML
-    private TableColumn<?, ?> informationDependingOnStatusColumn;
+    private TableColumn<DTOLoan, String> idColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> idColumn;
+    private TableColumn<DTOLoan, String> ownerColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> ownerColumn;
+    private TableColumn<DTOLoan, Integer> capitalColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> categoryColumn;
+    private TableColumn<DTOLoan, Integer> yazTimeColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> capitalColumn;
+    private TableColumn<DTOLoan, Integer> paysYazColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> totalTimeColumn;
+    private TableColumn<DTOLoan, Integer> interestColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> paysEveryYazColumn;
+    private TableColumn<DTOLoan, String> categoryColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> interestColumn;
+    private TableColumn<DTOLoan, Integer> statusColumn;
 
     @FXML
-    private TableColumn<DTOLoan,String> statusColumn;
+    private TableColumn<DTOInlay, String> nameColumn;
 
+    @FXML
+    private TableColumn<DTOInlay, Integer> investmentColumn;
 
-    void CreateRowLoanDetails(DTOLoan dtoLoan) {
-        loanDetails.getItems().add(dtoLoan);
-    }
+    @FXML
+    private Label totalPaymentsLabel;
+
+    @FXML
+    private Label leftPaymentsLabel;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-    } @FXML
-    void CategoryColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void IdColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void InformationDependingOnStatusColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void InterestColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void OwnerColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void PaysEveryYazColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void StatusColumnActionLisener(ActionEvent event) {
-
-    }
-
-    @FXML
-    void TotalTimeColumnActionLisener(ActionEvent event) {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<>("owner"));
+        capitalColumn.setCellValueFactory(new PropertyValueFactory<>("capital"));
+        yazTimeColumn.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
+        paysYazColumn.setCellValueFactory(new PropertyValueFactory<>("paysEveryYaz"));
+        interestColumn.setCellValueFactory(new PropertyValueFactory<>("interestPerPayment"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("loanStatus"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        investmentColumn.setCellValueFactory(new PropertyValueFactory<>("investAmount"));
 
     }
 

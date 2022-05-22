@@ -30,6 +30,9 @@ public class DesktopApplication extends Application implements UiType {
         URL url = getClass().getResource("MyGeneralView.fxml");
         fxmlLoader.setLocation(url);
         Parent banksRoot = (Parent) fxmlLoader.load(fxmlLoader.getLocation().openStream());
+
+        ABSController absController=fxmlLoader.getController();
+
         Scene scene = new Scene(banksRoot);
         primaryStage.setScene(scene);
         primaryStage.show();
