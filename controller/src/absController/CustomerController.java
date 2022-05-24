@@ -54,10 +54,9 @@ public class CustomerController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       final ObservableList<String> categories = FXCollections.observableArrayList();
-
-        categories.addAll(bank.getCategoriesGroup());
-        categoriesList.getItems().addAll(categories);
+       /*final ObservableList<String> categories = FXCollections.observableArrayList();
+      categories.addAll(bank.getCategoriesGroup());
+      categoriesList.getItems().addAll(categories);*/
     }
 
     public void setBankInCustomerController(UIInterfaceLogic bank){
