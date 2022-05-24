@@ -397,8 +397,8 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
     @Override
     public void yazProgressLogic(boolean progressTheYaz) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        if(progressTheYaz)
-           YazLogic.currentYazUnit++;
+        /*if(progressTheYaz)
+           YazLogic.currentYazUnit++;*/
         boolean inRiskToActive;
         /////////////2.Payment should be paid by the loaner+sorted the list because of the logic of the app
         List<Loan> loansThatShouldPay = loans.stream().filter(l -> (l.numberOfYazTillNextPulse() == 0 && l.getLoanStatus() == DTOLoanStatus.ACTIVE) || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
@@ -500,6 +500,11 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         return DTOLoansThatShouldPay;
     }
 
+
+    @Override
+    public void seStatus() {
+        loans.get(0).setLoanStatus(DTOLoanStatus.PENDING);
+    }
 }
 
 
