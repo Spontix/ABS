@@ -290,6 +290,26 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         return loansSustainInlay;
     }
 
+    ////////////copy of loansSustainInlay with addition///////////
+    @Override
+    public ArrayList<DTOLoan> loansSustainInlayDK(DTOInlay inlay) {
+        ArrayList<DTOLoan> loansSustainInlayDK = new ArrayList<>();
+        for (Loan loan : loans) {
+            if (loan.getLoanStatus() == DTOLoanStatus.PENDING || loan.getLoanStatus() == DTOLoanStatus.NEW) {
+                if (!Objects.equals(inlay.getDtoAccount().getCustomerName(), loan.getOwner())) {//if i am not the one who asking for the money
+                    if ((inlay.getMinInterestYaz() <= loan.getInterestPerPayment() || inlay.getMinInterestYaz() == 0) &&
+                            (inlay.getMinYazTime() <= loan.getTotalYazTime() || inlay.getMinYazTime() == 0) &&
+                            (inlay.getCategory().length()==0 || inlay.getCategory().contains(loan.getCategory())) &&
+                            ///////////////////// check if it is ok to use getRealCustomerByName() method//////////////////////
+                            (getRealCustomerByName(loan.getOwner()).getAllOpenLoansToBorrower() <= inlay.getMaximumLoansOpenToTheBorrower() || inlay.getMaximumLoansOpenToTheBorrower() == 0))
+
+                        loansSustainInlayDK.add(DTOLoan.build(loan));
+                }
+            }
+        }
+        return loansSustainInlayDK;
+    }
+
     @Override
     public ArrayList<DTOLoan> loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay, String[] arrayStringsScanner) {
         String errorMassage="Please select the number loan that you are interested in participating in. You can select more than one by separating the numbers by space or Enter for cancel. The format is: 2 3 4 ...(without duplication!)";

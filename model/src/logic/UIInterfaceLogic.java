@@ -56,6 +56,8 @@ public interface UIInterfaceLogic {
     ArrayList<DTOLoan> getLoansList();
 
     ArrayList<DTOLoan> loansSustainInlay(DTOInlay inlay);
+    //////////copy of loansSustainInlay with addition//////////
+    ArrayList<DTOLoan> loansSustainInlayDK(DTOInlay inlay);
 
     ArrayList<DTOLoan> loansSustainInlayAndClientChoose(ArrayList<DTOLoan> loansSupportInlay, String[] arrayStringsScanner);
 
@@ -68,7 +70,7 @@ public interface UIInterfaceLogic {
     DTOLoan loanBuilder(String idLoan, String ownerLoan, String categoryLoan, int capitalLoan, int totalYazTimeLoan, int paysEveryYazLoan, int interestPerPaymentLoan) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     Inlay inlayBuild(DTOAccount customer, int investAmount, String category, double minInterestYaz, int minYazTime) throws InvocationTargetException, InstantiationException, IllegalAccessException;
-    //////////copy of inlayBuild//////////
+    //////////copy of inlayBuild with addition//////////
     Inlay inlayBuildForDK(DTOAccount customer, int investAmount, String category, double minInterestYaz, int minYazTime, int maximumLoansOpenToTheBorrower) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
     DTOMovement movementBuildToCustomer(DTOCustomer customer, int movementSum, String movementOperation, int movementSumBeforeOperation, int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException;

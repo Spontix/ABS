@@ -20,11 +20,7 @@ import java.net.URL;
 import java.util.*;
 
 public class CustomerController implements Initializable{
-    private UIInterfaceLogic bank = new Bank();
-
-    public CustomerController() {
-        bank = ABSController.bank;
-    }
+    private UIInterfaceLogic bank;
 
     @FXML
     TabPane customerTablePane;
@@ -59,12 +55,14 @@ public class CustomerController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        final ObservableList<String> categories = FXCollections.observableArrayList();
-       ////////////This two lines are for example - don't forget to delete it!!////////////////////
 
         categories.addAll(bank.getCategoriesGroup());
         categoriesList.getItems().addAll(categories);
     }
 
+    public void setBankInCustomerController(UIInterfaceLogic bank){
+        this.bank=bank;
+    }
 
     @FXML
     void AccordingAddLoanTitleTableActionLisener(MouseEvent event) {
@@ -144,7 +142,9 @@ public class CustomerController implements Initializable{
             int maximumLoansOpenToTheBorrower = MaximumLoansOpenToTheBorrowerActionLisener();
             ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
             DTOInlay dtoInlay = bank.inlayBuildForDK(bank.getCustomer(0), investAmount, list.toString(), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
-            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlay(dtoInlay);
+            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlayDK(dtoInlay);
+            //ToDo: Function- creates loans from loansSupportInlay and SHOW them
+
 
         } catch (Exception e) {
             String message = e.getMessage();

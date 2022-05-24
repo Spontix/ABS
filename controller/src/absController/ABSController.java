@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 public class ABSController implements Initializable {
 
     private CustomerController customerController;
+
     private SecondAdminController secondAdminController;
     private LoansListController loansListController;
     private CustomersListController customersListController;
@@ -40,13 +41,7 @@ public class ABSController implements Initializable {
     ///////////// new Bank() = for this line I had to do Bank.Bank public////////////
     public static UIInterfaceLogic bank = new Bank();
 
-    ////////////// this ctor and the two blocks is for the example/////////////////////
-    public ABSController(){
-        try {
-            createBankExample();
-        } catch (InvocationTargetException | InstantiationException|IllegalAccessException e) {
-        }
-    }
+
 
 
     @FXML
@@ -71,7 +66,7 @@ public class ABSController implements Initializable {
     void contextMenuRequested(ContextMenuEvent event) {
     }
 
-    public void createBankExample() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    /*public void createBankExample() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         DTOCustomer customer0 = bank.customerBuild("Menash", 5000);
         DTOCustomer customer1 = bank.customerBuild("Avrum", 1000);
         DTOCustomer customer2 = bank.customerBuild("Tikva", 10000);
@@ -92,7 +87,7 @@ public class ABSController implements Initializable {
         bank.getCustomers().add(customer0);
         bank.getCustomers().add(customer1);
         bank.getCustomers().add(customer2);
-    }
+    }*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -129,14 +124,17 @@ public class ABSController implements Initializable {
             myBorderPane.setCenter(customerController.customerTablePane);
         });
 
+
         Admin.setOnAction(e->{
             myBorderPane.setCenter(secondAdminController.adminGridPane);
             viewBy.setText("Admin");
         });
 
+
         secondAdminController.increaseYazButton.setOnAction(e->
         YazLogicDesktop.currentYazUnitProperty.setValue(YazLogicDesktop.currentYazUnitProperty.getValue()+1));
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> currentYaz.setText("Current Yaz : "+newValue)));
+
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> {
             try {
                 bank.yazProgressLogic(true);
@@ -145,6 +143,7 @@ public class ABSController implements Initializable {
                 e.printStackTrace();
             }
         }));
+
 
        secondAdminController.loadFileButton.setOnAction(e-> {
             String file=fileChooserImplementation(e);
@@ -163,7 +162,6 @@ public class ABSController implements Initializable {
         });
 
         //ToDo: Function
-
 
 
     }
