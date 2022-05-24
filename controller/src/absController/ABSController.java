@@ -4,9 +4,7 @@ package absController;
 
 import dataObjects.dtoCustomer.DTOCustomer;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,15 +23,12 @@ import logic.bank.XmlSerialization;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ABSController implements Initializable {
 
     private CustomerController customerController;
-
-    private SecondAdminController secondAdminController;
+    private AdminController adminController;
     private LoansListController loansListController;
     private CustomersListController customersListController;
 
@@ -92,7 +87,7 @@ public class ABSController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customerController = myFXMLLoader("/application/desktop/MyCustomerView.fxml");
-        secondAdminController=myFXMLLoader("/application/desktop/SecondMyAdminView.fxml");
+        adminController =myFXMLLoader("/application/desktop/MyAdminView.fxml");
         loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
         customersListController=myFXMLLoader("/application/desktop/CustomerListViewer.fxml");
 
@@ -100,7 +95,7 @@ public class ABSController implements Initializable {
         loansListController.LoansListView.getSelectionModel().selectedItemProperty().addListener(e -> {
             if(!loansListController.LoansListView.getItems().isEmpty()) {
                 loansListController.loansAccordionInformation.setVisible(true);
-                DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
+                DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();/////ToDo:here!!!
                 loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
             }
         });
@@ -126,12 +121,12 @@ public class ABSController implements Initializable {
 
 
         Admin.setOnAction(e->{
-            myBorderPane.setCenter(secondAdminController.adminGridPane);
+            myBorderPane.setCenter(adminController.adminGridPane);
             viewBy.setText("Admin");
         });
 
 
-        secondAdminController.increaseYazButton.setOnAction(e->
+        adminController.increaseYazButton.setOnAction(e->
         YazLogicDesktop.currentYazUnitProperty.setValue(YazLogicDesktop.currentYazUnitProperty.getValue()+1));
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> currentYaz.setText("Current Yaz : "+newValue)));
 
@@ -145,7 +140,7 @@ public class ABSController implements Initializable {
         }));
 
 
-       secondAdminController.loadFileButton.setOnAction(e-> {
+       adminController.loadFileButton.setOnAction(e-> {
             String file=fileChooserImplementation(e);
             try {
                 bank=XmlSerialization.buildBank(file.trim());
@@ -153,8 +148,9 @@ public class ABSController implements Initializable {
                 YazLogicDesktop.currentYazUnitProperty.setValue(1);
                 showLoanInformationInAdminView();
                 showCustomerInformationAdminView();
-                secondAdminController.LoansBoardPane.setCenter(loansListController.LoansMainGridPane);
-                secondAdminController.CustomerBoardPane.setCenter(customersListController.CustomersMainGridPane);
+                customerController.setBankInCustomerController(bank);
+                adminController.LoansBoardPane.setCenter(loansListController.LoansMainGridPane);
+                adminController.CustomerBoardPane.setCenter(customersListController.CustomersMainGridPane);
 
             } catch (Exception ex) {
                 ex.printStackTrace();
