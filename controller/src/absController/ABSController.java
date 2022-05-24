@@ -40,17 +40,8 @@ public class ABSController implements Initializable {
     private CustomerController customerController;
     private List<LoanTitleTableController> loanTitleTableControllerList = new ArrayList<>();
     private AdminController adminController;
-    /////////////public static = just for to get the bank example that I create here to customerController
-    ///////////// new Bank() = for this line I had to do Bank.Bank public////////////
-    public static UIInterfaceLogic bank = new Bank();
+    public static UIInterfaceLogic bank;
 
-    ////////////// this ctor and the two blocks is for the example/////////////////////
-    public ABSController(){
-        try {
-            createBankExample();
-        } catch (InvocationTargetException | InstantiationException|IllegalAccessException e) {
-        }
-    }
 
 
     @FXML
@@ -75,7 +66,7 @@ public class ABSController implements Initializable {
     void contextMenuRequested(ContextMenuEvent event) {
     }
 
-    public void createBankExample() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    /*public void createBankExample() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         DTOCustomer customer0 = bank.customerBuild("Menash", 5000);
         DTOCustomer customer1 = bank.customerBuild("Avrum", 1000);
         DTOCustomer customer2 = bank.customerBuild("Tikva", 10000);
@@ -96,7 +87,7 @@ public class ABSController implements Initializable {
         bank.getCustomers().add(customer0);
         bank.getCustomers().add(customer1);
         bank.getCustomers().add(customer2);
-    }
+    }*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -125,7 +116,7 @@ public class ABSController implements Initializable {
 
 
 
-        adminController.setBank(bank);
+
 
         //ToDo: Function
         Customer.setOnAction(e -> myBorderPane.setCenter(customerController.customerTablePane));
@@ -146,6 +137,8 @@ public class ABSController implements Initializable {
                         bank=XmlSerialization.buildBank(file.trim());
                         filePath.setText(filePath.getText()+file);
                         YazLogicDesktop.currentYazUnitProperty.setValue(1);
+                        adminController.setBank(bank);
+                        customerController.setBankInCustomerController(bank);
                         showLoanInformationInAdminView();
                     }
                     catch (FileNotFoundException fileNotFoundException){
@@ -159,7 +152,6 @@ public class ABSController implements Initializable {
 
 
         //ToDo: Function
-
 
 
     }

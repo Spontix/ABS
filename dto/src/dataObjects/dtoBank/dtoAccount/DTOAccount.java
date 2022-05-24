@@ -10,4 +10,5 @@ public interface DTOAccount {
     String getCustomerName();
     int getAmount();
     String toString();
+    int getAllOpenLoansToBorrower();
 }

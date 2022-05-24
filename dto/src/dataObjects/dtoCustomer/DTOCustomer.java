@@ -1,10 +1,7 @@
 package dataObjects.dtoCustomer;
 
 
-import dataObjects.dtoBank.dtoAccount.DTOAccount;
-import dataObjects.dtoBank.dtoAccount.DTOInlay;
-import dataObjects.dtoBank.dtoAccount.DTOLoan;
-import dataObjects.dtoBank.dtoAccount.DTOMovement;
+import dataObjects.dtoBank.dtoAccount.*;
 import logic.YazLogic;
 import logic.bank.account.Account;
 import logic.bank.account.Movement;
@@ -12,6 +9,7 @@ import logic.customer.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DTOCustomer implements DTOAccount {
 
@@ -49,6 +47,10 @@ public class DTOCustomer implements DTOAccount {
         return name;
     }
 
+    @Override
+    public int getAllOpenLoansToBorrower(){
+        return (int) borrower.stream().filter(l -> l.getLoanStatus() != DTOLoanStatus.FINISHED).count();
+    }
 
     @Override
     public String toString()
