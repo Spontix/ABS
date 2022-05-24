@@ -53,7 +53,8 @@ public class DTOCustomer implements DTOAccount {
     @Override
     public String toString()
     {
-        return "Name : "+name+"\n"+"Current amount : "+amount+"\n"+"-----------Movements-----------"+"\n"+movements.toString();
+       // return "Name : "+name+"\n"+"Current amount : "+amount+"\n"+"-----------Movements-----------"+"\n"+movements.toString();
+        return "Name : "+name+"\n"+"Current amount : "+amount;
     }
     
     public static DTOCustomer build(DTOCustomer customer){

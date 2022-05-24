@@ -60,8 +60,6 @@ public class CustomerController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
        final ObservableList<String> categories = FXCollections.observableArrayList();
        ////////////This two lines are for example - don't forget to delete it!!////////////////////
-        categories.add("Renovate");
-        categories.add("OverdraftCover");
 
         categories.addAll(bank.getCategoriesGroup());
         categoriesList.getItems().addAll(categories);
