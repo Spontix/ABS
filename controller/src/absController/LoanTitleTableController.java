@@ -22,6 +22,7 @@ import java.util.function.DoubleToIntFunction;
 public class LoanTitleTableController implements Initializable {
     private UIInterfaceLogic bank;
 
+    @FXML
     protected TableView<DTOInlay> lendersTableView;
 
     @FXML

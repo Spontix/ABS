@@ -83,5 +83,7 @@ public interface UIInterfaceLogic {
 
     ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
+    void seStatus();
+
 }
 

@@ -330,7 +330,7 @@ public class Console implements UiType {
         List<DTOLoan> dtoCustomerLoanerList;
         List<DTOLoan> dtoCustomerBorrowersList;
         for (int i = 0; i < bank.getCustomers().size(); i++) {
-            System.out.println(bank.getCustomer(i)+"\n---------------------------------");
+            System.out.println(bank.getCustomer(i)+"\n"+"-----------Movements-----------"+"\n"+bank.getCustomer(i).getMovements().toString()+"\n---------------------------------");
             dtoCustomerLoanerList = bank.getCustomerLoanersList(bank.getCustomerName(i));//===bank1.methode();
             dtoCustomerBorrowersList = bank.getCustomerBorrowersList(bank.getCustomerName(i));
             System.out.println("\n-------- Loans as loaner --------");
