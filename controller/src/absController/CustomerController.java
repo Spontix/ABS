@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import logic.UIInterfaceLogic;
 import logic.bank.Bank;
 import logic.bank.account.Loan;
@@ -19,17 +20,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 
-public class CustomerController implements Initializable{
+public class CustomerController extends HelperFunction implements Initializable{
     private UIInterfaceLogic bank;
+    final ObservableList<String> categories = FXCollections.observableArrayList();
+    private LoansListController loansListController;
 
     @FXML
-    TabPane customerTablePane;
+    protected TabPane customerTablePane;
 
     @FXML
-    private CheckComboBox<String> categoriesList;
+    protected CheckComboBox<String> categoriesList;
 
     @FXML
-    private Button enableInlayButton;
+    private BorderPane inlayLoansBorderPane;
+
+    @FXML
+    protected Button enableInlayButton;
 
     @FXML
     private TextField investmentAmount;
@@ -49,14 +55,10 @@ public class CustomerController implements Initializable{
     @FXML
     private TextField maximumLoanOwnershipPercentage;
 
-    @FXML
-    private Accordion accordion;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       /*final ObservableList<String> categories = FXCollections.observableArrayList();
-      categories.addAll(bank.getCategoriesGroup());
-      categoriesList.getItems().addAll(categories);*/
+        loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
+
     }
 
     public void setBankInCustomerController(UIInterfaceLogic bank){
@@ -64,17 +66,11 @@ public class CustomerController implements Initializable{
     }
 
     @FXML
-    void AccordingAddLoanTitleTableActionLisener(MouseEvent event) {
-
-    }
-
-
-    @FXML
-    void MaximumLoanOwnershipPercentageActionLisener() {
+    private void MaximumLoanOwnershipPercentageActionLisener() {
     }
 
     @FXML
-    int MaximumLoansOpenToTheBorrowerActionLisener() {
+    private int MaximumLoansOpenToTheBorrowerActionLisener() {
         int maxLoansOpen = 0;
         String number = maximumLoansOpenToTheBorrower.getText();
         if (Objects.equals(number, ""))
@@ -88,7 +84,7 @@ public class CustomerController implements Initializable{
     }
 
     @FXML
-    double MinimumInterestYazActionLisener() {
+    private double MinimumInterestYazActionLisener() {
         double chosenMinInterestYaz = 0;
         String number = minimumInterestYaz.getText();
         if (Objects.equals(number, ""))
@@ -103,7 +99,7 @@ public class CustomerController implements Initializable{
     }
 
     @FXML
-    int MinimumTotalYazActionLisener() {
+    private int MinimumTotalYazActionLisener() {
         int chosenMinYazTime = 0;
         String number = minimumTotalYaz.getText();
         if (Objects.equals(number, ""))
@@ -117,7 +113,7 @@ public class CustomerController implements Initializable{
     }
 
     @FXML
-    int investmentAmountActionListener() throws Exception {
+    private int investmentAmountActionListener() throws Exception {
         String amount = investmentAmount.getText();
         int amountFromUser = 0;
         amountFromUser = Integer.parseInt(amount);
@@ -132,7 +128,7 @@ public class CustomerController implements Initializable{
 
 
     @FXML
-    void ClickEnableInlayButtonActionLisener(ActionEvent event) {
+    private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
             int investAmount = investmentAmountActionListener();
@@ -140,9 +136,15 @@ public class CustomerController implements Initializable{
             double minimumInterestYaz = MinimumInterestYazActionLisener();
             int maximumLoansOpenToTheBorrower = MaximumLoansOpenToTheBorrowerActionLisener();
             ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
-            DTOInlay dtoInlay = bank.inlayBuildForDK(bank.getCustomer(0), investAmount, list.toString(), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
-            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlayDK(dtoInlay);
-            //ToDo: Function- creates loans from loansSupportInlay and SHOW them
+            DTOInlay dtoInlay = bank.inlayBuildForDK(bank.getCustomer(0), investAmount,list.toString().substring(1,list.toString().length()-1), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
+
+            inlayLoansBorderPane.setCenter(loansListController.LoansMainGridPane);
+            showLoanInformationInAdminView(loansListController.LoansListView,bank.loansSustainInlayDK(dtoInlay));
+            DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
+            loansListController.loansAccordionInformation.setVisible(false);
+            if(localLoan!=null)
+                loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
+
 
 
         } catch (Exception e) {
@@ -167,8 +169,11 @@ public class CustomerController implements Initializable{
 
     private void sleepForSomeTime() {
         try {
-            Thread.sleep(300);
+            Thread.sleep(3000);
         } catch (InterruptedException ignored) {}
     }
+
+
+
 
 }

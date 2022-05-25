@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -71,7 +72,7 @@
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="92.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0" prefWidth="94.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
@@ -85,48 +86,52 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <GridPane hgap="10.0" vgap="10.0" GridPane.columnSpan="5" GridPane.rowSpan="6">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="10.0" prefWidth="300.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="Amount to investment:" />
-                        <Label text="Select desired categories from the list:" GridPane.rowIndex="1" />
-                        <Label text="Minimum interest yaz:" GridPane.rowIndex="2" />
-                        <Label text="Minimum total yaz:" GridPane.rowIndex="3" />
-                        <Label text="Maximum loans open to the borrower:" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
-                        <Label text="Maximum loan ownership percentage:" GridPane.rowIndex="5" />
-                        <TextField fx:id="investmentAmount" onAction="#investmentAmountActionListener" GridPane.columnIndex="1" />
-                        <TextField fx:id="minimumInterestYaz" onAction="#MinimumInterestYazActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="minimumTotalYaz" onAction="#MinimumTotalYazActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="maximumLoansOpenToTheBorrower" onAction="#MaximumLoansOpenToTheBorrowerActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <TextField fx:id="maximumLoanOwnershipPercentage" onAction="#MaximumLoanOwnershipPercentageActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <CheckComboBox fx:id="categoriesList" prefHeight="31.0" prefWidth="108.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </GridPane>
-                  <TextArea fx:id="errorTextArea" editable="false" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+                  <BorderPane GridPane.columnSpan="3" GridPane.rowSpan="6">
+                     <center>
+                        <GridPane hgap="10.0" prefHeight="393.0" prefWidth="375.0" vgap="10.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="10.0" prefWidth="300.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="0.0" prefWidth="130.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Amount to investment:" />
+                              <Label text="Select desired categories from the list:" GridPane.rowIndex="1" />
+                              <Label text="Minimum interest yaz:" GridPane.rowIndex="2" />
+                              <Label text="Minimum total yaz:" GridPane.rowIndex="3" />
+                              <Label text="Maximum loans open to the borrower:" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
+                              <Label text="Maximum loan ownership percentage:" GridPane.rowIndex="5" />
+                              <TextField fx:id="investmentAmount" onAction="#investmentAmountActionListener" GridPane.columnIndex="1" />
+                              <TextField fx:id="minimumInterestYaz" onAction="#MinimumInterestYazActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="minimumTotalYaz" onAction="#MinimumTotalYazActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="maximumLoansOpenToTheBorrower" onAction="#MaximumLoansOpenToTheBorrowerActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="maximumLoanOwnershipPercentage" onAction="#MaximumLoanOwnershipPercentageActionLisener" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <CheckComboBox fx:id="categoriesList" prefHeight="31.0" prefWidth="108.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </GridPane>
+                     </center>
+                  </BorderPane>
+                  <TextArea fx:id="errorTextArea" editable="false" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                   <Button fx:id="enableInlayButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#ClickEnableInlayButtonActionLisener" text="Enable Inlay" GridPane.columnSpan="2" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Button>
+                  <BorderPane fx:id="inlayLoansBorderPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowSpan="6" />
                </children>
             </GridPane>
          </content></Tab>

@@ -5,6 +5,7 @@ package absController;
 import dataObjects.dtoCustomer.DTOCustomer;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,18 +26,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ABSController implements Initializable {
+public class ABSController extends HelperFunction implements Initializable {
 
     private CustomerController customerController;
     private AdminController adminController;
     private LoansListController loansListController;
     private CustomersListController customersListController;
-
-    /////////////public static = just for to get the bank example that I create here to customerController
-    ///////////// new Bank() = for this line I had to do Bank.Bank public////////////
-    public static UIInterfaceLogic bank = new Bank();
-
-
+    public static UIInterfaceLogic bank;
 
 
     @FXML
@@ -117,6 +113,15 @@ public class ABSController implements Initializable {
 
         Customer.setOnAction(e -> {
             myBorderPane.setCenter(customerController.customerTablePane);
+            try {
+                final ObservableList<String> categories = FXCollections.observableArrayList();
+                categories.addAll(bank.getCategoriesGroup());
+                customerController.categoriesList.getItems().addAll(categories);
+            }
+            catch (Exception exception)
+            {
+                //ToDo popup
+            }
         });
 
 
@@ -125,7 +130,6 @@ public class ABSController implements Initializable {
             viewBy.setText("Admin");
         });
 
-
         adminController.increaseYazButton.setOnAction(e->
         YazLogicDesktop.currentYazUnitProperty.setValue(YazLogicDesktop.currentYazUnitProperty.getValue()+1));
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> currentYaz.setText("Current Yaz : "+newValue)));
@@ -133,7 +137,8 @@ public class ABSController implements Initializable {
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> {
             try {
                 bank.yazProgressLogic(true);
-                showLoanInformationInAdminView();
+                showLoanInformationInAdminView(loansListController.LoansListView,bank.getLoansList());
+                showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -146,8 +151,8 @@ public class ABSController implements Initializable {
                 bank=XmlSerialization.buildBank(file.trim());
                 filePath.setText("File Path : "+file);
                 YazLogicDesktop.currentYazUnitProperty.setValue(1);
-                showLoanInformationInAdminView();
-                showCustomerInformationAdminView();
+                showLoanInformationInAdminView(loansListController.LoansListView,bank.getLoansList());
+                showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
                 customerController.setBankInCustomerController(bank);
                 adminController.LoansBoardPane.setCenter(loansListController.LoansMainGridPane);
                 adminController.CustomerBoardPane.setCenter(customersListController.CustomersMainGridPane);
@@ -162,35 +167,6 @@ public class ABSController implements Initializable {
 
     }
 
-    private void showLoanInformationInAdminView() {
-        loansListController.LoansListView.getItems().clear();
-        for (DTOLoan dtoLoan:bank.getLoansList()) {
-            loansListController.LoansListView.getItems().add(dtoLoan);
-        }
-    }
-
-    private void showCustomerInformationAdminView(){
-        customersListController.customersListView.getItems().clear();
-        for (DTOCustomer dtoCustomer:bank.getCustomers()) {
-            customersListController.customersListView.getItems().add(dtoCustomer);
-        }
-
-    }
-
-    /*private void showLoanInformationInAdminView()
-    {
-        for (DTOLoan dtoLoan:bank.getLoansList()) {
-            LoanTitleTableController loanTitleTableController=myFXMLLoader("/application/desktop/LoanTitleTableView.fxml");
-            loanTitleTableControllerList.add(loanTitleTableController);
-            adminController.loansAccordion.getPanes().add(loanTitleTableController.loanTitledPane);
-            List<DTOLoan> dtoLoans=new ArrayList<>();
-            dtoLoans.add(dtoLoan);
-            loanTitleTableController.lendersTableView.setItems(FXCollections.observableArrayList(dtoLoan.getListOfInlays()));
-            loanTitleTableController.loansTableView.setItems(FXCollections.observableArrayList(dtoLoans));
-            loanTitleTableController.loanTitledPane.setText("ID:"+dtoLoan.getId()+"-"+"Owner:"+dtoLoan.getOwner());
-
-        }
-    }*/
 
     private String fileChooserImplementation(javafx.event.ActionEvent e){
         Node node = (Node) e.getSource();
@@ -200,17 +176,5 @@ public class ABSController implements Initializable {
         return fileChooser.showOpenDialog(node.getScene().getWindow()).getPath();
     }
 
-    private <T> T myFXMLLoader(String resource){
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url =  getClass().getResource(resource);
-        fxmlLoader.setLocation(url);
-        try {
-            fxmlLoader.load(fxmlLoader.getLocation().openStream());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return fxmlLoader.getController();
-    }
 }
 
