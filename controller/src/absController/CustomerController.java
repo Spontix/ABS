@@ -14,6 +14,7 @@ import logic.UIInterfaceLogic;
 import logic.bank.Bank;
 import logic.bank.account.Loan;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.GridView;
 
 import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
@@ -26,10 +27,16 @@ public class CustomerController extends HelperFunction implements Initializable{
     private LoansListController loansListController;
 
     @FXML
+    private Button addLoanButton;
+
+    @FXML
     protected TabPane customerTablePane;
 
     @FXML
     protected CheckComboBox<String> categoriesList;
+
+    @FXML
+    private ListView<DTOLoan> inlayLoansChosen;
 
     @FXML
     private BorderPane inlayLoansBorderPane;
@@ -61,12 +68,25 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     }
 
-    public void setBankInCustomerController(UIInterfaceLogic bank){
-        this.bank=bank;
+    public void setBankInCustomerController(UIInterfaceLogic bank){this.bank= bank;}
+
+    @FXML
+    private void ClickOnAddLoanButtonActionLisener(ActionEvent event) {
+
     }
 
     @FXML
-    private void MaximumLoanOwnershipPercentageActionLisener() {
+    private int MaximumLoanOwnershipPercentageActionLisener() {
+        int maxLoanOwnershipPercentage=0;
+        String number = maximumLoanOwnershipPercentage.getText();
+        if (Objects.equals(number, ""))
+            return 0;
+        else {
+            maxLoanOwnershipPercentage = Integer.parseInt((number));
+            if (maxLoanOwnershipPercentage < 1 || maxLoanOwnershipPercentage > 100)
+                throw new NumberFormatException("In 'Maximum loan ownership percentage' - Invalid input!! Please enter a number between 1 and 100, or leave this figure empty.");
+        }
+        return maxLoanOwnershipPercentage;
     }
 
     @FXML
@@ -77,7 +97,7 @@ public class CustomerController extends HelperFunction implements Initializable{
             return 0;
         else {
             maxLoansOpen = Integer.parseInt((number));
-            if (maxLoansOpen < 0)
+            if (maxLoansOpen <= 0)
                 throw new NumberFormatException("In 'Maximum loans open to the borrower' - Invalid input!! Please enter a number greater than 0 or leave this figure empty.");
         }
         return maxLoansOpen;
@@ -129,23 +149,39 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
+        loansListController.LoansListView.getItems().clear();
+        loansListController.LoansListView.setVisible(false);
+        addLoanButton.setVisible(false);
+        ArrayList<DTOLoan> loansCustomerChosen = null;
+
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
             int investAmount = investmentAmountActionListener();
             int minimumTotalYaz = MinimumTotalYazActionLisener();
             double minimumInterestYaz = MinimumInterestYazActionLisener();
             int maximumLoansOpenToTheBorrower = MaximumLoansOpenToTheBorrowerActionLisener();
+            int maximumLoanOwnershipPercentage = MaximumLoanOwnershipPercentageActionLisener();
             ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
             DTOInlay dtoInlay = bank.inlayBuildForDK(bank.getCustomer(0), investAmount,list.toString().substring(1,list.toString().length()-1), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
+            ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlayDK(dtoInlay);
+            if(loansSupportInlay.isEmpty()){
+                popupMessage("Failed!!!", "No loans were found for this inlay.");
+            }
+            else {
+                loansListController.LoansListView.setVisible(true);
+                inlayLoansBorderPane.setCenter(loansListController.LoansMainGridPane);
+                showLoanInformationInAdminView(loansListController.LoansListView, loansSupportInlay);
+                addLoanButton.setVisible(true);
+                popupMessage("Success!!!", "Please click on the loan you want and then click on the 'Add loan' button.");
+                //DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
+                loansListController.loansAccordionInformation.setVisible(false);
+                addLoanButton.setOnAction(e->{
+                    DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
+                    loansCustomerChosen.add(localLoan);});
+                //if (localLoan != null)
+                    //loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
 
-            inlayLoansBorderPane.setCenter(loansListController.LoansMainGridPane);
-            showLoanInformationInAdminView(loansListController.LoansListView,bank.loansSustainInlayDK(dtoInlay));
-            DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
-            loansListController.loansAccordionInformation.setVisible(false);
-            if(localLoan!=null)
-                loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
-
-
+            }
 
         } catch (Exception e) {
             String message = e.getMessage();
@@ -157,14 +193,14 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     }
 
-    /*void setDisableFields(boolean choice){
-        enableInlayButton.setDisable(choice);
-        categoriesList.setDisable(choice);
-        minimumInterestYaz.setDisable(choice);
-        minimumTotalYaz.setDisable(choice);
-        maximumLoansOpenToTheBorrower.setDisable(choice);
-        maximumLoanOwnershipPercentage.setDisable(choice);
-    }*/
+    private void popupMessage(String title, String contentText)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           alert.setTitle(title);
+           alert.setContentText(contentText);
+
+           alert.showAndWait();
+    }
 
 
     private void sleepForSomeTime() {
