@@ -72,6 +72,7 @@ public class CustomerController extends HelperFunction implements Initializable{
         chosenInlayListView=new ListView<>();
         allInlayListView=new ListView<>();
 
+
     }
 
     public void setBankInCustomerController(UIInterfaceLogic bank){this.bank= bank;}
@@ -157,7 +158,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         allInlayListView.setVisible(false);
         addLoanButton.setVisible(false);
-        ArrayList<DTOLoan> loansCustomerChosen = null;
+        List<DTOLoan> loansCustomerChosen = new ArrayList<>();
 
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
