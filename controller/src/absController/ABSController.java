@@ -91,7 +91,7 @@ public class ABSController extends HelperFunction implements Initializable {
         loansListController.LoansListView.getSelectionModel().selectedItemProperty().addListener(e -> {
             if(!loansListController.LoansListView.getItems().isEmpty()) {
                 loansListController.loansAccordionInformation.setVisible(true);
-                DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();/////ToDo:here!!!
+                DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
                 loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
             }
         });
