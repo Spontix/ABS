@@ -24,11 +24,14 @@ import logic.bank.XmlSerialization;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ABSController extends HelperFunction implements Initializable {
 
-    private CustomerController customerController;
+    private List<CustomerController> customersController;
     private AdminController adminController;
     private LoansListController loansListController;
     private CustomersListController customersListController;
@@ -40,9 +43,6 @@ public class ABSController extends HelperFunction implements Initializable {
 
     @FXML
     protected MenuItem Admin;
-
-    @FXML
-    protected MenuItem Customer;
 
     @FXML
     protected Label filePath;
@@ -82,11 +82,14 @@ public class ABSController extends HelperFunction implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        customerController = myFXMLLoader("/application/desktop/MyCustomerView.fxml");
         adminController =myFXMLLoader("/application/desktop/MyAdminView.fxml");
         loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
         customersListController=myFXMLLoader("/application/desktop/CustomerListViewer.fxml");
-
+        customersController=new ArrayList<>();
+        Admin.setOnAction(e->{
+            myBorderPane.setCenter(adminController.adminGridPane);
+            viewBy.setText("Admin");
+        });
         //C:\Users\Eliran\IdeaProjects\ABS\model\src\resources
         loansListController.LoansListView.getSelectionModel().selectedItemProperty().addListener(e -> {
             if(!loansListController.LoansListView.getItems().isEmpty()) {
@@ -106,28 +109,6 @@ public class ABSController extends HelperFunction implements Initializable {
                      customersListController.loansListLoanerView.getItems().add(dtoLoan);
 
             }
-        });
-
-
-        viewBy.onContextMenuRequestedProperty().addListener(e->viewBy.setText(viewBy.getContextMenu().toString()));
-
-        Customer.setOnAction(e -> {
-            myBorderPane.setCenter(customerController.customerTablePane);
-            try {
-                final ObservableList<String> categories = FXCollections.observableArrayList();
-                categories.addAll(bank.getCategoriesGroup());
-                customerController.categoriesList.getItems().addAll(categories);
-            }
-            catch (Exception exception)
-            {
-                //ToDo popup
-            }
-        });
-
-
-        Admin.setOnAction(e->{
-            myBorderPane.setCenter(adminController.adminGridPane);
-            viewBy.setText("Admin");
         });
 
         adminController.increaseYazButton.setOnAction(e->
@@ -153,9 +134,10 @@ public class ABSController extends HelperFunction implements Initializable {
                 YazLogicDesktop.currentYazUnitProperty.setValue(1);
                 showLoanInformationInAdminView(loansListController.LoansListView,bank.getLoansList());
                 showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
-                customerController.setBankInCustomerController(bank);
                 adminController.LoansBoardPane.setCenter(loansListController.LoansMainGridPane);
                 adminController.CustomerBoardPane.setCenter(customersListController.CustomersMainGridPane);
+                setTheAdminAndCustomersAsMenuItems();
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -167,7 +149,65 @@ public class ABSController extends HelperFunction implements Initializable {
 
     }
 
+    private void setTheAdminAndCustomersAsMenuItems(){
+        MenuItem customerAsMenuItem;
+        for (DTOCustomer dtoCustomer: bank.getCustomers()) {
+            customerAsMenuItem=new MenuItem(dtoCustomer.getCustomerName());
+            viewBy.getItems().add(customerAsMenuItem);
+            CustomerController customerController =myFXMLLoader("/application/desktop/MyCustomerView.fxml");
+            customersController.add(customerController);
+            customerController.setCurrentCustomer(dtoCustomer);
+            customerController.setBankInCustomerController(bank);
+            customerAsMenuItem.setOnAction(e->{
+                viewBy.setText(dtoCustomer.getCustomerName());
+                try {
+                    myBorderPane.setCenter(customerController.customerTablePane);
+                    final ObservableList<String> categories = FXCollections.observableArrayList();
+                    categories.addAll(bank.getCategoriesGroup());
+                    customerController.categoriesList.getItems().clear();
+                    customerController.categoriesList.getItems().addAll(categories);
 
+                }
+                catch (Exception exception)
+                {
+                    //ToDo popup
+                }
+            });
+        }
+
+    }
+
+    /*private void setTheAdminAndCustomersAsMenuItems(){
+        MenuItem customerAsMenuItem;
+
+        for (DTOCustomer dtoCustomer1: bank.getCustomers()) {
+            customerAsMenuItem=new MenuItem(dtoCustomer1.getCustomerName());
+            viewBy.getItems().add(customerAsMenuItem);
+            viewBy.setText(dtoCustomer1.getCustomerName());
+        }
+
+        for (DTOCustomer dtoCustomer: bank.getCustomers()) {
+            CustomerController customerController =myFXMLLoader("/application/desktop/MyCustomerView.fxml");
+            customersController.add(customerController);
+            customerController.setCurrentCustomer(dtoCustomer);
+            customerController.setBankInCustomerController(bank);
+
+                try {
+                    myBorderPane.setCenter(customerController.customerTablePane);
+                    final ObservableList<String> categories = FXCollections.observableArrayList();
+                    categories.addAll(bank.getCategoriesGroup());
+                    customerController.categoriesList.getItems().clear();
+                    customerController.categoriesList.getItems().addAll(categories);
+
+                }
+                catch (Exception exception)
+                {
+                    //ToDo popup
+                }
+            });
+        }
+
+    }*/
     private String fileChooserImplementation(javafx.event.ActionEvent e){
         Node node = (Node) e.getSource();
         FileChooser fileChooser = new FileChooser();

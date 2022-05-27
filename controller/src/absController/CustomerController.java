@@ -3,6 +3,7 @@ package absController;
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
+import dataObjects.dtoCustomer.DTOCustomer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import java.util.*;
 
 public class CustomerController extends HelperFunction implements Initializable{
     private UIInterfaceLogic bank;
+    protected DTOCustomer dtoCustomer;
     final ObservableList<String> categories = FXCollections.observableArrayList();
     private ListView<DTOLoan> allInlayListView;
     private ListView<DTOLoan> chosenInlayListView;
@@ -218,6 +220,9 @@ public class CustomerController extends HelperFunction implements Initializable{
     }
 
 
+    protected void setCurrentCustomer(DTOCustomer dtoCustomer){
+        this.dtoCustomer=dtoCustomer;
+    }
 
 
 }
