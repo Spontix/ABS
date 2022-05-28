@@ -4,6 +4,7 @@ package logic.bank.account;
 
 
 import dataObjects.dtoBank.dtoAccount.*;
+import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -106,6 +107,13 @@ public class Loan extends DTOLoan {
         this.endedYaz=endedYaz;
     }
 
+    public void myAddListenerToStringProperty(ListView<String> listener){
+        massagesProperty.addListener(e->listener.getItems().add(massagesProperty.getValue()));
+    }
+
+    public void setStringPropertyValue(String value){
+        massagesProperty.setValue(value);
+    }
 
 
 

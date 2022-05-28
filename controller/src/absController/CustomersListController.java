@@ -76,5 +76,6 @@ public class CustomersListController implements Initializable {
         actionColumn.setCellValueFactory(new PropertyValueFactory<>("operation"));
         sumBeforeColumn.setCellValueFactory(new PropertyValueFactory<>("sumBeforeOperation"));
         sumAfterColumn.setCellValueFactory(new PropertyValueFactory<>("sumAfterOperation"));
+
     }
 }

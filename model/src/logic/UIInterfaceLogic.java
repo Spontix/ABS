@@ -5,6 +5,7 @@ import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
 import dataObjects.dtoCustomer.DTOCustomer;
+import javafx.scene.control.ListView;
 import logic.bank.account.Inlay;
 import logic.bank.account.Loan;
 import logic.bank.account.Movement;
@@ -83,7 +84,9 @@ public interface UIInterfaceLogic {
 
     ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
-    void seStatus();
+    void myAddListenerToStringPropertyLoans(ListView<String> listener);
+
+    ArrayList<DTOMovement> addMovementPerLoanFromInlayDK(DTOInlay inlay, List<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int maximumOwnershipLoanPercentage) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
 }
 
