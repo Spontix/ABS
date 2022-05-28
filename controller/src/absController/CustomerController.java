@@ -176,7 +176,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         allInlayListView.setVisible(false);
         chooseLoanButton.setVisible(false);
-        unChooseLoanButton.setVisible(false);
+        unChosenLoanButton.setVisible(false);
 
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
@@ -230,6 +230,7 @@ public class CustomerController extends HelperFunction implements Initializable{
                     List<DTOMovement> dtoMovementList;
                     try {
                         dtoMovementList=bank.addMovementPerLoanFromInlayDK(dtoInlay, new ArrayList<>(chosenInlayListView.getItems()),investAmount,maximumLoanOwnershipPercentage);
+                        bank.yazProgressLogicDesktop();
                         allInlayListView.getItems().clear();
                         chosenInlayListView.getItems().clear();
                         allInlayListView.setVisible(false);
