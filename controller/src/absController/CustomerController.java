@@ -47,6 +47,10 @@ public class CustomerController extends HelperFunction implements Initializable{
     private BorderPane allInlayLoansBorderPane;
 
     @FXML
+    private Button removeLoanButton;
+
+
+    @FXML
     protected TabPane customerTablePane;
 
     @FXML
@@ -172,6 +176,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         allInlayListView.setVisible(false);
         chooseLoanButton.setVisible(false);
+        unChooseLoanButton.setVisible(false);
 
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
@@ -202,6 +207,7 @@ public class CustomerController extends HelperFunction implements Initializable{
                 //ToDo : extract to an outside function
                 chooseLoanButton.setOnAction(e->{
                     DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
+
                     if (localLoan != null) {
                         chosenInlayListView.getItems().add(localLoan);
                         unChosenLoanButton.setDisable(false);
