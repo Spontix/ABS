@@ -40,6 +40,10 @@ public class CustomerController extends HelperFunction implements Initializable{
     private Button addLoanButton;
 
     @FXML
+    private Button removeLoanButton;
+
+
+    @FXML
     protected TabPane customerTablePane;
 
     @FXML
@@ -160,6 +164,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         allInlayListView.setVisible(false);
         addLoanButton.setVisible(false);
+        removeLoanButton.setVisible(false);
         List<DTOLoan> loansCustomerChosen = new ArrayList<>();
 
         try {
@@ -187,9 +192,12 @@ public class CustomerController extends HelperFunction implements Initializable{
                 addLoanButton.setOnAction(e->{
                     DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
                     chosenInlayListView.getItems().add(localLoan);
-                    loansCustomerChosen.add(localLoan);});
-                //if (localLoan != null)
-                    //loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
+                    loansCustomerChosen.add(localLoan);
+                    removeLoanButton.setVisible(true);});
+                removeLoanButton.setOnAction(e->{
+                    DTOLoan localLoan = chosenInlayListView.getSelectionModel().getSelectedItem();
+                    chosenInlayListView.getItems().removeAll(localLoan);});
+
 
             }
 
