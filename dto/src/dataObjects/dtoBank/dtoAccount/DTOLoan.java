@@ -2,8 +2,10 @@ package dataObjects.dtoBank.dtoAccount;
 
 
 import dataObjects.dtoCustomer.DTOCustomer;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import logic.YazLogic;
+import logic.YazLogicDesktop;
 import logic.customer.Customer;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class DTOLoan {
     protected int endedYaz;
     protected int inRiskCounter;
     protected int windowOfPaymentCounter=1;
-    //protected StringProperty massagesProperty=n
+    protected StringProperty massagesProperty=new SimpleStringProperty();
 
     public DTOLoan() {
 
@@ -90,7 +92,9 @@ public class DTOLoan {
                 "The total original time of the loan - " + totalYazTime + "\n" +
                 "Pays every yaz - " + paysEveryYaz + "\n" +
                 "Loan interest - " + interestPerPayment + "\n" +
-                "Loan status - " + loanStatus+"\n");
+                "Loan status - " + loanStatus+"\n") +
+                "Final loan amount - "+ (this.capital+this.capital*this.getInterestPerPayment()/100) +"\n" +
+                invokeStatusOperation(3);
     }
 
 ////////////////// I decided that I don't want to copy this CODE, so we will sand the number of the operation: //////////////////////////////
@@ -98,6 +102,7 @@ public class DTOLoan {
         if(indexOperation ==3)
             return loanStatus.operationThree(this);
         return loanStatus.operationTwo(this);
+
     }
 
     public DTOLoanStatus getStatusOperation(){
@@ -167,6 +172,13 @@ public class DTOLoan {
             windowOfPaymentCounter++;
         }
         return (YazLogic.currentYazUnit-(this.startedYazInActive-1))%this.paysEveryYaz;
+    }
+
+    public int numberOfYazTillNextPulseDK(){
+        if((YazLogicDesktop.currentYazUnitProperty.getValue()-(this.startedYazInActive-1))%this.paysEveryYaz==0) {
+            windowOfPaymentCounter++;
+        }
+        return (YazLogicDesktop.currentYazUnitProperty.getValue()-(this.startedYazInActive-1))%this.paysEveryYaz;
     }
 
 

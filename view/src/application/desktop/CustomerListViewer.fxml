@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -67,10 +66,7 @@
                         <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label fx:id="InterestAndCapitalLoanerLabel" text="Interest+Capital : " GridPane.columnSpan="4" GridPane.rowIndex="1" />
-                        <Label fx:id="firstStatusLoanerLabel" text="Label : " GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                        <Label fx:id="secondStatusLoanerLabel" text="Label : " GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                        <ListView fx:id="loansListLoanerView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" />
+                        <ListView fx:id="loansListLoanerView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowSpan="3" />
                      </children>
                   </GridPane>
                </content>
@@ -90,10 +86,7 @@
                         <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label fx:id="InterestAndCapitalLenderLabel" text="Interest+Capital : " GridPane.columnSpan="4" GridPane.rowIndex="1" />
-                        <Label fx:id="firstStatusLenderLabel" text="Label : " GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                        <Label fx:id="secondStatusLenderLabel" text="Label : " GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                        <ListView fx:id="loansListLenderView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" />
+                        <ListView fx:id="loansListLenderView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowSpan="3" />
                      </children>
                   </GridPane>
                </content>

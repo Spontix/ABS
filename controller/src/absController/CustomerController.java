@@ -3,6 +3,7 @@ package absController;
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
+import dataObjects.dtoBank.dtoAccount.DTOMovement;
 import dataObjects.dtoCustomer.DTOCustomer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,23 +22,29 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CustomerController extends HelperFunction implements Initializable{
     private UIInterfaceLogic bank;
     protected DTOCustomer dtoCustomer;
-    final ObservableList<String> categories = FXCollections.observableArrayList();
-    private ListView<DTOLoan> allInlayListView;
-    private ListView<DTOLoan> chosenInlayListView;
+    protected ListView<DTOLoan> allInlayListView;
+    protected ListView<DTOLoan> chosenInlayListView;
 
+
+    @FXML
+    protected Button doneChosenLoanButton;
+
+    @FXML
+    protected Button unChosenLoanButton;
+
+    @FXML
+    protected Button chooseLoanButton;
 
     @FXML
     private BorderPane chosenInlayLoansBorderPane;
 
     @FXML
     private BorderPane allInlayLoansBorderPane;
-
-    @FXML
-    private Button addLoanButton;
 
     @FXML
     protected TabPane customerTablePane;
@@ -68,6 +75,12 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private TextField maximumLoanOwnershipPercentage;
+
+    @FXML
+    protected ListView<String> notificationAreaListView;
+
+    @FXML
+    protected ListView<DTOLoan> loansThatShouldBePaidListView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -146,8 +159,7 @@ public class CustomerController extends HelperFunction implements Initializable{
         String amount = investmentAmount.getText();
         int amountFromUser = 0;
         amountFromUser = Integer.parseInt(amount);
-        ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
-        if (amountFromUser <= 0 || amountFromUser > bank.getAmountOfCustomer(0))
+        if (amountFromUser <= 0 || amountFromUser > dtoCustomer.getAmount())
             throw new NumberFormatException("In 'Amount to investment' - Invalid input!! Please enter a number greater than 0 and less than \" + bank.getAmountOfCustomer(0)");
 
         return amountFromUser;
@@ -159,8 +171,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     @FXML
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         allInlayListView.setVisible(false);
-        addLoanButton.setVisible(false);
-        List<DTOLoan> loansCustomerChosen = new ArrayList<>();
+        chooseLoanButton.setVisible(false);
 
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
@@ -169,25 +180,64 @@ public class CustomerController extends HelperFunction implements Initializable{
             double minimumInterestYaz = MinimumInterestYazActionLisener();
             int maximumLoansOpenToTheBorrower = MaximumLoansOpenToTheBorrowerActionLisener();
             int maximumLoanOwnershipPercentage = MaximumLoanOwnershipPercentageActionLisener();
-            ///////////////////////// Missing - what customer is it to take the amount of the balance from him ////////////////////////
-            DTOInlay dtoInlay = bank.inlayBuildForDK(bank.getCustomer(0), investAmount,list.toString().substring(1,list.toString().length()-1), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
+            DTOInlay dtoInlay = bank.inlayBuildForDK(dtoCustomer, investAmount,list.toString().substring(1,list.toString().length()-1), minimumInterestYaz, minimumTotalYaz, maximumLoansOpenToTheBorrower);
             ArrayList<DTOLoan> loansSupportInlay = bank.loansSustainInlayDK(dtoInlay);
             if(loansSupportInlay.isEmpty()){
                 popupMessage("Failed!!!", "No loans were found for this inlay.");
             }
             else {
+                //ToDo : mySetVisible() function
                 allInlayListView.setVisible(true);
+                chosenInlayListView.setVisible(true);
                 allInlayLoansBorderPane.setCenter(allInlayListView);
                 chosenInlayLoansBorderPane.setCenter(chosenInlayListView);
                 showLoanInformationInAdminView(allInlayListView, loansSupportInlay);
-                addLoanButton.setVisible(true);
+                //ToDo : mySetVisible() function
+                chooseLoanButton.setVisible(true);
+                unChosenLoanButton.setVisible(true);
+                doneChosenLoanButton.setVisible(true);
                 popupMessage("Success!!!", "Please click on the loan you want and then click on the 'Add loan' button.");
                 //DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
                 //allInlayListView.setVisible(false);
-                addLoanButton.setOnAction(e->{
+                //ToDo : extract to an outside function
+                chooseLoanButton.setOnAction(e->{
                     DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
-                    chosenInlayListView.getItems().add(localLoan);
-                    loansCustomerChosen.add(localLoan);});
+                    if (localLoan != null) {
+                        chosenInlayListView.getItems().add(localLoan);
+                        unChosenLoanButton.setDisable(false);
+                        allInlayListView.getItems().removeAll(localLoan);
+                        if(allInlayListView.getItems().isEmpty())
+                            chooseLoanButton.setDisable(true);
+                    }
+                });
+                unChosenLoanButton.setOnAction(e->{
+                    DTOLoan localLoan = chosenInlayListView.getSelectionModel().getSelectedItem();
+                    if (localLoan != null){
+                        allInlayListView.getItems().add(localLoan);
+                        chooseLoanButton.setDisable(false);
+                        chosenInlayListView.getItems().removeAll(localLoan);
+                        if (chosenInlayListView.getItems().isEmpty())
+                            unChosenLoanButton.setDisable(true);
+                    }
+                });
+                doneChosenLoanButton.setOnAction(e->{
+                    List<DTOMovement> dtoMovementList;
+                    try {
+                        dtoMovementList=bank.addMovementPerLoanFromInlayDK(dtoInlay, new ArrayList<>(chosenInlayListView.getItems()),investAmount,maximumLoanOwnershipPercentage);
+                        allInlayListView.getItems().clear();
+                        chosenInlayListView.getItems().clear();
+                        allInlayListView.setVisible(false);
+                        chosenInlayListView.setVisible(false);
+                        chooseLoanButton.setVisible(false);
+                        unChosenLoanButton.setVisible(false);
+                        doneChosenLoanButton.setVisible(false);
+                        popupMessage("Success!","The operation is done.");
+                    } catch (InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+                        ex.printStackTrace();
+                    }
+
+                });
+
                 //if (localLoan != null)
                     //loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
 
