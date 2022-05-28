@@ -3,6 +3,7 @@ package absController;
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
+import dataObjects.dtoCustomer.DTOCustomer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,11 +24,24 @@ import java.util.*;
 
 public class CustomerController extends HelperFunction implements Initializable{
     private UIInterfaceLogic bank;
+    protected DTOCustomer dtoCustomer;
     final ObservableList<String> categories = FXCollections.observableArrayList();
-    private LoansListController loansListController;
+    private ListView<DTOLoan> allInlayListView;
+    private ListView<DTOLoan> chosenInlayListView;
+
+
+    @FXML
+    private BorderPane chosenInlayLoansBorderPane;
+
+    @FXML
+    private BorderPane allInlayLoansBorderPane;
 
     @FXML
     private Button addLoanButton;
+
+    @FXML
+    private Button removeLoanButton;
+
 
     @FXML
     protected TabPane customerTablePane;
@@ -37,9 +51,6 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private ListView<DTOLoan> inlayLoansChosen;
-
-    @FXML
-    private BorderPane inlayLoansBorderPane;
 
     @FXML
     protected Button enableInlayButton;
@@ -64,7 +75,9 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
+        chosenInlayListView=new ListView<>();
+        allInlayListView=new ListView<>();
+
 
     }
 
@@ -149,10 +162,10 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
-        loansListController.LoansListView.getItems().clear();
-        loansListController.LoansListView.setVisible(false);
+        allInlayListView.setVisible(false);
         addLoanButton.setVisible(false);
-        ArrayList<DTOLoan> loansCustomerChosen = null;
+        removeLoanButton.setVisible(false);
+        List<DTOLoan> loansCustomerChosen = new ArrayList<>();
 
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
@@ -168,18 +181,23 @@ public class CustomerController extends HelperFunction implements Initializable{
                 popupMessage("Failed!!!", "No loans were found for this inlay.");
             }
             else {
-                loansListController.LoansListView.setVisible(true);
-                inlayLoansBorderPane.setCenter(loansListController.LoansMainGridPane);
-                showLoanInformationInAdminView(loansListController.LoansListView, loansSupportInlay);
+                allInlayListView.setVisible(true);
+                allInlayLoansBorderPane.setCenter(allInlayListView);
+                chosenInlayLoansBorderPane.setCenter(chosenInlayListView);
+                showLoanInformationInAdminView(allInlayListView, loansSupportInlay);
                 addLoanButton.setVisible(true);
                 popupMessage("Success!!!", "Please click on the loan you want and then click on the 'Add loan' button.");
                 //DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
-                loansListController.loansAccordionInformation.setVisible(false);
+                //allInlayListView.setVisible(false);
                 addLoanButton.setOnAction(e->{
-                    DTOLoan localLoan = loansListController.LoansListView.getSelectionModel().getSelectedItem();
-                    loansCustomerChosen.add(localLoan);});
-                //if (localLoan != null)
-                    //loansListController.lendersTableView.setItems(FXCollections.observableArrayList(localLoan.getListOfInlays()));
+                    DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
+                    chosenInlayListView.getItems().add(localLoan);
+                    loansCustomerChosen.add(localLoan);
+                    removeLoanButton.setVisible(true);});
+                removeLoanButton.setOnAction(e->{
+                    DTOLoan localLoan = chosenInlayListView.getSelectionModel().getSelectedItem();
+                    chosenInlayListView.getItems().removeAll(localLoan);});
+
 
             }
 
@@ -210,6 +228,9 @@ public class CustomerController extends HelperFunction implements Initializable{
     }
 
 
+    protected void setCurrentCustomer(DTOCustomer dtoCustomer){
+        this.dtoCustomer=dtoCustomer;
+    }
 
 
 }

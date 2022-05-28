@@ -2,6 +2,7 @@ package dataObjects.dtoBank.dtoAccount;
 
 
 import dataObjects.dtoCustomer.DTOCustomer;
+import javafx.beans.property.StringProperty;
 import logic.YazLogic;
 import logic.customer.Customer;
 
@@ -32,6 +33,7 @@ public class DTOLoan {
     protected int endedYaz;
     protected int inRiskCounter;
     protected int windowOfPaymentCounter=1;
+    //protected StringProperty massagesProperty=n
 
     public DTOLoan() {
 
