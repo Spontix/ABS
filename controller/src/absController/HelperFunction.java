@@ -23,6 +23,13 @@ public class HelperFunction {
         listView.getItems().addAll(list);
     }
 
+    /*protected void showCustomersNamesView(ListView<String> listView,  List<DTOCustomer> list){
+        listView.getItems().clear();
+        for (DTOCustomer customer:list) {
+            listView.getItems().add(customer.getCustomerName());
+        }
+    }*/
+
     protected  <T> T myFXMLLoader(String resource){
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url =  getClass().getResource(resource);
