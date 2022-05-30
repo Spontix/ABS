@@ -100,6 +100,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         inlay.setMinInterestYaz(minInterestYaz);
         inlay.setMinYazTime(minYazTime);
         inlay.setInlayCustomer(accounts.stream().filter(a -> a.getCustomerName().equals(customer.getCustomerName())).collect(Collectors.toList()).get(0));
+        inlay.setCustomerName(inlay.getDtoAccount().getCustomerName());
 
         return inlay;
     }
@@ -115,6 +116,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         inlay.setMaximumLoansOpenToTheBorrower(maximumLoansOpenToTheBorrower);
         inlay.setMinYazTime(minYazTime);
         inlay.setInlayCustomer(accounts.stream().filter(a -> a.getCustomerName().equals(customer.getCustomerName())).collect(Collectors.toList()).get(0));
+        inlay.setCustomerName(inlay.getDtoAccount().getCustomerName());
         return inlay;
     }
 
@@ -586,7 +588,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     public ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException {
 
         /////////////2.Payment should be paid by the loaner+sorted the list because of the logic of the app
-        List<Loan> loansThatShouldPay = loans.stream().filter(l -> (l.numberOfYazTillNextPulseDK() == 0 && l.getLoanStatus() == DTOLoanStatus.ACTIVE) || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
+        List<Loan> loansThatShouldPay = loans.stream().filter(l -> ( l.getLoanStatus() == DTOLoanStatus.ACTIVE && l.numberOfYazTillNextPulseDK() == 0) || l.getLoanStatus() == DTOLoanStatus.ACTIVE || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
             @Override
             public int compare(Loan l1, Loan l2) {
                 if (l1.getStartedYazInActive() - l2.getStartedYazInActive() == 0 && l1.paymentPerPulse() - l2.paymentPerPulse() == 0)//if the yaz equals and the payment per pulse is equal so sort by the number of pulse
@@ -598,18 +600,28 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
             }
         }).collect(Collectors.toList());
         for (Loan loan:loansThatShouldPay) {
-                loan.setStringPropertyValue("Name : "+loan.getId()+"\n"+"Payment Yaz: "+ YazLogicDesktop.currentYazUnitProperty.getValue()+"\n"+"Amount of required payment : "+loan.paymentPerPulse()+
-                        "\n"+"Status : "+loan.getLoanStatus());
+            if(loan.getPulseCounterThatHappened()<loan.getWindowOfPaymentCounter()-1 || loan.getInRiskCounter()!=0){
+                if(loan.getInRiskCounter()!=0) {
+                    loan.setLoanStatus(DTOLoanStatus.RISK);
+                }
+                loan.incrInRiskCounter();
+            }
+            if(loan.numberOfYazTillNextPulseWithoutTheIncOfWindowOfPaymentCounterDK() == 0 || loan.getLoanStatus()==DTOLoanStatus.RISK){
+            loan.setStringPropertyValue("Name : "+loan.getId()+"\n"+"Payment Yaz: "+ YazLogicDesktop.currentYazUnitProperty.getValue()+"\n"+"Amount of required payment : "+loan.paymentPerPulse()+
+                    "\n"+"Status : "+loan.getLoanStatus());
+            }
+            else
+                loan.setLoanStatus(DTOLoanStatus.ACTIVE);
         }
         ArrayList<DTOLoan> DTOLoansThatShouldPay=new ArrayList<>();
-        loansThatShouldPay.stream().filter(l->DTOLoansThatShouldPay.add(DTOLoan.build(l)));
+        loansThatShouldPay.forEach(l->DTOLoansThatShouldPay.add(DTOLoan.build(l)));
 
         return DTOLoansThatShouldPay;
     }
 
     @Override
-    public void myAddListenerToStringPropertyLoans(ListView<String> listener){
-        this.loans.stream().forEach(l->l.myAddListenerToStringProperty(listener));
+    public void myAddListenerToStringPropertyLoans(ListView<String> listener,DTOLoan dtoLoan){
+        this.loans.stream().filter(l->l.getId()==dtoLoan.getId()).forEach(l->l.myAddListenerToStringProperty(listener));
     }
 }
 
