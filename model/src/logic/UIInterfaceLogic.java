@@ -84,7 +84,7 @@ public interface UIInterfaceLogic {
 
     ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
-    void myAddListenerToStringPropertyLoans(ListView<String> listener);
+    void myAddListenerToStringPropertyLoans(ListView<String> listener,DTOLoan dtoLoan);
 
     ArrayList<DTOMovement> addMovementPerLoanFromInlayDK(DTOInlay inlay, List<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int maximumOwnershipLoanPercentage) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 

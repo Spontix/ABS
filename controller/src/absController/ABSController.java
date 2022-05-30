@@ -112,6 +112,10 @@ public class ABSController extends HelperFunction implements Initializable {
                 customersListController.loansListLoanerView.getItems().clear();
                 for (DTOLoan dtoLoan:bank.getCustomerLoanersList(localCustomer.getCustomerName()))
                      customersListController.loansListLoanerView.getItems().add(dtoLoan);
+                customersListController.loansListLenderView.getItems().clear();
+                for (DTOLoan dtoLoan:bank.getCustomerBorrowersList(localCustomer.getCustomerName()))
+                    customersListController.loansListLenderView.getItems().add(dtoLoan);
+
 
             }
         });
@@ -123,7 +127,8 @@ public class ABSController extends HelperFunction implements Initializable {
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> {
             try {
                 List<DTOLoan> loansThatShouldPay=bank.yazProgressLogicDesktop();
-                showLoansThatShouldPayInformationInCustomerView(loansThatShouldPay);
+                clearAllLoansPayListView();
+                addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
                 showLoanInformationInAdminView(loansListController.LoansListView,bank.getLoansList());
                 showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -166,7 +171,10 @@ public class ABSController extends HelperFunction implements Initializable {
             customersController.add(customerController);
             customerController.setCurrentCustomer(dtoCustomer);
             customerController.setBankInCustomerController(bank);
-            bank.myAddListenerToStringPropertyLoans(customerController.notificationAreaListView);
+            customerController.setAbsControllerRef(this);
+            List<DTOLoan> dtoLoan=bank.getLoansList().stream().filter(l-> Objects.equals(l.getOwner(), dtoCustomer.getCustomerName())).collect(Collectors.toList());
+            if(!dtoLoan.isEmpty())
+                bank.myAddListenerToStringPropertyLoans(customerController.notificationAreaListView,dtoLoan.get(0));
             customerAsMenuItem.setOnAction(e->{
                 viewBy.setText(dtoCustomer.getCustomerName());
                 try {
@@ -178,7 +186,6 @@ public class ABSController extends HelperFunction implements Initializable {
                     showLoanInformationInAdminView(loansListController.LoansListView,bank.getLoansList());
                     showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
                     customerController.allInlayListView.getItems().clear();
-                    customerController.loansThatShouldBePaidListView.getItems().clear();
                     customerController.chosenInlayListView.getItems().clear();
                     customerController.allInlayListView.setVisible(false);
                     customerController.chosenInlayListView.setVisible(false);
@@ -239,12 +246,19 @@ public class ABSController extends HelperFunction implements Initializable {
         return fileChooser.showOpenDialog(node.getScene().getWindow()).getPath();
     }
 
-    private void showLoansThatShouldPayInformationInCustomerView(List<DTOLoan> loansThatShouldPay){//ToDo need to check if it works
-        for (CustomerController customerController:customersController) {
-            for (DTOLoan dtoLoan:loansThatShouldPay) {
-                if(Objects.equals(customerController.dtoCustomer.getCustomerName(), dtoLoan.getOwner()))
+    protected void  addTheLoansThatShouldPayToAllTheLoansPayListView(List<DTOLoan> loansThatShouldPay){
+        for (CustomerController customerController: customersController) {
+            for (DTOLoan dtoLoan: loansThatShouldPay) {
+                if(Objects.equals(customerController.dtoCustomer.getCustomerName(), dtoLoan.getOwner())) {
                     customerController.loansThatShouldBePaidListView.getItems().add(dtoLoan);
+                }
             }
+        }
+    }
+
+    protected void clearAllLoansPayListView(){
+        for (CustomerController customerController: customersController) {
+            customerController.loansThatShouldBePaidListView.getItems().clear();
         }
     }
 

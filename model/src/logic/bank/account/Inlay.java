@@ -31,6 +31,10 @@ public class Inlay extends DTOInlay {
         minYazTime = inlayMinYazTime;
     }
 
+    public void setCustomerName(String name){
+        this.name=name;
+    }
+
     public void setInlayCustomer(DTOAccount customer){
         dtoAccount=customer;
         name=customer.getCustomerName();

@@ -43,7 +43,7 @@ public class DTOInlay {
         dtoInlay.category=inlay.category;
         dtoInlay.minInterestYaz=inlay.minInterestYaz;
         dtoInlay.minYazTime=inlay.minYazTime;
-        dtoInlay.name=inlay.name;
+        dtoInlay.name=inlay.dtoAccount.getCustomerName();
         dtoInlay.dtoAccount=DTOCustomer.build((DTOCustomer)inlay.dtoAccount);
         return dtoInlay;
     }

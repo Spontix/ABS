@@ -78,6 +78,8 @@ public class DTOLoan {
         dtoLoan.listOfInlays=inlaysList;
         dtoLoan.listOfAccompanied=accompaniedList;
         dtoLoan.listOfMovements=movementsList;
+        dtoLoan.massagesProperty=loan.massagesProperty;
+        dtoLoan.pulseCounterThatHappened=loan.pulseCounterThatHappened;
         return dtoLoan;
     }
 
@@ -181,6 +183,10 @@ public class DTOLoan {
         return (YazLogicDesktop.currentYazUnitProperty.getValue()-(this.startedYazInActive-1))%this.paysEveryYaz;
     }
 
+    public int numberOfYazTillNextPulseWithoutTheIncOfWindowOfPaymentCounterDK(){
+        return (YazLogicDesktop.currentYazUnitProperty.getValue()-(this.startedYazInActive-1))%this.paysEveryYaz;
+    }
+
 
     public int calculatePaymentToLoaner(Customer customer) {
 
@@ -238,6 +244,10 @@ public class DTOLoan {
 
     public int getTotalAmountOfInRiskCapitalThatDidNotPayed(){
         return this.inRiskCounter*this.paymentPerPulse();
+    }
+
+    public int getWindowOfPaymentCounter(){
+        return windowOfPaymentCounter;
     }
 
 }

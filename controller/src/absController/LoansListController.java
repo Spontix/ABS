@@ -35,6 +35,7 @@ public class LoansListController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        investmentColumn.setCellValueFactory(new PropertyValueFactory<>("investAmount"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
     }
 }

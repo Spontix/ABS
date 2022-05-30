@@ -29,6 +29,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     protected DTOCustomer dtoCustomer;
     protected ListView<DTOLoan> allInlayListView;
     protected ListView<DTOLoan> chosenInlayListView;
+    protected ABSController absControllerRef;
 
 
     @FXML
@@ -230,7 +231,9 @@ public class CustomerController extends HelperFunction implements Initializable{
                     List<DTOMovement> dtoMovementList;
                     try {
                         dtoMovementList=bank.addMovementPerLoanFromInlayDK(dtoInlay, new ArrayList<>(chosenInlayListView.getItems()),investAmount,maximumLoanOwnershipPercentage);
-                        bank.yazProgressLogicDesktop();
+                        List<DTOLoan> loansThatShouldPay=bank.yazProgressLogicDesktop();
+                        absControllerRef.clearAllLoansPayListView();
+                        absControllerRef.addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
                         allInlayListView.getItems().clear();
                         chosenInlayListView.getItems().clear();
                         allInlayListView.setVisible(false);
@@ -279,6 +282,10 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     protected void setCurrentCustomer(DTOCustomer dtoCustomer){
         this.dtoCustomer=dtoCustomer;
+    }
+
+    protected void setAbsControllerRef(ABSController absController){
+        this.absControllerRef=absController;
     }
 
 
