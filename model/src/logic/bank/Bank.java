@@ -58,18 +58,14 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
     @Override
     public DTOMovement movementBuildToCustomer(DTOCustomer customer, int movementSum, String movementOperation, int movementSumBeforeOperation, int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        Movement movement = creatMovement(movementSum, movementOperation, movementSumBeforeOperation, movementSumAfterOperation);
-
-
+        Movement movement = createMovement(movementSum, movementOperation, movementSumBeforeOperation, movementSumAfterOperation);
         accounts.stream().filter(a -> a.getCustomerName().equals(customer.getCustomerName())).collect(Collectors.toList()).get(0).getMovements().add(movement);
-
-
         return DTOMovement.build(movement);
     }
 
     @Override
     public DTOMovement movementBuildToLoan(DTOLoan dtoLoan, int movementSum, String movementOperation, int movementSumBeforeOperation, int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        Movement movement = creatMovement(movementSum, movementOperation, movementSumBeforeOperation, movementSumAfterOperation);
+        Movement movement = createMovement(movementSum, movementOperation, movementSumBeforeOperation, movementSumAfterOperation);
 
         loans.stream().filter(l -> l.getId().equals(dtoLoan.getId())).collect(Collectors.toList()).get(0).getListOfMovements().add(movement);
 
@@ -77,7 +73,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         return DTOMovement.build(movement);
     }
 
-    private Movement creatMovement(int movementSum, String movementOperation, int movementSumBeforeOperation, int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Movement createMovement(int movementSum, String movementOperation, int movementSumBeforeOperation, int movementSumAfterOperation) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Movement movement = (Movement) createInstance(Movement.class);
         movement.setSum(movementSum);
         movement.setOperation(movementOperation);
@@ -199,6 +195,15 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
     @Override
+    public DTOCustomer getCustomerByName(String customerName) {
+        for (Account account : this.getAccounts()) {
+            if (Objects.equals(account.getCustomerName(), customerName))
+                return DTOCustomer.build((Customer) account);
+        }
+        return null;
+    }
+
+    @Override
     public int getTotalCustomersSize() {
         return this.getAccounts().size();
     }
@@ -215,8 +220,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
     @Override
     public void cashDeposit(Customer customer, int sum) {
-        accounts.stream().filter(a -> a.getCustomerName() == customer.getCustomerName()).collect(Collectors.toList()).get(0).cashDeposit(sum);
-
+        accounts.stream().filter(a -> Objects.equals(a.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).cashDeposit(sum);
     }
 
     @Override
@@ -414,7 +418,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         return listOfDTOMovements;
     }
 
-    @Override//ToDo : To get the real customer and not the index
+    @Override
     public ArrayList<DTOMovement> addMovementPerLoanFromInlayDK(DTOInlay dtoInlay, List<DTOLoan> loansCustomerChosen, int chosenInvestAmount , int maximumOwnershipLoanPercentage) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         ///5000
         //if(maximumOwnershipLoanPercentage!=0)
@@ -437,7 +441,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                     sumPerLoanToBeAdd = sumPerLoan + 1;////1666+1
                     remainderByModulo--;//מודולו=1
                 }
-////////////////////////seperate method
+
                 loan = loans.stream().filter(l -> l.getId().equals(dtoLoan.getId())).collect(Collectors.toList()).get(0);//מציאת ההלוואה המקורית מהלוגיקה
                 if(maximumOwnershipLoanPercentage!=0)
                     sumPerLoanToBeAdd=sumPerLoanWithChosenPercentage;//ToDo : Check if its right
@@ -495,7 +499,8 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         return listOfDTOMovements;
     }
 
-    private Customer getRealCustomerByName(String customerName) {
+    @Override
+    public Customer getRealCustomerByName(String customerName) {
         return (Customer) (accounts.stream().filter(c -> Objects.equals(c.getCustomerName(), customerName)).collect(Collectors.toList())).get(0);
     }
 

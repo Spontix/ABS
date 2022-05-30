@@ -58,29 +58,6 @@ public class ABSController extends HelperFunction implements Initializable {
     void contextMenuRequested(ContextMenuEvent event) {
     }
 
-    /*public void createBankExample() throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        DTOCustomer customer0 = bank.customerBuild("Menash", 5000);
-        DTOCustomer customer1 = bank.customerBuild("Avrum", 1000);
-        DTOCustomer customer2 = bank.customerBuild("Tikva", 10000);
-
-        DTOLoan loan1 = bank.loanBuilder("build a room", "Avrum", "Renovate", 3000, 10, 2,3);
-        DTOLoan loan2 = bank.loanBuilder("Bar Mitzva", "Tikva", "OverdraftCover", 4000, 10, 1,3);
-        DTOLoan loan3 = bank.loanBuilder("Wedding", "Menash", "Setup a business", 42000, 21, 7,20);
-
-        String a =new String("Renovate");
-        bank.getCategoriesGroup().add(a);
-        bank.getCategoriesGroup().add("OverdraftCover");
-        bank.getCategoriesGroup().add("Setup a business");
-
-        bank.getLoansList().add(loan1);
-        bank.getLoansList().add(loan2);
-        bank.getLoansList().add(loan3);
-
-        bank.getCustomers().add(customer0);
-        bank.getCustomers().add(customer1);
-        bank.getCustomers().add(customer2);
-    }*/
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         adminController =myFXMLLoader("/application/desktop/MyAdminView.fxml");
@@ -184,6 +161,9 @@ public class ABSController extends HelperFunction implements Initializable {
                     customerController.categoriesList.getItems().clear();
                     customerController.categoriesList.getItems().addAll(categories);
                     showLoanInformationInAdminView(loansListController.LoansListView,bank.getLoansList());
+                    showLoanInformationInAdminView(customerController.loanerLoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()));
+                    showLoanInformationInAdminView(customerController.LenderLoansTableListView, bank.getCustomerBorrowersList(dtoCustomer.getCustomerName()));
+                    customerController.listViewMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
                     showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
                     customerController.allInlayListView.getItems().clear();
                     customerController.chosenInlayListView.getItems().clear();
@@ -201,6 +181,7 @@ public class ABSController extends HelperFunction implements Initializable {
         }
 
     }
+
 
     /*private void setTheAdminAndCustomersAsMenuItems(){
         MenuItem customerAsMenuItem;
