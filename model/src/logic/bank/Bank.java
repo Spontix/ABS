@@ -581,7 +581,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
         return inRiskToActive;
 
-    }
+    }//
 
     @Override
     public void operateThePaymentOfTheLoanDesktop(DTOLoan loan, int customerPayment) throws InvocationTargetException, InstantiationException, IllegalAccessException {
