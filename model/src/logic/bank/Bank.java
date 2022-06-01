@@ -674,7 +674,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
                 loan.setStringPropertyValue("Name : "+loan.getId()+"\n"+"Payment Yaz: "+ YazLogicDesktop.currentYazUnitProperty.getValue()+"\n"+"Amount of required payment : "+loan.paymentPerPulse()+
                         "\n"+"Status : "+loan.getLoanStatus());
             }
-        }
+        }//
         ArrayList<DTOLoan> DTOLoansThatShouldPay=new ArrayList<>();
         loansThatShouldPay.forEach(l->DTOLoansThatShouldPay.add(DTOLoan.build(l)));
 
