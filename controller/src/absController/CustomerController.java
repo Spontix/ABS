@@ -2,34 +2,22 @@ package absController;
 
 import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
-import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
 import dataObjects.dtoCustomer.DTOCustomer;
-import javafx.animation.FillTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import logic.UIInterfaceLogic;
-import logic.bank.Bank;
-import logic.bank.account.Loan;
-import logic.customer.Customer;
 import org.controlsfx.control.CheckComboBox;
-import org.controlsfx.control.GridView;
+import org.controlsfx.dialog.ProgressDialog;
 
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CustomerController extends HelperFunction implements Initializable{
     private UIInterfaceLogic bank;
@@ -37,6 +25,10 @@ public class CustomerController extends HelperFunction implements Initializable{
     protected ListView<DTOLoan> allInlayListView;
     protected ListView<DTOLoan> chosenInlayListView;
     protected ABSController absControllerRef;
+    private Task<Boolean> workerScrambleTask;
+
+    @FXML
+    private BorderPane loansThatShouldBePaidBorderPane;
 
     @FXML
     protected ListView<DTOMovement> listViewMovments;
@@ -110,8 +102,18 @@ public class CustomerController extends HelperFunction implements Initializable{
     @FXML
     protected ListView<String> notificationAreaListView;
 
+    /*@FXML
+    protected ListView<DTOLoan> loansThatShouldBePaidListView;*/
+
+    protected LoansListController loansListController;
+
     @FXML
-    protected ListView<DTOLoan> loansThatShouldBePaidListView;
+    protected Button closeLoanButton;
+
+    @FXML
+    protected Button payButton;
+
+
 
     //ToDo: create property FinalBalance=amount in DTOCustomer that will listen for every change, that we will be possible to show current balance all the time.
     @FXML
@@ -119,6 +121,8 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
+        loansThatShouldBePaidBorderPane.setCenter(loansListController.LoansMainGridPane);
         chosenInlayListView=new ListView<>();
         allInlayListView=new ListView<>();
         informationTab.setOnSelectionChanged(e-> {
@@ -127,8 +131,8 @@ public class CustomerController extends HelperFunction implements Initializable{
             if (bank != null) {
 
                 setCurrentCustomer(bank.getCustomerByName(dtoCustomer.getCustomerName()));
-                showLoanInformationInAdminView(loanerLoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()));
-                showLoanInformationInAdminView(LenderLoansTableListView, bank.getCustomerBorrowersList(dtoCustomer.getCustomerName()));
+                showLoanInformationInAdminAndCustomerView(loanerLoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()),false);
+                showLoanInformationInAdminAndCustomerView(LenderLoansTableListView, bank.getCustomerBorrowersList(dtoCustomer.getCustomerName()),false);
                 listViewMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
 
             }
@@ -267,7 +271,7 @@ public class CustomerController extends HelperFunction implements Initializable{
                 mySetVisible(true);
                 allInlayLoansBorderPane.setCenter(allInlayListView);
                 chosenInlayLoansBorderPane.setCenter(chosenInlayListView);
-                showLoanInformationInAdminView(allInlayListView, loansSupportInlay);
+                showLoanInformationInAdminAndCustomerView(allInlayListView, loansSupportInlay,false);
                 popupMessage("Success!!!", "Please click on the loan you want and then click on the 'Add loan' button.");
 
                 chooseLoanButton.setOnAction(e->{
@@ -276,28 +280,44 @@ public class CustomerController extends HelperFunction implements Initializable{
                 unChosenLoanButton.setOnAction(e->{
                     unChosenLoanButtonSetOnAction();
                 });
-                doneChosenLoanButton.setOnAction(e->{
-                    List<DTOMovement> dtoMovementList;
-                    try {
-                        dtoMovementList=bank.addMovementPerLoanFromInlayDK(dtoInlay, new ArrayList<>(chosenInlayListView.getItems()),investAmount,maximumLoanOwnershipPercentage);
-                        List<DTOLoan> loansThatShouldPay=bank.yazProgressLogicDesktop();
-                        absControllerRef.clearAllLoansPayListView();
-                        absControllerRef.addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
-                        allInlayListView.getItems().clear();
-                        chosenInlayListView.getItems().clear();
-                        allInlayListView.setVisible(false);
-                        chosenInlayListView.setVisible(false);
-                        chooseLoanButton.setVisible(false);
-                        unChosenLoanButton.setVisible(false);
-                        doneChosenLoanButton.setVisible(false);
-                        popupMessage("Success!","The operation is done.");
-                    } catch (InvocationTargetException | InstantiationException | IllegalAccessException ex) {
-                        ex.printStackTrace();
-                    }
+                doneChosenLoanButton.setOnAction(e-> {
 
-    private void unChosenLoanButtonSetOnAction(){
+                    List<DTOMovement> dtoMovementList;
+                    workerScrambleTask=new Task<Boolean>(){
+                        @Override
+                        protected Boolean call() throws Exception {
+                            List<DTOMovement>  dtoMovementList = bank.addMovementPerLoanFromInlayDK(dtoInlay, new ArrayList<>(chosenInlayListView.getItems()), investAmount, maximumLoanOwnershipPercentage);
+                            List<DTOLoan> loansThatShouldPay = bank.yazProgressLogicDesktop();
+                            absControllerRef.clearAllLoansPayListView();
+                            absControllerRef.addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
+                            sleepForSomeTime();
+                            return true;
+                        }
+                    };
+                    ProgressDialog progressDialog=new ProgressDialog(workerScrambleTask);
+                    progressDialog.setContentText("Please wait...");
+                    progressDialog.setTitle("Scramble");
+                    progressDialog.setHeaderText("Doing the scramble");
+                    new Thread(workerScrambleTask).start();
+                    progressDialog.showAndWait();
+                    allInlayListView.getItems().clear();
+                    chosenInlayListView.getItems().clear();
+                    allInlayListView.setVisible(false);
+                    chosenInlayListView.setVisible(false);
+                    chooseLoanButton.setVisible(false);
+                    unChosenLoanButton.setVisible(false);
+                    doneChosenLoanButton.setVisible(false);
+                    popupMessage("Success!", "The operation is done.");
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void unChosenLoanButtonSetOnAction () {
         DTOLoan localLoan = chosenInlayListView.getSelectionModel().getSelectedItem();
-        if (localLoan != null){
+        if (localLoan != null) {
             allInlayListView.getItems().add(localLoan);
             chooseLoanButton.setDisable(false);
             chosenInlayListView.getItems().removeAll(localLoan);
@@ -306,48 +326,54 @@ public class CustomerController extends HelperFunction implements Initializable{
         }
     }
 
-    private void chooseLoanButtonSetOnAction(){
-        DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
-        if (localLoan != null) {
-            chosenInlayListView.getItems().add(localLoan);
-            unChosenLoanButton.setDisable(false);
-            allInlayListView.getItems().removeAll(localLoan);
-            if(allInlayListView.getItems().isEmpty())
-                chooseLoanButton.setDisable(true);
-        }
-    }
+                    private void chooseLoanButtonSetOnAction () {
+                        DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
+                        if (localLoan != null) {
+                            chosenInlayListView.getItems().add(localLoan);
+                            unChosenLoanButton.setDisable(false);
+                            allInlayListView.getItems().removeAll(localLoan);
+                            if (allInlayListView.getItems().isEmpty())
+                                chooseLoanButton.setDisable(true);
+                        }
+                    }
 
-    private void mySetVisible(boolean parameter){
-        allInlayListView.setVisible(parameter);
-        chosenInlayListView.setVisible(parameter);
-        chooseLoanButton.setVisible(parameter);
-        unChosenLoanButton.setVisible(parameter);
-        doneChosenLoanButton.setVisible(parameter);
-    }
+                    private void mySetVisible ( boolean parameter){
+                        allInlayListView.setVisible(parameter);
+                        chosenInlayListView.setVisible(parameter);
+                        chooseLoanButton.setVisible(parameter);
+                        unChosenLoanButton.setVisible(parameter);
+                        doneChosenLoanButton.setVisible(parameter);
+                    }
 
-    private void popupMessage(String title, String contentText)
-    {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(contentText);
-        alert.showAndWait();
-    }
+                    private void popupMessage (String title, String contentText) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle(title);
+                        alert.setContentText(contentText);
+                        alert.showAndWait();
+                    }
 
+                   /* private void popupMessage1(Label title,Label contentText){
+                        Task worker=createWorker();
+                        ProgressDialog progressDialog=new ProgressDialog();
 
-    private void sleepForSomeTime() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ignored) {}
-    }
+                    }*/
 
 
-    protected void setCurrentCustomer(DTOCustomer dtoCustomer){
-        this.dtoCustomer=dtoCustomer;
-    }
+                    private void sleepForSomeTime () {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException ignored) {
+                        }
+                    }
 
-    protected void setAbsControllerRef(ABSController absController){
-        this.absControllerRef=absController;
-    }
+
+                    protected void setCurrentCustomer (DTOCustomer dtoCustomer){
+                        this.dtoCustomer = dtoCustomer;
+                    }
+
+                    protected void setAbsControllerRef (ABSController absController) {
+                        this.absControllerRef = absController;
+                    }
 
 
 }

@@ -32,6 +32,10 @@ public class DTOInlay {
         return minYazTime;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public DTOAccount getDtoAccount() {
         return dtoAccount;
     }

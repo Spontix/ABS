@@ -92,5 +92,6 @@ public interface UIInterfaceLogic {
 
     ArrayList<DTOMovement> addMovementPerLoanFromInlayDK(DTOInlay inlay, List<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int maximumOwnershipLoanPercentage) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
+    void operateThePaymentOfTheLoanDesktop(DTOLoan loan,int customerPayment) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 }
 

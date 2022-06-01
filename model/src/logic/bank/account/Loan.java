@@ -115,8 +115,22 @@ public class Loan extends DTOLoan {
         massagesProperty.setValue(value);
     }
 
+    public void addDebt(int sum){
+        this.debt+=sum;
+    }
+
+    public void decDebt(int sum){
+        this.debt-=sum;
+    }
+
+    public void setPaymentsInfoList(ArrayList<DTOPaymentsInfo> paymentsInfoList){
+        this.paymentsInfoList=paymentsInfoList;
+    }
 
 
+    public void setIsPaid(boolean isPaid) {
+        this.isPaid=isPaid;
+    }
 }
 
 

@@ -1,10 +1,11 @@
 package absController;
 
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
+import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 import dataObjects.dtoCustomer.DTOCustomer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
-import logic.UIInterfaceLogic;
+import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,9 +14,17 @@ import java.util.List;
 
 public class HelperFunction {
 
-    protected void showLoanInformationInAdminView(ListView<DTOLoan> listView, List<DTOLoan> list) {
+    protected void showLoanInformationInAdminAndCustomerView(ListView<DTOLoan> listView, List<DTOLoan> loanList, Boolean isCustomerListViewInPayment) {
         listView.getItems().clear();
-        listView.getItems().addAll(list);
+        if(isCustomerListViewInPayment){
+            for (DTOLoan dtoLoan:loanList) {
+                if(dtoLoan.getLoanStatus()!= DTOLoanStatus.NEW && dtoLoan.getLoanStatus()!=DTOLoanStatus.FINISHED)
+                       listView.getItems().add(dtoLoan);
+            }
+        }
+        else {
+            listView.getItems().addAll(loanList);
+        }
     }
 
     protected void showCustomerInformationAdminView(ListView<DTOCustomer> listView,  List<DTOCustomer> list){
