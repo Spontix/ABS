@@ -323,4 +323,15 @@ public class DTOLoan {
     public boolean getIsPaid() {
         return isPaid;
     }
+
+    public int getTotalNonePaidPayments(){
+        int sum=0;
+        for (DTOPaymentsInfo dtoPaymentsInfo:paymentsInfoList) {
+            if(Objects.equals(dtoPaymentsInfo.isPaid, "No")){
+                sum+=dtoPaymentsInfo.capitalAndInterest;
+            }
+
+        }
+        return sum;
+    }
 }
