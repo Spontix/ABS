@@ -108,5 +108,6 @@ public class LoansListController implements Initializable{
         capitalAndInterestColumnACRI.setCellValueFactory(new PropertyValueFactory<>("capitalAndInterest"));
         isPaidColumnACRI.setCellValueFactory(new PropertyValueFactory<>("isPaid"));
 
+
     }
 }

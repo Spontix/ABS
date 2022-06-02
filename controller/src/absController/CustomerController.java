@@ -19,6 +19,8 @@ import org.controlsfx.dialog.ProgressDialog;
 import java.net.URL;
 import java.util.*;
 
+import static java.lang.Thread.sleep;
+
 public class CustomerController extends HelperFunction implements Initializable{
     private UIInterfaceLogic bank;
     protected DTOCustomer dtoCustomer;
@@ -112,6 +114,9 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     protected Button payButton;
+
+    List<DTOLoan> loansThatShouldPay;
+
 
 
 
@@ -280,16 +285,12 @@ public class CustomerController extends HelperFunction implements Initializable{
                 unChosenLoanButton.setOnAction(e->{
                     unChosenLoanButtonSetOnAction();
                 });
-                doneChosenLoanButton.setOnAction(e-> {
-
-                    List<DTOMovement> dtoMovementList;
+               doneChosenLoanButton.setOnAction(e-> {
                     workerScrambleTask=new Task<Boolean>(){
                         @Override
                         protected Boolean call() throws Exception {
                             List<DTOMovement>  dtoMovementList = bank.addMovementPerLoanFromInlayDK(dtoInlay, new ArrayList<>(chosenInlayListView.getItems()), investAmount, maximumLoanOwnershipPercentage);
-                            List<DTOLoan> loansThatShouldPay = bank.yazProgressLogicDesktop();
-                            absControllerRef.clearAllLoansPayListView();
-                            absControllerRef.addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
+                            loansThatShouldPay = bank.yazProgressLogicDesktop();
                             sleepForSomeTime();
                             return true;
                         }
@@ -300,6 +301,8 @@ public class CustomerController extends HelperFunction implements Initializable{
                     progressDialog.setHeaderText("Doing the scramble");
                     new Thread(workerScrambleTask).start();
                     progressDialog.showAndWait();
+                    absControllerRef.clearAllLoansPayListView();
+                    absControllerRef.addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
                     allInlayListView.getItems().clear();
                     chosenInlayListView.getItems().clear();
                     allInlayListView.setVisible(false);
@@ -361,7 +364,7 @@ public class CustomerController extends HelperFunction implements Initializable{
 
                     private void sleepForSomeTime () {
                         try {
-                            Thread.sleep(3000);
+                            sleep(3000);
                         } catch (InterruptedException ignored) {
                         }
                     }
