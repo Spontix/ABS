@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Reflection?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<TabPane fx:id="customerTablePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.CustomerController">
+<TabPane fx:id="customerTablePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@FullPackStyling.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.CustomerController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
    <tabs>
-      <Tab fx:id="informationTab" text="Infromation">
+      <Tab fx:id="informationTab" styleClass="header-tab" text="Infromation">
          <content>
             <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <columnConstraints>
                   <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="178.0" />
                   <ColumnConstraints hgrow="ALWAYS" maxWidth="315.0" minWidth="10.0" prefWidth="85.0" />
-                  <ColumnConstraints hgrow="ALWAYS" maxWidth="283.0" minWidth="0.0" prefWidth="270.0" />
-                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="315.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="150.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="ALWAYS" />
@@ -41,60 +44,30 @@
                   <Insets left="10.0" right="10.0" top="10.0" />
                </padding>
                <children>
-                  <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="440.0" prefWidth="466.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="3">
+                  <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="440.0" prefWidth="466.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="3">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="119.0" />
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="187.0" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="185.0" />
                         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="180.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="156.0" vgrow="ALWAYS" />
-                        <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="124.0" vgrow="ALWAYS" />
-                        <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="38.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="122.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="124.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="74.0" vgrow="ALWAYS" />
                         <RowConstraints maxHeight="134.0" minHeight="0.0" prefHeight="119.0" vgrow="ALWAYS" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="chargeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Charge" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
-                           <GridPane.margin>
-                              <Insets bottom="10.0" />
-                           </GridPane.margin></Button>
-                        <Button fx:id="withdrawButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Withdraw" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
-                           <GridPane.margin>
-                              <Insets bottom="10.0" />
-                           </GridPane.margin></Button>
-                        <SplitPane dividerPositions="0.438871473354232" orientation="VERTICAL" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowSpan="3">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0">
-                                 <children>
-                                    <Label layoutX="14.0" layoutY="14.0" text="Select an amount:">
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" />
-                                       </padding>
-                                    </Label>
-                                    <TextField fx:id="amountTextField" layoutX="14.0" layoutY="50.0" prefHeight="31.0" prefWidth="129.0">
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" />
-                                       </padding>
-                                       <effect>
-                                          <Reflection />
-                                       </effect>
-                                    </TextField>
-                                    <Label fx:id="errorAmountLabel" alignment="BOTTOM_LEFT" layoutX="14.0" layoutY="90.0" text="Wrong amount!!" visible="false" AnchorPane.bottomAnchor="10.0">
-                                       <padding>
-                                          <Insets left="10.0" />
-                                       </padding>
-                                    </Label>
-                                    <Label layoutX="200.0" layoutY="14.0" text="Current final balance:" />
-                                    <Label fx:id="currentFinalBalance" layoutX="250.0" layoutY="50.0" text="Label" />
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="310.0">
-                                 <children>
-                                    <ListView fx:id="listViewMovments" maxWidth="1.7976931348623157E308" prefHeight="153.0" prefWidth="312.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
+                        <TableView fx:id="customerMovments" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowSpan="2">
+                           <columns>
+                              <TableColumn fx:id="yazColumn" prefWidth="30.0" text="Yaz" />
+                              <TableColumn fx:id="sumColumn" minWidth="0.0" prefWidth="30.0" text="Sum" />
+                              <TableColumn fx:id="actionColumn" prefWidth="60.0" text="Action" />
+                              <TableColumn fx:id="sumBeforeColumn" prefWidth="60.0" text="Before" />
+                              <TableColumn fx:id="sumAfterColumn" prefWidth="60.0" text="After" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
                      </children>
                   </GridPane>
                   <Label text="Loaner Loans Table">
@@ -112,11 +85,32 @@
                         <Insets bottom="10.0" />
                      </GridPane.margin>
                   </ListView>
+                  <Button fx:id="chargeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Charge" GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="10.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font name="Berlin Sans FB" size="15.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="withdrawButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Withdraw" GridPane.columnIndex="4" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="10.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <ImageView fx:id="imageAnimation" cache="true" fitHeight="204.0" fitWidth="200.0" focusTraversable="true" nodeOrientation="INHERIT" pickOnBounds="true" smooth="false" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                     <GridPane.margin>
+                        <Insets bottom="10.0" />
+                     </GridPane.margin>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
                </children>
             </GridPane>
          </content>
       </Tab>
-      <Tab text="Scramble">
+      <Tab fx:id="scrambleTab" styleClass="header-tab" text="Scramble">
          <content>
             <GridPane>
                <columnConstraints>
@@ -180,14 +174,14 @@
                         </GridPane>
                      </center>
                   </BorderPane>
-                  <Button fx:id="enableInlayButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ClickEnableInlayButtonActionLisener" text="Enable Inlay" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                  <Button fx:id="enableInlayButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ClickEnableInlayButtonActionLisener" styleClass="header-button" text="Enable Inlay" GridPane.columnSpan="2" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets bottom="10.0" left="10.0" />
                      </GridPane.margin>
                   </Button>
                   <BorderPane fx:id="allInlayLoansBorderPane" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowSpan="6" />
 
-                  <Button fx:id="chooseLoanButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Choose" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                  <Button fx:id="chooseLoanButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Choose" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6">
 
                      <GridPane.margin>
                         <Insets bottom="10.0" />
@@ -195,12 +189,12 @@
                   </Button>
                   <BorderPane fx:id="chosenInlayLoansBorderPane" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowSpan="6" />
 
-                  <Button fx:id="unChosenLoanButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Un Choose" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="6">
+                  <Button fx:id="unChosenLoanButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Un Choose" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets bottom="10.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="doneChosenLoanButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Done" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="6">
+                  <Button fx:id="doneChosenLoanButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Done" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="6">
 
                      <GridPane.margin>
                         <Insets bottom="10.0" />
@@ -209,7 +203,7 @@
                </children>
             </GridPane>
          </content></Tab>
-      <Tab text="Payment">
+      <Tab styleClass="header-tab" text="Payment">
          <content>
             <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <columnConstraints>
@@ -248,8 +242,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="payButton" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Pay" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="closeLoanButton" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Close loan" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Button fx:id="payButton" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Pay" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="closeLoanButton" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Close loan" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>

@@ -133,12 +133,15 @@ public class ABSController extends HelperFunction implements Initializable {
                     categories.addAll(bank.getCategoriesGroup());
                     customerController.categoriesList.getItems().clear();
                     customerController.categoriesList.getItems().addAll(categories);
+                  
                     showLoanInformationInAdminAndCustomerView(loansListController.LoansListView, bank.getLoansList(),false);
                     showLoanInformationInAdminAndCustomerView(customerController.loanerLoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()),false);
                     showLoanInformationInAdminAndCustomerView(customerController.LenderLoansTableListView, bank.getCustomerBorrowersList(dtoCustomer.getCustomerName()),false);
                     showLoanInformationInAdminAndCustomerView(customerController.loansListController.LoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()), true);
                     customerController.listViewMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
                     showCustomerInformationAdminView(customersListController.customersListView, bank.getCustomers());
+                  
+                    customerController.errorTextArea.setVisible(false);
                     customerController.allInlayListView.getItems().clear();
                     customerController.chosenInlayListView.getItems().clear();
                     customerController.allInlayListView.setVisible(false);

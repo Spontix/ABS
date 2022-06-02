@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="adminGridPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.AdminController">
+<GridPane fx:id="adminGridPane" stylesheets="@FullPackStyling.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="absController.AdminController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -26,8 +26,8 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Button fx:id="increaseYazButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Incrase Yaz" GridPane.columnIndex="1" />
-      <Button fx:id="loadFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Load File" GridPane.columnIndex="4" />
+      <Button fx:id="increaseYazButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Incrase Yaz" GridPane.columnIndex="1" />
+      <Button fx:id="loadFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="header-button" text="Load File" GridPane.columnIndex="4" />
       <BorderPane fx:id="LoansBoardPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
       <BorderPane fx:id="CustomerBoardPane" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="5" GridPane.rowSpan="2" />
    </children>
