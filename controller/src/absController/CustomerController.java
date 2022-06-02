@@ -61,7 +61,7 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private TableColumn<DTOMovement, Integer> sumAfterColumn;
-
+//
     @FXML
     private Tab informationTab;
 
