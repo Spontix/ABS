@@ -4,18 +4,26 @@ import dataObjects.dtoBank.dtoAccount.DTOInlay;
 import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOMovement;
 import dataObjects.dtoCustomer.DTOCustomer;
+import javafx.animation.*;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Duration;
 import logic.UIInterfaceLogic;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.dialog.ProgressDialog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 
@@ -27,26 +35,44 @@ public class CustomerController extends HelperFunction implements Initializable{
     protected ABSController absControllerRef;
     private Task<Boolean> workerScrambleTask;
 
+
+    @FXML
+    protected TextArea errorTextArea;
+    @FXML
+    private ImageView imageAnimation;
+
     @FXML
     private BorderPane loansThatShouldBePaidBorderPane;
 
     @FXML
-    protected ListView<DTOMovement> listViewMovments;
+    protected TableView<DTOMovement> customerMovments;
+
+    @FXML
+    private TableColumn<DTOMovement, Integer> yazColumn;
+
+    @FXML
+    private TableColumn<DTOMovement, Integer> sumColumn;
+
+    @FXML
+    private TableColumn<DTOMovement, String > actionColumn;
+
+    @FXML
+    private TableColumn<DTOMovement, Integer> sumBeforeColumn;
+
+    @FXML
+    private TableColumn<DTOMovement, Integer> sumAfterColumn;
 
     @FXML
     private Tab informationTab;
+
+    @FXML
+    private Tab scrambleTab;
 
     @FXML
     protected ListView<DTOLoan> loanerLoansListView;
 
     @FXML
     protected ListView<DTOLoan> LenderLoansTableListView;
-
-    @FXML
-    private TextField amountTextField;
-
-    @FXML
-    private Label errorAmountLabel;
 
     @FXML
     private Button chargeButton;
@@ -76,16 +102,10 @@ public class CustomerController extends HelperFunction implements Initializable{
     protected CheckComboBox<String> categoriesList;
 
     @FXML
-    private ListView<DTOLoan> inlayLoansChosen;
-
-    @FXML
     protected Button enableInlayButton;
 
     @FXML
     private TextField investmentAmount;
-
-    @FXML
-    private TextArea errorTextArea;
 
     @FXML
     private TextField minimumInterestYaz;
@@ -102,8 +122,6 @@ public class CustomerController extends HelperFunction implements Initializable{
     @FXML
     protected ListView<String> notificationAreaListView;
 
-    /*@FXML
-    protected ListView<DTOLoan> loansThatShouldBePaidListView;*/
 
     protected LoansListController loansListController;
 
@@ -114,26 +132,31 @@ public class CustomerController extends HelperFunction implements Initializable{
     protected Button payButton;
 
 
-
-    //ToDo: create property FinalBalance=amount in DTOCustomer that will listen for every change, that we will be possible to show current balance all the time.
-    @FXML
-    private Label currentFinalBalance;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        yazColumn.setCellValueFactory(new PropertyValueFactory<>("toDoYazTime"));
+        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<>("operation"));
+        sumBeforeColumn.setCellValueFactory(new PropertyValueFactory<>("sumBeforeOperation"));
+        sumAfterColumn.setCellValueFactory(new PropertyValueFactory<>("sumAfterOperation"));
+
         loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
         loansThatShouldBePaidBorderPane.setCenter(loansListController.LoansMainGridPane);
         chosenInlayListView=new ListView<>();
         allInlayListView=new ListView<>();
+
+        scrambleTab.setOnSelectionChanged(e->{
+            errorTextArea.setVisible(false);
+        });
+
         informationTab.setOnSelectionChanged(e-> {
-            errorAmountLabel.setVisible(false);
-            amountTextField.clear();
+
             if (bank != null) {
 
                 setCurrentCustomer(bank.getCustomerByName(dtoCustomer.getCustomerName()));
                 showLoanInformationInAdminAndCustomerView(loanerLoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()),false);
                 showLoanInformationInAdminAndCustomerView(LenderLoansTableListView, bank.getCustomerBorrowersList(dtoCustomer.getCustomerName()),false);
-                listViewMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
+                customerMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
 
             }
         });
@@ -146,40 +169,38 @@ public class CustomerController extends HelperFunction implements Initializable{
         });
     }
 
-    private void chargeOrWithdrawAction(int indexOperation){
-        errorAmountLabel.setVisible(false);
-        String number = amountTextField.getText();
+    private void chargeOrWithdrawAction(int indexOperation) {
+        String textOperation;
+        if (indexOperation == 1)
+            textOperation = "charge";
+        else
+            textOperation = "withdraw";
+        TextInputDialog paymentDialog = new TextInputDialog();
+        paymentDialog.setTitle("Run an action.");
+        paymentDialog.setContentText("Please enter the amount of money you would like to " + textOperation + ": ");
+        paymentDialog.setHeaderText("Current Balance: " + (int) bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount());
+        paymentDialog.showAndWait();
 
-        if (Objects.equals(number, "")) {
-            errorAmountLabel.setVisible(true);
-        }
         try {
-            int amount = Integer.parseInt(number);
-            if (indexOperation == 1) {
-                if (amount <= 0) {
-                    throw new Exception();
-                }
-                DTOMovement dtoMovement = bank.movementBuildToCustomer(dtoCustomer, amount, "+", bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount(), bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount() + amount);
-                bank.cashDeposit(bank.getRealCustomerByName(dtoCustomer.getCustomerName()), amount);
-                listViewMovments.getItems().add(dtoMovement);
-
-            } else if (indexOperation == 2) {
-                if (amount <= 0 || amount > dtoCustomer.getAmount()) {
-                    throw new Exception();
-                }
-                DTOMovement dtoMovement = bank.movementBuildToCustomer(dtoCustomer, amount, "-", bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount(), bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount() - amount);
-                bank.cashWithdrawal(bank.getRealCustomerByName(dtoCustomer.getCustomerName()), amount);
-                listViewMovments.getItems().add(dtoMovement);
+            int amount = Integer.parseInt(paymentDialog.getResult());
+            if (paymentDialog.getResult() != null && amount > 0) {
+                if (indexOperation == 1) {
+                    DTOMovement dtoMovement = bank.movementBuildToCustomer(dtoCustomer, amount, "+", bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount(), bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount() + amount);
+                    bank.cashDeposit(bank.getRealCustomerByName(dtoCustomer.getCustomerName()), amount);
+                    customerMovments.getItems().add(dtoMovement);
+                } else if (indexOperation == 2 && amount <= bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount()) {
+                    DTOMovement dtoMovement = bank.movementBuildToCustomer(dtoCustomer, amount, "-", bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount(), bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount() - amount);
+                    bank.cashWithdrawal(bank.getRealCustomerByName(dtoCustomer.getCustomerName()), amount);
+                    customerMovments.getItems().add(dtoMovement);
+                } else
+                    throw new NumberFormatException();
             }
-        }
-        catch(Exception ex){
-            errorAmountLabel.setVisible(true);
-        }
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException ex){
+                ex.printStackTrace();
+            }
     }
 
     public void setBankInCustomerController(UIInterfaceLogic bank){this.bank= bank;}
-
-
 
     @FXML
     private int MaximumLoanOwnershipPercentageActionLisener() {
@@ -255,6 +276,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     @FXML
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         mySetVisible(false);
+        errorTextArea.setVisible(false);
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
             int investAmount = investmentAmountActionListener();
@@ -301,17 +323,16 @@ public class CustomerController extends HelperFunction implements Initializable{
                     new Thread(workerScrambleTask).start();
                     progressDialog.showAndWait();
                     allInlayListView.getItems().clear();
-                    chosenInlayListView.getItems().clear();
-                    allInlayListView.setVisible(false);
-                    chosenInlayListView.setVisible(false);
-                    chooseLoanButton.setVisible(false);
-                    unChosenLoanButton.setVisible(false);
-                    doneChosenLoanButton.setVisible(false);
+                    mySetVisible(false);
                     popupMessage("Success!", "The operation is done.");
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            String message = e.getMessage();
+            errorTextArea.setVisible(true);
+            errorTextArea.setText("ERROR: " + message);
+            //ShakeTransition anim = new ShakeTransition(dialog.getDialogPane(), t->dialog.close());
+            //anim.playFromStart();
         }
     }
 
@@ -326,31 +347,31 @@ public class CustomerController extends HelperFunction implements Initializable{
         }
     }
 
-                    private void chooseLoanButtonSetOnAction () {
-                        DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
-                        if (localLoan != null) {
-                            chosenInlayListView.getItems().add(localLoan);
-                            unChosenLoanButton.setDisable(false);
-                            allInlayListView.getItems().removeAll(localLoan);
-                            if (allInlayListView.getItems().isEmpty())
-                                chooseLoanButton.setDisable(true);
-                        }
-                    }
+    private void chooseLoanButtonSetOnAction () {
+        DTOLoan localLoan = allInlayListView.getSelectionModel().getSelectedItem();
+        if (localLoan != null) {
+            chosenInlayListView.getItems().add(localLoan);
+            unChosenLoanButton.setDisable(false);
+            allInlayListView.getItems().removeAll(localLoan);
+            if (allInlayListView.getItems().isEmpty())
+                chooseLoanButton.setDisable(true);
+        }
+    }
 
-                    private void mySetVisible ( boolean parameter){
-                        allInlayListView.setVisible(parameter);
-                        chosenInlayListView.setVisible(parameter);
-                        chooseLoanButton.setVisible(parameter);
-                        unChosenLoanButton.setVisible(parameter);
-                        doneChosenLoanButton.setVisible(parameter);
-                    }
+    private void mySetVisible ( boolean parameter) {
+        allInlayListView.setVisible(parameter);
+        chosenInlayListView.setVisible(parameter);
+        chooseLoanButton.setVisible(parameter);
+        unChosenLoanButton.setVisible(parameter);
+        doneChosenLoanButton.setVisible(parameter);
+    }
 
-                    private void popupMessage (String title, String contentText) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle(title);
-                        alert.setContentText(contentText);
-                        alert.showAndWait();
-                    }
+    private void popupMessage (String title, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
 
                    /* private void popupMessage1(Label title,Label contentText){
                         Task worker=createWorker();
@@ -359,21 +380,21 @@ public class CustomerController extends HelperFunction implements Initializable{
                     }*/
 
 
-                    private void sleepForSomeTime () {
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException ignored) {
-                        }
-                    }
+    private void sleepForSomeTime () {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ignored) {
+        }
+    }
 
 
-                    protected void setCurrentCustomer (DTOCustomer dtoCustomer){
-                        this.dtoCustomer = dtoCustomer;
-                    }
+    protected void setCurrentCustomer (DTOCustomer dtoCustomer) {
+        this.dtoCustomer = dtoCustomer;
+    }
 
-                    protected void setAbsControllerRef (ABSController absController) {
-                        this.absControllerRef = absController;
-                    }
+    protected void setAbsControllerRef (ABSController absController) {
+        this.absControllerRef = absController;
+    }
 
 
 }
