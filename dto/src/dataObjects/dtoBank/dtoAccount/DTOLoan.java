@@ -6,11 +6,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import logic.YazLogic;
 import logic.YazLogicDesktop;
+import logic.bank.account.PaymentsInfo;
 import logic.customer.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -36,6 +36,14 @@ public class DTOLoan {
     protected int inRiskCounter;
     protected int windowOfPaymentCounter=1;
     protected StringProperty massagesProperty=new SimpleStringProperty();
+    protected int totalInterestPayTillEnd;
+    protected int totalInterestPayTillNow;
+    protected int totalCapitalPayTillEnd;
+    protected int totalCapitalPayTillNow;
+    protected int nextYazToBePaid;
+    protected List<DTOPaymentsInfo> paymentsInfoList;
+    protected int debt;
+    protected Boolean isPaid=false;
 
     public DTOLoan() {
 
@@ -44,6 +52,12 @@ public class DTOLoan {
 
     public static DTOLoan build(DTOLoan loan) {
         DTOLoan dtoLoan = new DTOLoan();
+        dtoLoan.isPaid=loan.isPaid;
+        dtoLoan.nextYazToBePaid=loan.nextYazToBePaid;
+        dtoLoan.totalInterestPayTillEnd= loan.totalInterestPayTillEnd;
+        dtoLoan.totalCapitalPayTillEnd=loan.totalCapitalPayTillEnd;
+        dtoLoan.totalCapitalPayTillNow=loan.totalCapitalPayTillNow;
+        dtoLoan.totalInterestPayTillNow= loan.totalInterestPayTillNow;;
         dtoLoan.windowOfPaymentCounter=loan.windowOfPaymentCounter;
         dtoLoan.capital = loan.capital;
         dtoLoan.loanStatus = loan.loanStatus;
@@ -56,12 +70,17 @@ public class DTOLoan {
         dtoLoan.startedYazInActive=loan.startedYazInActive;
         dtoLoan.endedYaz=loan.endedYaz;
         dtoLoan.inRiskCounter=loan.inRiskCounter;
+        dtoLoan.debt=loan.debt;
         dtoLoan.capitalSumLeftTillActive=loan.capitalSumLeftTillActive;
         List<DTOAccount> accompaniedList = new ArrayList<>();
         List<DTOInlay> inlaysList = new ArrayList<>();
         List<DTOMovement> movementsList=new ArrayList<>();
         List<Integer> listOfYazPayments=new ArrayList<>();
         List<Integer> listOfInRiskYazPayments=new ArrayList<>();
+        List<DTOPaymentsInfo> paymentsInfoList=new ArrayList<>();
+        for (DTOPaymentsInfo dtoPaymentsInfo : loan.paymentsInfoList) {
+            paymentsInfoList.add(DTOPaymentsInfo.build((PaymentsInfo) dtoPaymentsInfo));
+        }
         for (DTOAccount dtoAccount : loan.listOfAccompanied) {
             accompaniedList.add(DTOCustomer.build((DTOCustomer) dtoAccount));
         }
@@ -78,8 +97,11 @@ public class DTOLoan {
         dtoLoan.listOfInlays=inlaysList;
         dtoLoan.listOfAccompanied=accompaniedList;
         dtoLoan.listOfMovements=movementsList;
+        dtoLoan.paymentsInfoList=paymentsInfoList;
         dtoLoan.massagesProperty=loan.massagesProperty;
         dtoLoan.pulseCounterThatHappened=loan.pulseCounterThatHappened;
+
+
         return dtoLoan;
     }
 
@@ -165,8 +187,9 @@ public class DTOLoan {
         //it's the amount per payment capital+interest
     }
 
-    public int theNextYazToBePaid(){
-        return windowOfPaymentCounter*paysEveryYaz+startedYazInActive-1;
+    public int getNextYazToBePaid(){
+        nextYazToBePaid=windowOfPaymentCounter*paysEveryYaz+startedYazInActive-1;
+        return nextYazToBePaid;
     }
 
     public int numberOfYazTillNextPulse(){
@@ -178,6 +201,7 @@ public class DTOLoan {
 
     public int numberOfYazTillNextPulseDK(){
         if((YazLogicDesktop.currentYazUnitProperty.getValue()-(this.startedYazInActive-1))%this.paysEveryYaz==0) {
+            isPaid=false;
             windowOfPaymentCounter++;
         }
         return (YazLogicDesktop.currentYazUnitProperty.getValue()-(this.startedYazInActive-1))%this.paysEveryYaz;
@@ -188,9 +212,13 @@ public class DTOLoan {
     }
 
 
-    public int calculatePaymentToLoaner(Customer customer) {
+    public int calculatePaymentToLoanerConsole(Customer customer) {
 
         return (paymentPerPulse() * (listOfInlays.stream().filter(i-> Objects.equals(i.dtoAccount.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).investAmount * 100) / capital) / 100;
+    }
+
+    public int calculatePaymentToLoaner(Customer customer,int sum) {
+        return (sum * (listOfInlays.stream().filter(i-> Objects.equals(i.dtoAccount.getCustomerName(), customer.getCustomerName())).collect(Collectors.toList()).get(0).investAmount * 100) / capital) / 100;
     }
 
 
@@ -226,20 +254,54 @@ public class DTOLoan {
         return this.listOfYazPayments;
     }
 
+    public int getTotalCapitalPayTillNowConsole() {
+      return this.listOfYazPayments.size()*this.paymentPerPulse();
+    }
+
     public int getTotalCapitalPayTillNow() {
-        return this.listOfYazPayments.size()*this.paymentPerPulse();
+        return totalCapitalPayTillNow;
+    }
+
+    public int getTotalCapitalPayTillEndConsole() {
+        return this.pulseNumber()*this.paymentPerPulse()-this.getTotalCapitalPayTillNowConsole();
     }
 
     public int getTotalCapitalPayTillEnd() {
-        return this.pulseNumber()*this.paymentPerPulse()-this.getTotalCapitalPayTillNow();
+        return totalCapitalPayTillEnd;
     }
 
-    public int getTotalInterestPayTillNow() {
+    public int getTotalInterestPayTillNowConsole() {
         return this.listOfYazPayments.size()*(int)((this.capital) / this.pulseNumber() * ( (double)(this.interestPerPayment / 100.0)));
     }
 
+    public int getTotalInterestPayTillNow() {
+        return totalInterestPayTillNow;
+    }
+
+    public int getTotalInterestPayTillEndConsole() {
+       return this.pulseNumber()*(int)((this.capital) / this.pulseNumber() * ( (double)(this.interestPerPayment / 100.0)))-this.getTotalInterestPayTillNowConsole();
+    }
+
     public int getTotalInterestPayTillEnd() {
-        return this.pulseNumber()*(int)((this.capital) / this.pulseNumber() * ( (double)(this.interestPerPayment / 100.0)))-this.getTotalInterestPayTillNow();
+        return totalInterestPayTillEnd;
+    }
+
+    public void addTotalCapitalPayTillNow(int sum) {
+        totalCapitalPayTillNow+=sum;
+        setTotalCapitalPayTillEnd(totalCapitalPayTillNow);
+    }
+
+    public void setTotalCapitalPayTillEnd(int totalCapitalPayTillNow) {
+        totalCapitalPayTillEnd= getCapital()+getCapital()*getInterestPerPayment()/100-totalCapitalPayTillNow;
+    }
+
+    public void addTotalInterestPayTillNow(int sum) {
+        totalInterestPayTillNow+=sum;
+        setTotalInterestPayTillEnd(totalInterestPayTillNow);
+    }
+
+    public void setTotalInterestPayTillEnd(int totalInterestPayTillNow) {
+        totalInterestPayTillEnd=getCapital()*getInterestPerPayment()/100-totalInterestPayTillNow ;
     }
 
     public int getTotalAmountOfInRiskCapitalThatDidNotPayed(){
@@ -250,4 +312,15 @@ public class DTOLoan {
         return windowOfPaymentCounter;
     }
 
+    public List<DTOPaymentsInfo> getPaymentsInfoList(){
+        return paymentsInfoList;
+    }
+
+    public int getDebt(){
+        return debt;
+    }
+
+    public boolean getIsPaid() {
+        return isPaid;
+    }
 }

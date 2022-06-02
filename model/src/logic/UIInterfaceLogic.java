@@ -26,7 +26,11 @@ public interface UIInterfaceLogic {
 
     DTOCustomer getCustomer(int customerIndex);
 
+    DTOCustomer getCustomerByName(String customerName);
+
     String getCustomerName(int customerIndex);
+
+    Customer getRealCustomerByName(String customerName);
 
     int getNumbersOfOpenLoansBorrowerDK(int customerIndex);
 
@@ -88,5 +92,6 @@ public interface UIInterfaceLogic {
 
     ArrayList<DTOMovement> addMovementPerLoanFromInlayDK(DTOInlay inlay, List<DTOLoan> loansCustomerChosen, int chosenInvestAmount, int maximumOwnershipLoanPercentage) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 
+    void operateThePaymentOfTheLoanDesktop(DTOLoan loan,int customerPayment) throws InvocationTargetException, InstantiationException, IllegalAccessException;
 }
 

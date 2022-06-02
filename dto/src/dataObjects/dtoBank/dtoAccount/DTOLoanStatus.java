@@ -1,10 +1,5 @@
 package dataObjects.dtoBank.dtoAccount;
 
-import dataObjects.dtoBank.dtoAccount.DTOLoan;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
 public enum DTOLoanStatus {
     PENDING{
         @Override
@@ -30,16 +25,16 @@ public enum DTOLoanStatus {
                     "The interest per pulse is : "+(int)(dtoLoan.getCapital()) / dtoLoan.pulseNumber() * ( (double)(dtoLoan.getInterestPerPayment() / 100.0))+"\n" +
                     "The total pulse withe interest payment : " + dtoLoan.paymentPerPulse() + "\n" +
                     "The payments were preformed in Yaz's : " + dtoLoan.getListOfYazPayments() + "\n" +
-                    "The total capital that was payed till now are : " + dtoLoan.getTotalCapitalPayTillNow() + "\n" +
-                    "The total capital that left to pay is : " + dtoLoan.getTotalCapitalPayTillEnd() + "\n" +
-                    "The total interest that was payed till now are : " + dtoLoan.getTotalInterestPayTillNow() + "\n" +
-                    "The total interest that left to pay is : " + dtoLoan.getTotalInterestPayTillEnd() + "\n"
+                    "The total capital that was payed till now are : " + dtoLoan.getTotalCapitalPayTillNowConsole() + "\n" +
+                    "The total capital that left to pay is : " + dtoLoan.getTotalCapitalPayTillEndConsole() + "\n" +
+                    "The total interest that was payed till now are : " + dtoLoan.getTotalInterestPayTillNowConsole() + "\n" +
+                    "The total interest that left to pay is : " + dtoLoan.getTotalInterestPayTillEndConsole() + "\n"
                     ;
         }
 
         @Override
         public String operationThree(DTOLoan dtoLoan) {
-            return "The next Yaz to be paid is: "+dtoLoan.theNextYazToBePaid()+"\n"+"The expected payment is: "+dtoLoan.paymentPerPulse();
+            return "The next Yaz to be paid is: "+dtoLoan.getNextYazToBePaid()+"\n"+"The expected payment is: "+dtoLoan.paymentPerPulse();
         }
     }
     ,RISK{

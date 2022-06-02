@@ -40,7 +40,7 @@
                               <TableColumn fx:id="yazColumn" prefWidth="30.0" text="Yaz" />
                               <TableColumn fx:id="sumColumn" minWidth="0.0" prefWidth="30.0" text="Sum" />
                               <TableColumn fx:id="actionColumn" prefWidth="60.0" text="Action" />
-                              <TableColumn fx:id="sumBeforeColumn" prefWidth="60.0" text="Befor" />
+                              <TableColumn fx:id="sumBeforeColumn" prefWidth="60.0" text="Before" />
                               <TableColumn fx:id="sumAfterColumn" prefWidth="60.0" text="After" />
                            </columns>
                            <columnResizePolicy>
