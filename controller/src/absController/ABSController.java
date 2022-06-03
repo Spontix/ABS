@@ -138,7 +138,7 @@ public class ABSController extends HelperFunction implements Initializable {
                     showLoanInformationInAdminAndCustomerView(customerController.loanerLoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()),false);
                     showLoanInformationInAdminAndCustomerView(customerController.LenderLoansTableListView, bank.getCustomerBorrowersList(dtoCustomer.getCustomerName()),false);
                     showLoanInformationInAdminAndCustomerView(customerController.loansListController.LoansListView, bank.getCustomerLoanersList(dtoCustomer.getCustomerName()), true);
-                    customerController.listViewMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
+                    customerController.customerMovments.setItems(FXCollections.observableArrayList(dtoCustomer.getMovements()));
                     showCustomerInformationAdminView(customersListController.customersListView, bank.getCustomers());
                   
                     customerController.errorTextArea.setVisible(false);
@@ -196,7 +196,7 @@ public class ABSController extends HelperFunction implements Initializable {
                                 TextInputDialog paymentDialog = new TextInputDialog();
                                 paymentDialog.setTitle("Loan In Risk");
                                 paymentDialog.setContentText("Please enter the amount of money you would like to pay:");
-                                paymentDialog.setHeaderText("Current Balance: " + (int) bank.getCustomerByName(selectedLoan.getOwner()).getAmount() + "\nDebt Amount: " + ((selectedLoan.getDebt())-(selectedLoan.getPaysEveryYaz()==1?selectedLoan.paymentPerPulse():0)));
+                                paymentDialog.setHeaderText("Current Balance: " + (int) bank.getCustomerByName(selectedLoan.getOwner()).getAmount() + "\nDebt Amount: " + (selectedLoan.getDebt()));
                                 paymentDialog.showAndWait();
 
                                 if (paymentDialog.getResult() != null && (Integer.parseInt(paymentDialog.getResult()) <= selectedLoan.getDebt())) {
@@ -287,7 +287,7 @@ public class ABSController extends HelperFunction implements Initializable {
                 loansListController.activeStatusTableView.setItems(FXCollections.observableArrayList(selectedLoan));
                 loansListController.inRiskStatusTableView.setItems(FXCollections.observableArrayList(selectedLoan.getPaymentsInfoList()));
                 loansListController.delayedPaymentsColumnRI.setText("Delayed payments : " + String.valueOf(selectedLoan.getInRiskCounter()));
-                loansListController.totalDelayedColumnRI.setText("Total delayed : " + String.valueOf(((selectedLoan.getDebt())-(selectedLoan.getPaysEveryYaz()==1?selectedLoan.paymentPerPulse():0))));
+                loansListController.totalDelayedColumnRI.setText("Total delayed : " + String.valueOf(selectedLoan.getDebt()));
             }
             if (selectedLoan.getLoanStatus() == DTOLoanStatus.FINISHED) {
                 loansListController.endYazColumnFI.setVisible(true);
