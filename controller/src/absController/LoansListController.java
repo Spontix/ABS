@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import sun.tracing.dtrace.DTraceProviderFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;

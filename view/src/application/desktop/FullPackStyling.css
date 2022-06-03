@@ -39,3 +39,17 @@
   -fx-effect: dropShadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
 }
 
+#filePath{
+    -fx-border-color: linear-gradient(#eabf86,#fcf7f6);
+    -fx-border-width: 3;
+}
+
+#currentYaz{
+    -fx-border-color: linear-gradient(#eabf86,#fcf7f6);
+    -fx-border-width: 3;
+}
+
+/*.list-view{
+    -fx-background-color: ;
+}*/
+

@@ -617,9 +617,9 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
         }
     }
 
-    private void findThePaymentInfoByYazAndRemove(List<DTOPaymentsInfo> paymentsInfoList, List<Integer> yaz, int customerPayment, Loan logicLoan) {
+    private synchronized void findThePaymentInfoByYazAndRemove(List<DTOPaymentsInfo> paymentsInfoList, List<Integer> yaz, int customerPayment, Loan logicLoan) {
         int indexOfPaymentInfoList = 0;
-        int indexOfYazList = 0;
+        Integer indexOfYazList = 0;
         ArrayList<DTOPaymentsInfo> indexOfPaymentInfoListToRemove = new ArrayList<>();
         ArrayList<Integer> indexOfYazListToRemove = new ArrayList<>();
         for (DTOPaymentsInfo dtoPayments : paymentsInfoList) {
@@ -672,7 +672,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     }
 
 
-    @Override
+    @Override//ToDo : need to check...Does it works?
     public ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         /////////////2.Payment should be paid by the loaner+sorted the list because of the logic of the app
         List<Loan> loansThatShouldPay = loans.stream().filter(l -> (l.getLoanStatus() == DTOLoanStatus.ACTIVE && l.numberOfYazTillNextPulseDK() == 0) || l.getLoanStatus() == DTOLoanStatus.ACTIVE || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
@@ -728,7 +728,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
 
         @Override
         public void myAddListenerToStringPropertyLoans (ListView < String > listener, DTOLoan dtoLoan){
-            this.loans.stream().filter(l -> l.getId() == dtoLoan.getId()).forEach(l -> l.myAddListenerToStringProperty(listener));
+            this.loans.stream().filter(l -> Objects.equals(l.getId(), dtoLoan.getId())).forEach(l -> l.myAddListenerToStringProperty(listener));
         }
 }
 
