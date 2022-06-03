@@ -234,7 +234,7 @@ public class CustomerController extends HelperFunction implements Initializable{
         }
         return maxLoansOpen;
     }
-
+//
     @FXML
     private double MinimumInterestYazActionLisener() {
         double chosenMinInterestYaz;
