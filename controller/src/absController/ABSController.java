@@ -14,8 +14,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import logic.UIInterfaceLogic;
 import logic.YazLogicDesktop;
@@ -37,7 +39,6 @@ public class ABSController extends HelperFunction implements Initializable {
     private CustomersListController customersListController;
     public static UIInterfaceLogic bank;
 
-
     @FXML
     protected MenuButton viewBy;
 
@@ -56,6 +57,7 @@ public class ABSController extends HelperFunction implements Initializable {
     @FXML
     void contextMenuRequested(ContextMenuEvent event) {
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
