@@ -1,6 +1,5 @@
 package dataObjects.dtoBank.dtoAccount;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface DTOAccount {

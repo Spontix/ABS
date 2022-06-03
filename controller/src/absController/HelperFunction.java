@@ -4,8 +4,8 @@ import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import dataObjects.dtoBank.dtoAccount.DTOLoanStatus;
 import dataObjects.dtoCustomer.DTOCustomer;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +25,7 @@ public class HelperFunction {
         else {
             listView.getItems().addAll(loanList);
         }
+        //listView.getItems().stream().sorted()
     }
 
     protected void showCustomerInformationAdminView(ListView<DTOCustomer> listView,  List<DTOCustomer> list){
@@ -32,12 +33,6 @@ public class HelperFunction {
         listView.getItems().addAll(list);
     }
 
-    /*protected void showCustomersNamesView(ListView<String> listView,  List<DTOCustomer> list){
-        listView.getItems().clear();
-        for (DTOCustomer customer:list) {
-            listView.getItems().add(customer.getCustomerName());
-        }
-    }*/
 
     protected  <T> T myFXMLLoader(String resource){
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -50,6 +45,13 @@ public class HelperFunction {
         }
 
         return fxmlLoader.getController();
+    }
+
+    public void popupMessage (String title, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(contentText);
+        alert.showAndWait();
     }
 }
 

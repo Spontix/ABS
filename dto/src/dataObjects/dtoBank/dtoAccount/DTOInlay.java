@@ -1,8 +1,6 @@
 package dataObjects.dtoBank.dtoAccount;
 
 import dataObjects.dtoCustomer.DTOCustomer;
-import logic.YazLogic;
-import logic.customer.Customer;
 
 public class DTOInlay {
     protected DTOAccount dtoAccount = new DTOCustomer();

@@ -1,7 +1,5 @@
 package dataObjects.dtoBank.dtoAccount;
 
-import logic.YazLogic;
-import logic.bank.account.Movement;
 
 public class DTOMovement {
     protected int toDoYazTime;

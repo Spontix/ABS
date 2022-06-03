@@ -71,13 +71,13 @@ public enum DTOLoanStatus {
     ,NEW {
         @Override
         public String operationTwo(DTOLoan dtoLoan) {
-            return new String("The loan standing on NEW status there for the capital stand still");
+            return "The loan standing on NEW status there for the capital stand still";
         }
 
         @Override
         public String operationThree(DTOLoan dtoLoan) {
 
-            return new String("The loan standing on NEW status there for the capital stand still");
+            return "The loan standing on NEW status there for the capital stand still";
         }
     };
 

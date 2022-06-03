@@ -183,7 +183,7 @@ public class CustomerController extends HelperFunction implements Initializable{
         TextInputDialog paymentDialog = new TextInputDialog();
         paymentDialog.setTitle("Run an action.");
         paymentDialog.setContentText("Please enter the amount of money you would like to " + textOperation + ": ");
-        paymentDialog.setHeaderText("Current Balance: " + (int) bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount());
+        paymentDialog.setHeaderText("Current Balance: " + bank.getCustomerByName(dtoCustomer.getCustomerName()).getAmount());
         paymentDialog.showAndWait();
 
         try {
@@ -223,7 +223,7 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private int MaximumLoansOpenToTheBorrowerActionLisener() {
-        int maxLoansOpen = 0;
+        int maxLoansOpen;
         String number = maximumLoansOpenToTheBorrower.getText();
         if (Objects.equals(number, ""))
             return 0;
@@ -234,10 +234,10 @@ public class CustomerController extends HelperFunction implements Initializable{
         }
         return maxLoansOpen;
     }
-
+//
     @FXML
     private double MinimumInterestYazActionLisener() {
-        double chosenMinInterestYaz = 0;
+        double chosenMinInterestYaz;
         String number = minimumInterestYaz.getText();
         if (Objects.equals(number, ""))
             return 0;
@@ -252,7 +252,7 @@ public class CustomerController extends HelperFunction implements Initializable{
 
     @FXML
     private int MinimumTotalYazActionLisener() {
-        int chosenMinYazTime = 0;
+        int chosenMinYazTime;
         String number = minimumTotalYaz.getText();
         if (Objects.equals(number, ""))
             return 0;
@@ -267,7 +267,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     @FXML
     private int investmentAmountActionListener() throws Exception {
         String amount = investmentAmount.getText();
-        int amountFromUser = 0;
+        int amountFromUser;
         amountFromUser = Integer.parseInt(amount);
         if (amountFromUser <= 0 || amountFromUser > (bank.getCustomerByName(dtoCustomer.getCustomerName())).getAmount())
             throw new NumberFormatException("In 'Amount to investment' - Invalid input!! Please enter a number greater than 0 and less than " + (bank.getCustomerByName(dtoCustomer.getCustomerName())).getAmount());
@@ -282,6 +282,7 @@ public class CustomerController extends HelperFunction implements Initializable{
     private void ClickEnableInlayButtonActionLisener(ActionEvent event) {
         mySetVisible(false);
         errorTextArea.setVisible(false);
+        chosenInlayListView.getItems().clear();
         try {
             ObservableList<String> list = categoriesList.getCheckModel().getCheckedItems();
             int investAmount = investmentAmountActionListener();
@@ -368,20 +369,6 @@ public class CustomerController extends HelperFunction implements Initializable{
         unChosenLoanButton.setVisible(parameter);
         doneChosenLoanButton.setVisible(parameter);
     }
-
-    private void popupMessage (String title, String contentText) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(contentText);
-        alert.showAndWait();
-    }
-
-                   /* private void popupMessage1(Label title,Label contentText){
-                        Task worker=createWorker();
-                        ProgressDialog progressDialog=new ProgressDialog();
-
-                    }*/
-
 
 
     private void sleepForSomeTime () {
