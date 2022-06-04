@@ -37,6 +37,7 @@ public class DesktopApplication extends Application implements UiType {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+
     }
 
     @Override

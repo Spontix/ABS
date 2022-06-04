@@ -2,6 +2,11 @@
      -fx-background-image: url("wallpaper.jpg");
      -fx-background-size: cover;
 }
+#gridPaneForImage{
+-fx-background-image: url("mobileBanking.jpg");
+     -fx-background-size: cover;
+}
+
 .label {
     -fx-font-size: 16px;
     -fx-font-family: "Californian FB";
@@ -40,16 +45,17 @@
 }
 
 #filePath{
-    -fx-border-color: linear-gradient(#eabf86,#fcf7f6);
+    -fx-border-color: linear-gradient(#eabf86, #f3e8be);
     -fx-border-width: 3;
 }
 
 #currentYaz{
-    -fx-border-color: linear-gradient(#eabf86,#fcf7f6);
+    -fx-border-color: linear-gradient(#eabf86,#f3e8be);
     -fx-border-width: 3;
 }
 
 /*.list-view{
     -fx-background-color: ;
 }*/
+
 
