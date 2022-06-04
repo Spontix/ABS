@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -23,6 +24,7 @@ import logic.UIInterfaceLogic;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.dialog.ProgressDialog;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
@@ -145,7 +147,8 @@ public class CustomerController extends HelperFunction implements Initializable{
         sumBeforeColumn.setCellValueFactory(new PropertyValueFactory<>("sumBeforeOperation"));
         sumAfterColumn.setCellValueFactory(new PropertyValueFactory<>("sumAfterOperation"));
 
-        loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
+        loansListController=myFXMLLoader("LoansListViewer.fxml");
+
         loansThatShouldBePaidBorderPane.setCenter(loansListController.LoansMainGridPane);
         chosenInlayListView=new ListView<>();
         allInlayListView=new ListView<>();

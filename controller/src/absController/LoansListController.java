@@ -100,7 +100,7 @@ public class LoansListController implements Initializable{
         capitalPaidColumnAC.setCellValueFactory(new PropertyValueFactory<>("totalCapitalPayTillNow"));
         capitalLeftColumnAC.setCellValueFactory(new PropertyValueFactory<>("totalCapitalPayTillEnd"));
         InterestPaidColumnAC.setCellValueFactory(new PropertyValueFactory<>("totalInterestPayTillNow"));
-        InterestLeftColumnAC.setCellValueFactory(new PropertyValueFactory<>("totalInterestPayTillEnd"));//////////TODO !!!!!continue with Eden
+        InterestLeftColumnAC.setCellValueFactory(new PropertyValueFactory<>("totalInterestPayTillEnd"));
         yazPaymentColumnACRI.setCellValueFactory(new PropertyValueFactory<>("yazPayment"));
         capitalAmountColumnACRI.setCellValueFactory(new PropertyValueFactory<>("capitalAmount"));
         interestAmountColumnACRI.setCellValueFactory(new PropertyValueFactory<>("interestAmount"));

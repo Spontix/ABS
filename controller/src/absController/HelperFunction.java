@@ -18,14 +18,13 @@ public class HelperFunction {
         listView.getItems().clear();
         if(isCustomerListViewInPayment){
             for (DTOLoan dtoLoan:loanList) {
-                if(dtoLoan.getLoanStatus()!= DTOLoanStatus.NEW && dtoLoan.getLoanStatus()!=DTOLoanStatus.FINISHED)
+                if(dtoLoan.getLoanStatus()!= DTOLoanStatus.NEW && dtoLoan.getLoanStatus()!=DTOLoanStatus.FINISHED && dtoLoan.getLoanStatus()!=DTOLoanStatus.PENDING )
                        listView.getItems().add(dtoLoan);
             }
         }
         else {
             listView.getItems().addAll(loanList);
         }
-        //listView.getItems().stream().sorted()
     }
 
     protected void showCustomerInformationAdminView(ListView<DTOCustomer> listView,  List<DTOCustomer> list){
@@ -39,7 +38,7 @@ public class HelperFunction {
         URL url =  getClass().getResource(resource);
         fxmlLoader.setLocation(url);
         try {
-            fxmlLoader.load(fxmlLoader.getLocation().openStream());
+            fxmlLoader.load(url.openStream());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
