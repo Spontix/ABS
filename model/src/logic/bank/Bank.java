@@ -675,7 +675,7 @@ public class Bank extends DTOBank implements UIInterfaceLogic {
     @Override//ToDo : need to check...Does it works?
     public ArrayList<DTOLoan> yazProgressLogicDesktop() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         /////////////2.Payment should be paid by the loaner+sorted the list because of the logic of the app
-        List<Loan> loansThatShouldPay = loans.stream().filter(l -> (l.getLoanStatus() == DTOLoanStatus.ACTIVE && l.numberOfYazTillNextPulseDK() == 0) || l.getLoanStatus() == DTOLoanStatus.ACTIVE || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
+        List<Loan> loansThatShouldPay = loans.stream().filter(l -> ( l.numberOfYazTillNextPulseDK() == 0 && l.getLoanStatus() == DTOLoanStatus.ACTIVE ) || l.getLoanStatus() == DTOLoanStatus.ACTIVE || l.getLoanStatus() == DTOLoanStatus.RISK).sorted(new Comparator<Loan>() {
             @Override
             public int compare(Loan l1, Loan l2) {
                 if (l1.getStartedYazInActive() - l2.getStartedYazInActive() == 0 && l1.paymentPerPulse() - l2.paymentPerPulse() == 0)//if the yaz equals and the payment per pulse is equal so sort by the number of pulse

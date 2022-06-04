@@ -8,6 +8,7 @@ import dataObjects.dtoBank.dtoAccount.DTOLoan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ import logic.UIInterfaceLogic;
 import logic.YazLogicDesktop;
 import logic.bank.XmlSerialization;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,6 +40,12 @@ public class ABSController extends HelperFunction implements Initializable {
     private LoansListController loansListController;
     private CustomersListController customersListController;
     public static UIInterfaceLogic bank;
+
+    @FXML
+    private MenuItem defaultSkinMenuButton;
+
+    @FXML
+    protected MenuItem skinMenuButton;
 
     @FXML
     protected MenuButton viewBy;
@@ -61,10 +69,30 @@ public class ABSController extends HelperFunction implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        adminController =myFXMLLoader("/application/desktop/MyAdminView.fxml");
-        loansListController=myFXMLLoader("/application/desktop/LoansListViewer.fxml");
-        customersListController=myFXMLLoader("/application/desktop/CustomerListViewer.fxml");
+        adminController =myFXMLLoader("MyAdminView.fxml");
+        loansListController=myFXMLLoader("LoansListViewer.fxml");
+        customersListController=myFXMLLoader("CustomerListViewer.fxml");
         customersController=new ArrayList<>();
+        adminController.loadFileButton.setOnAction(e-> {
+            try {
+                String file=fileChooserImplementation(e);
+                bank=XmlSerialization.buildBank(file.trim());
+                filePath.setText("File Path : "+file);
+                YazLogicDesktop.currentYazUnitProperty.setValue(1);
+                showLoanInformationInAdminAndCustomerView(loansListController.LoansListView,bank.getLoansList(),false);
+                showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
+                adminController.LoansBoardPane.setCenter(loansListController.LoansMainGridPane);
+                adminController.CustomerBoardPane.setCenter(customersListController.CustomersMainGridPane);
+
+                setTheAdminAndCustomersAsMenuItems();
+            }
+            catch (NullPointerException ex){
+                popupMessage("Error","Please be sure to choose a file...");
+            }
+            catch (Exception ex) {
+                popupMessage("Error",ex.getMessage());
+            }
+        });
         onAdminMenuItemClick();
         //C:\Users\Eliran\IdeaProjects\ABS\model\src\resources
         onLoanClickProperty(loansListController,null);
@@ -88,43 +116,29 @@ public class ABSController extends HelperFunction implements Initializable {
         }));
 
 
-       adminController.loadFileButton.setOnAction(e-> {
-            try {
-                String file=fileChooserImplementation(e);
-                bank=XmlSerialization.buildBank(file.trim());
-                filePath.setText("File Path : "+file);
-                YazLogicDesktop.currentYazUnitProperty.setValue(1);
-                showLoanInformationInAdminAndCustomerView(loansListController.LoansListView,bank.getLoansList(),false);
-                showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
-                adminController.LoansBoardPane.setCenter(loansListController.LoansMainGridPane);
-                adminController.CustomerBoardPane.setCenter(customersListController.CustomersMainGridPane);
 
-                setTheAdminAndCustomersAsMenuItems();
-
-
-
-            }
-            catch (NullPointerException ex){
-                popupMessage("Error","Please be sure to choose a file...");
-            }
-            catch (Exception ex) {
-                popupMessage("Error",ex.getMessage());
-            }
-        });
 
         //ToDo: Function
 
 
     }
 
+   public MenuItem getSkinMenuButton(){
+        return skinMenuButton;
+   }
+
+   public MenuItem getDefaultSkinMenuButton(){
+        return defaultSkinMenuButton;
+   }
+
     private void setTheAdminAndCustomersAsMenuItems() {
-        MenuItem customerAsMenuItem;
+
         if( viewBy.getItems().size()>1)
              viewBy.getItems().remove(1,viewBy.getItems().size());
         for (DTOCustomer dtoCustomer : bank.getCustomers()) {
-            customerAsMenuItem = new MenuItem(dtoCustomer.getCustomerName());
+            MenuItem customerAsMenuItem = new MenuItem(dtoCustomer.getCustomerName());
             viewBy.getItems().add(customerAsMenuItem);
-            CustomerController customerController = myFXMLLoader("/application/desktop/MyCustomerView.fxml");
+            CustomerController customerController = myFXMLLoader("MyCustomerView.fxml");
             customersController.add(customerController);
             onLoanClickProperty(customerController.loansListController,customerController);
             customerController.setCurrentCustomer(dtoCustomer);
@@ -134,7 +148,7 @@ public class ABSController extends HelperFunction implements Initializable {
             if (!dtoLoan.isEmpty())
                 bank.myAddListenerToStringPropertyLoans(customerController.notificationAreaListView, dtoLoan.get(0));
             customerAsMenuItem.setOnAction(e -> {
-                viewBy.setText(dtoCustomer.getCustomerName());
+                    //viewBy.setText(dtoCustomer.getCustomerName());
                     myBorderPane.setCenter(customerController.customerTablePane);
                     final ObservableList<String> categories = FXCollections.observableArrayList();
                     categories.addAll(bank.getCategoriesGroup());

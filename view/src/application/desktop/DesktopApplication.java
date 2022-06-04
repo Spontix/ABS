@@ -29,11 +29,12 @@ public class DesktopApplication extends Application implements UiType {
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = getClass().getResource("MyGeneralView.fxml");
         fxmlLoader.setLocation(url);
-        Parent banksRoot = (Parent) fxmlLoader.load(fxmlLoader.getLocation().openStream());
+        Parent banksRoot = fxmlLoader.load(url.openStream());
 
         ABSController absController=fxmlLoader.getController();
-
         Scene scene = new Scene(banksRoot);
+        absController.getSkinMenuButton().setOnAction(e->scene.getStylesheets().add(getClass().getResource("FullPackStyling.css").toExternalForm()));
+        absController.getDefaultSkinMenuButton().setOnAction(e->scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm()));
         primaryStage.setScene(scene);
         primaryStage.show();
 

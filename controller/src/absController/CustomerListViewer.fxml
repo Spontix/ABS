@@ -21,7 +21,7 @@
       <ListView fx:id="customersListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="SOMETIMES" GridPane.vgrow="ALWAYS" />
       <Accordion fx:id="customersAccordionInformation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false" GridPane.columnIndex="1">
          <panes>
-            <TitledPane animated="false" text="Movements Infromation">
+            <TitledPane animated="false" text="Movements Information">
                <content>
                   <GridPane>
                      <columnConstraints>
