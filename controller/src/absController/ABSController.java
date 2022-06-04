@@ -101,7 +101,10 @@ public class ABSController extends HelperFunction implements Initializable {
             YazLogicDesktop.currentYazUnitProperty.setValue(YazLogicDesktop.currentYazUnitProperty.getValue() + 1);
             loansListControllerHandler(loansListController);
         });
-        YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> currentYaz.setText("Current Yaz : "+newValue)));
+        YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> {
+            if(bank!=null)
+               currentYaz.setText("Current Yaz : "+newValue);
+        }));
 
         YazLogicDesktop.currentYazUnitProperty.addListener(((observable, oldValue, newValue) -> {
             try {
@@ -110,8 +113,8 @@ public class ABSController extends HelperFunction implements Initializable {
                 addTheLoansThatShouldPayToAllTheLoansPayListView(loansThatShouldPay);
                 showLoanInformationInAdminAndCustomerView(loansListController.LoansListView,bank.getLoansList(),false);
                 showCustomerInformationAdminView( customersListController.customersListView,bank.getCustomers());
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                popupMessage("Error","Please be sure to choose a file...");
             }
         }));
 
