@@ -7,7 +7,7 @@ import logic.YazLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTOBank {
+public class DTOBank {//
 
     protected List<Account> accounts;
     protected List<Loan> loans;
