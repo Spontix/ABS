@@ -33,8 +33,14 @@ public class DesktopApplication extends Application implements UiType {
 
         ABSController absController=fxmlLoader.getController();
         Scene scene = new Scene(banksRoot);
-        absController.getSkinMenuButton().setOnAction(e->scene.getStylesheets().add(getClass().getResource("FullPackStyling.css").toExternalForm()));
-        absController.getDefaultSkinMenuButton().setOnAction(e->scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm()));
+        absController.getSkinMenuButton().setOnAction(e->{
+         scene.getStylesheets().setAll(getClass().getResource("FullPackStyling.css").toExternalForm());
+         absController.getSkinsMenuButton().setText(absController.getSkinMenuButton().getText());
+        });
+        absController.getDefaultSkinMenuButton().setOnAction(e->{
+            scene.getStylesheets().setAll(getClass().getResource("Default.css").toExternalForm());
+            absController.getSkinsMenuButton().setText(absController.getDefaultSkinMenuButton().getText());
+        });
         primaryStage.setScene(scene);
         primaryStage.show();
 

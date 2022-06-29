@@ -37,10 +37,10 @@
                   </MenuButton>
                   <Label fx:id="filePath" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="File Path : " GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="1" />
                   <Label fx:id="currentYaz" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Current Yaz : 1" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                  <MenuButton mnemonicParsing="false" text="Skins" GridPane.columnIndex="6">
+                  <MenuButton fx:id="skinsMenuButton" mnemonicParsing="false" text="Skins" GridPane.columnIndex="6">
                     <items>
-                      <MenuItem fx:id="defaultSkinMenuButton" mnemonicParsing="false" text="Default" />
-                        <MenuItem fx:id="skinMenuButton" mnemonicParsing="false" text="Skin 1" />
+                      <MenuItem fx:id="defaultSkinMenuButton" mnemonicParsing="false" text="Skin 1" />
+                        <MenuItem fx:id="skinMenuButton" mnemonicParsing="false" text="Skin 2" />
                     </items>
                   </MenuButton>
                </children>

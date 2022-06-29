@@ -42,6 +42,9 @@ public class ABSController extends HelperFunction implements Initializable {
     public static UIInterfaceLogic bank;
 
     @FXML
+    private MenuButton skinsMenuButton;
+
+    @FXML
     private MenuItem defaultSkinMenuButton;
 
     @FXML
@@ -132,6 +135,10 @@ public class ABSController extends HelperFunction implements Initializable {
 
    public MenuItem getDefaultSkinMenuButton(){
         return defaultSkinMenuButton;
+   }
+
+   public MenuButton getSkinsMenuButton(){
+        return skinsMenuButton;
    }
 
     private void setTheAdminAndCustomersAsMenuItems() {
